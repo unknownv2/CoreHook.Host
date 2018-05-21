@@ -36,7 +36,6 @@ ICLRRuntimeHost4 *m_Host;
 
 DWORD m_domainId;
 
-Logger g_Log;
 
 Logger *m_Log;
 
@@ -59,10 +58,15 @@ DWORD GetDomainId() {
 }
 
 VOID SetLogger(Logger* log) {
-    m_Log = log;
+	if (m_Log == NULL) {
+		m_Log = log;
+	}
 }
 
 Logger& GetLogger() {
+	if (m_Log == NULL) {
+		m_Log = new Logger();
+	}
     return *m_Log;
 }
 void RtlLongLongToAsciiHex(LONGLONG InValue, char* InBuffer)
@@ -368,17 +372,6 @@ public:
                 *m_log << W("You can set the environment variable CORE_LIBRARIES to point to a") << Logger::endl;
                 *m_log << W("path containing additional platform assemblies,") << Logger::endl;
             }
-            if (WszGetEnvironmentVariable(W("CORE_LIBRARIES2"), coreLibraries) > 0 && coreLibraries.GetCount() > 0)
-            {
-                coreLibraries.Append(W('\\'));
-                AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
-            }
-            else
-            {
-                *m_log << W("CORE_LIBRARIES2 not set; skipping") << Logger::endl;
-                *m_log << W("You can set the environment variable CORE_LIBRARIES to point to a") << Logger::endl;
-                *m_log << W("path containing additional platform assemblies,") << Logger::endl;
-            }
             AddFilesFromDirectoryToTPAList(m_coreCLRDirectoryPath, rgTPAExtensions, _countof(rgTPAExtensions));
         }
 
@@ -564,7 +557,10 @@ bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
 
     void *pfnDelegate = NULL;
 
-    ICLRRuntimeHost4 * host = GetGlobalHost();
+	ICLRRuntimeHost4 * host = NULL;
+	while (!host) {
+		host = GetGlobalHost();
+	}
     hr = host->CreateDelegate(
         GetDomainId(),
         assembly, // Target managed assembly
@@ -727,11 +723,6 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
         nativeDllSearchDirs.Append(W(";"));
         nativeDllSearchDirs.Append(coreLibraries);
     }
-    if (WszGetEnvironmentVariable(W("CORE_LIBRARIES2"), coreLibraries) > 0 && coreLibraries.GetCount() > 0)
-    {
-        nativeDllSearchDirs.Append(W(";"));
-        nativeDllSearchDirs.Append(coreLibraries);
-    }
     */
     nativeDllSearchDirs.Append(W(";"));
     nativeDllSearchDirs.Append(hostEnvironment.m_coreCLRDirectoryPath);
@@ -886,7 +877,7 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     else {
         SetGlobalHost(host);
 
-        SetLogger(&log);
+        //SetLogger(&log);
 
         SetDomainId(domainId);
 
@@ -894,12 +885,13 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
 
     return true;
 }
+
 // Load a .NET Core DLL Application into the Host Application and execute the Main function
 extern "C" DllExport int StartCLRAndExecuteAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries)
 {
     // Parse the options from the command line
     DWORD exitCode;
-    Logger log;
+	Logger log = GetLogger();
     if (verbose) {
         log.Enable();
     }
@@ -924,21 +916,21 @@ extern "C" DllExport int StartCLRAndLoadAssembly(const wchar_t* dllPath, bool ve
 {
     // Parse the options from the command line
     DWORD exitCode;
-
+	Logger log = GetLogger();
     if (verbose) {
-        g_Log.Enable();
+		log.Enable();
     }
     else {
-        g_Log.Disable();
+		log.Disable();
     }
 
     const wchar_t * params[] = {
         dllPath
     };
     DWORD paramCount = 1;
-    auto success = LoadStartHost(paramCount, params, g_Log, verbose, waitForDebugger, exitCode, coreRoot, coreLibraries, false);
+    auto success = LoadStartHost(paramCount, params, log, verbose, waitForDebugger, exitCode, coreRoot, coreLibraries, false);
 
-    g_Log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
+    log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
 
     return exitCode;
 }
