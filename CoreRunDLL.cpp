@@ -200,7 +200,6 @@ public:
 
 			m_coreCLRModule = NULL; // Initialize this here since we don't call TryLoadCoreCLR if CORE_ROOT is unset.
           
-            //if (WszGetEnvironmentVariable(W("CORE_ROOT"), coreRoot) > 0 && coreRoot.GetCount() > 0)
             if (coreRootPath)
             {
                 coreRoot.Append(coreRootPath);
@@ -348,7 +347,7 @@ public:
 
     // Returns the semicolon-separated list of paths to runtime dlls that are considered trusted.
     // On first call, scans the coreclr directory for dlls and adds them all to the list.
-    const wchar_t * GetTpaList() {
+    const wchar_t * GetTpaList(const wchar_t * coreLibsPath) {
         if (m_tpaList.IsEmpty()) {
             const wchar_t *rgTPAExtensions[] = {
                         W("*.ni.dll"),		// Probe for .ni.dll first so that it's preferred if ni and il coexist in the same dir
@@ -361,17 +360,11 @@ public:
 
             // Add files from %CORE_LIBRARIES% if specified
             StackSString coreLibraries;
-            if (WszGetEnvironmentVariable(W("CORE_LIBRARIES"), coreLibraries) > 0 && coreLibraries.GetCount() > 0)
-            {
-                coreLibraries.Append(W('\\'));
-                AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
-            }
-            else
-            {
-                *m_log << W("CORE_LIBRARIES not set; skipping") << Logger::endl;
-                *m_log << W("You can set the environment variable CORE_LIBRARIES to point to a") << Logger::endl;
-                *m_log << W("path containing additional platform assemblies,") << Logger::endl;
-            }
+			if (coreLibsPath) {
+				coreLibraries.Append(coreLibsPath);
+				coreLibraries.Append(W('\\'));
+				AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
+			}
             AddFilesFromDirectoryToTPAList(m_coreCLRDirectoryPath, rgTPAExtensions, _countof(rgTPAExtensions));
         }
 
@@ -711,19 +704,9 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
 
     nativeDllSearchDirs.Append(W(";"));
     nativeDllSearchDirs.Append(managedAssemblyDirectory);
-    //nativeDllSearchDirs.Append(W(";"));
-    //nativeDllSearchDirs.Append(coreRoot);
+
     nativeDllSearchDirs.Append(W(";"));
     nativeDllSearchDirs.Append(coreLibraries);
-
-    /*
-    StackSString coreLibraries;
-    if (WszGetEnvironmentVariable(W("CORE_LIBRARIES"), coreLibraries) > 0 && coreLibraries.GetCount() > 0)
-    {
-        nativeDllSearchDirs.Append(W(";"));
-        nativeDllSearchDirs.Append(coreLibraries);
-    }
-    */
     nativeDllSearchDirs.Append(W(";"));
     nativeDllSearchDirs.Append(hostEnvironment.m_coreCLRDirectoryPath);
 
@@ -767,7 +750,7 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
         tpaList.Append(W(';'));
     }
 
-    tpaList.Append(hostEnvironment.GetTpaList());
+    tpaList.Append(hostEnvironment.GetTpaList(coreLibraries));
 
     //-------------------------------------------------------------
 
