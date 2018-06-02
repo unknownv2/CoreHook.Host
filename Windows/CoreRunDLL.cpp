@@ -860,8 +860,6 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     else {
         SetGlobalHost(host);
 
-        //SetLogger(&log);
-
         SetDomainId(domainId);
 
     }
