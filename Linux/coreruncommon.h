@@ -50,8 +50,6 @@ int ExecuteManagedAssembly(
 
 #define EXPORT __attribute__((visibility("default")))
 
-
-EXPORT int tempVariable;
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
 static const char * const coreClrDll = "libcoreclr.dylib";
