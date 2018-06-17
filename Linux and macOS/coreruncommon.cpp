@@ -43,7 +43,7 @@ static const char* globalizationInvariantVar = "CORECLR_GLOBAL_INVARIANT";
 typedef void* (*thread_start_routine)(void*);
 
 #define BITS_PER_BYTE (8)
- 
+
 #define LOCAL_PARAM 1
 /* extract the n-th bit of x */
 #define GET_BIT(x, n) ((((x)[(n) / BITS_PER_BYTE]) & (0x1 << ((n) % BITS_PER_BYTE))) != 0)
@@ -72,7 +72,7 @@ struct BinaryLoaderArgs
 	char CoreLibrariesPath[PATH_MAX];
 };
 
-
+#if defined (__linux__)
 RemoteThreadArgs * m_RemoteThread = NULL;
 
 EXPORT void* RemoteThreadMailbox = m_RemoteThread;
@@ -98,16 +98,16 @@ void * CreateRemoteThread(void * args)
                 // clear args buffer
                 memset(m_RemoteThread, 0, sizeof(RemoteThreadArgs));
                 // set function result
-                m_RemoteThread->Result = (uint64_t)ret;                
+                m_RemoteThread->Result = (uint64_t)ret;
 
                 printf("Function call returned %llx\n", m_RemoteThread->Result);
             }
-                        
+
         }
     }
     return NULL;
 }
-
+#endif
 extern "C"
 bool GetEntrypointExecutableAbsolutePath(std::string& entrypointExecutable)
 {
@@ -742,14 +742,42 @@ struct AssemblyFunctionCall
 	char Function[256];
 	BYTE Arguments[256];
 };
+#define ULONG       uint64_t
+#define LONGLONG    int64_t
+struct RemoteEntryInfo
+{
+	pid_t HostPID;
+	const BYTE* UserData;
+	ULONG UserDataSize;
+};
+void RtlLongLongToAsciiHex(LONGLONG InValue, char* InBuffer)
+{
+	ULONG           Index;
+	ULONG           iChar;
+	char            c;
 
+	for (Index = 0, iChar = 0; Index < 64; Index += 4, iChar++)
+	{
+		c = ((LONGLONG)InValue >> Index) & 0x0F;
+
+		if (c < 10)
+			c += '0';
+		else
+			c += 'A' - 10;
+
+		InBuffer[15 - iChar] = c;
+	}
+
+	InBuffer[16] = 0;
+}
 extern "C"
 EXPORT int ExecuteManagedAssemblyClassFunction(AssemblyFunctionCall * args)
 {
     // Indicates failure
     int exitCode = -1;
     int st = -1;
-
+    char ParamString[17];
+    RemoteEntryInfo EntryInfo;
     if(createDelegate != NULL) {
         printf("Executing .NET library assembly = %s, class = %s, function = %s...\n", args->Assembly, args->Class, args->Function);
         typedef void (MainMethodFp)(const void* args);
@@ -767,29 +795,38 @@ EXPORT int ExecuteManagedAssemblyClassFunction(AssemblyFunctionCall * args)
             args->Function, // Target entry point (static method)
             &pfnDelegate
         );
-        exitCode = st;        
+        exitCode = st;
         printf("createDelegate returend %d.\nCalling .NET delegate %p...\n", st, pfnDelegate);
-        
+
         if (!SUCCEEDED(st))
         {
             fprintf(stderr, "coreclr_execute_assembly failed - status: 0x%08x\n", st);
             exitCode = -1;
         }
         else {
-            ((MainMethodFp*)pfnDelegate)(NULL);
+            LONGLONG argPtr = *(LONGLONG*)args->Arguments;
+            if(argPtr != 0) {
+              EntryInfo.UserData = (BYTE*)argPtr;
+              EntryInfo.UserDataSize = 0x400;
 
-        }        
+              RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+              ((MainMethodFp*)pfnDelegate)(ParamString);
+            }
+            else {
+                ((MainMethodFp*)pfnDelegate)(NULL);
+            }
+        }
     }
     /*
     int latchedExitCode = 0;
-    
+
     st = shutdownCoreCLR(hostHandle, domainId, &latchedExitCode);
     if (!SUCCEEDED(st))
     {
         fprintf(stderr, "coreclr_shutdown failed - status: 0x%08x\n", st);
         exitCode = -1;
     }
-    
+
 
     if (exitCode != -1)
     {
@@ -819,7 +856,7 @@ extern "C" EXPORT void *LoadAssemblyBinaryArgs(BinaryLoaderArgs * args)
 
         const char** managedAssemblyArgv = nullptr;
         int managedAssemblyArgc = 0;
- 
+
         // Check if the specified managed assembly file exists
         struct stat sb;
         if (stat(managedAssemblyPath, &sb) == -1)
@@ -858,7 +895,7 @@ extern "C" EXPORT void *LoadAssemblyBinaryArgs(BinaryLoaderArgs * args)
             return NULL;
         }
         printf("%s\n", managedAssemblyAbsolutePath.c_str());
-       
+
         printf("Calling LoadManagedAssembly...\n");
 
         int exitCode = LoadManagedAssembly(
@@ -866,7 +903,7 @@ extern "C" EXPORT void *LoadAssemblyBinaryArgs(BinaryLoaderArgs * args)
                                 clrFilesAbsolutePath.c_str(),
                                 managedAssemblyAbsolutePath.c_str(),
                                 managedAssemblyArgc,
-                                managedAssemblyArgv);  
+                                managedAssemblyArgv);
         printf("LoadManagedAssembly returned %d\n", exitCode);
 
         return NULL;
@@ -921,7 +958,7 @@ extern "C" EXPORT void* ExecuteDotnetAssembly(BinaryLoaderArgs * args)
             return NULL;
         }
         printf("%s\n", managedAssemblyAbsolutePath.c_str());
-       
+
         printf("Calling ExecuteManagedAssembly...\n");
 
         int exitCode = ExecuteManagedAssembly(
@@ -929,7 +966,7 @@ extern "C" EXPORT void* ExecuteDotnetAssembly(BinaryLoaderArgs * args)
                                 clrFilesAbsolutePath.c_str(),
                                 managedAssemblyAbsolutePath.c_str(),
                                 managedAssemblyArgc,
-                                managedAssemblyArgv);  
+                                managedAssemblyArgv);
         printf("ExecuteManagedAssembly returned %d\n", exitCode);
 
         return NULL;
@@ -938,19 +975,22 @@ extern "C" EXPORT void* ExecuteDotnetAssembly(BinaryLoaderArgs * args)
 __attribute__((destructor))
 void ExitFunc()
 {
-    if(m_RemoteThread != NULL)
-    {
-        free(m_RemoteThread);
-    }
+  #if defined (__linux__)
+      if(m_RemoteThread != NULL)
+      {
+          free(m_RemoteThread);
+      }
+  #endif
 }
 __attribute__((constructor))
 void EntryPoint()
 {
-	printf("Loaded unixcoreruncommon dynamic library\n");
+  printf("Loaded corerun dynamic library\n");
+#if defined (__linux__)
+  m_RemoteThread = (RemoteThreadArgs*)malloc(sizeof(RemoteThreadArgs));
+  memset(m_RemoteThread, 0, sizeof(RemoteThreadArgs));
 
-    m_RemoteThread = (RemoteThreadArgs*)malloc(sizeof(RemoteThreadArgs));
-    memset(m_RemoteThread, 0, sizeof(RemoteThreadArgs));
-
-    pthread_t t;
-    pthread_create(&t, NULL, CreateRemoteThread, NULL);
+  pthread_t t;
+  pthread_create(&t, NULL, CreateRemoteThread, NULL);
+#endif
 }

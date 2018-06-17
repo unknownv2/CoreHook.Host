@@ -17,10 +17,10 @@ endif
 
 
 macos:
-		$(CXX) $(CXX_FLAGS) $(CXX_DEFINES) coreruncommon.cpp -fstack-protector -shared -o libcorerun.dylib
+	$(CXX) $(CXX_FLAGS) $(CXX_DEFINES) coreruncommon.cpp -I. -fstack-protector -shared -o libcorerun.dylib
 
 linux:
-		$(CXX)-3.9 $(CXX_FLAGS) $(CXX_DEFINES) -DLINUX64 coreruncommon.cpp -fstack-protector-strong -shared -o libcorerun.so -lpthread
+	$(CXX)-3.9 $(CXX_FLAGS) $(CXX_DEFINES) -DLINUX64 coreruncommon.cpp -I. -fstack-protector-strong -shared -o libcorerun.so -lpthread
 
 clean:
 ifeq ($(UNAME),Linux)
