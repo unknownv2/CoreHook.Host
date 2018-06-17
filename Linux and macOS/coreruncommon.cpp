@@ -93,16 +93,12 @@ void * CreateRemoteThread(void * args)
 
             if(m_RemoteThread->StartAddress != NULL) {
                 thread_start_routine func = (thread_start_routine)m_RemoteThread->StartAddress;
-                printf("Function call with param %llx\n", (uint64_t)m_RemoteThread->Params);
                 void * ret = func(m_RemoteThread->Params);
                 // clear args buffer
                 memset(m_RemoteThread, 0, sizeof(RemoteThreadArgs));
                 // set function result
                 m_RemoteThread->Result = (uint64_t)ret;
-
-                printf("Function call returned %llx\n", m_RemoteThread->Result);
             }
-
         }
     }
     return NULL;
