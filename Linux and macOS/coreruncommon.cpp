@@ -742,14 +742,42 @@ struct AssemblyFunctionCall
 	char Function[256];
 	BYTE Arguments[256];
 };
+#define ULONG       uint64_t
+#define LONGLONG    int64_t
+struct RemoteEntryInfo
+{
+	pid_t HostPID;
+	const BYTE* UserData;
+	ULONG UserDataSize;
+};
+void RtlLongLongToAsciiHex(LONGLONG InValue, char* InBuffer)
+{
+	ULONG           Index;
+	ULONG           iChar;
+	char            c;
 
+	for (Index = 0, iChar = 0; Index < 64; Index += 4, iChar++)
+	{
+		c = ((LONGLONG)InValue >> Index) & 0x0F;
+
+		if (c < 10)
+			c += '0';
+		else
+			c += 'A' - 10;
+
+		InBuffer[15 - iChar] = c;
+	}
+
+	InBuffer[16] = 0;
+}
 extern "C"
 EXPORT int ExecuteManagedAssemblyClassFunction(AssemblyFunctionCall * args)
 {
     // Indicates failure
     int exitCode = -1;
     int st = -1;
-
+    char ParamString[17];
+    RemoteEntryInfo EntryInfo;
     if(createDelegate != NULL) {
         printf("Executing .NET library assembly = %s, class = %s, function = %s...\n", args->Assembly, args->Class, args->Function);
         typedef void (MainMethodFp)(const void* args);
@@ -776,8 +804,17 @@ EXPORT int ExecuteManagedAssemblyClassFunction(AssemblyFunctionCall * args)
             exitCode = -1;
         }
         else {
-            ((MainMethodFp*)pfnDelegate)(NULL);
+            LONGLONG argPtr = *(LONGLONG*)args->Arguments;
+            if(argPtr != 0) {
+              EntryInfo.UserData = (BYTE*)argPtr;
+              EntryInfo.UserDataSize = 0x400;
 
+              RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+              ((MainMethodFp*)pfnDelegate)(ParamString);
+            }
+            else {
+                ((MainMethodFp*)pfnDelegate)(NULL);
+            }
         }
     }
     /*
