@@ -20,7 +20,7 @@ macos:
 	$(CXX) $(CXX_FLAGS) $(CXX_DEFINES) coreruncommon.cpp -I. -fstack-protector -shared -o libcorerun.dylib
 
 linux:
-	$(CXX) $(CXX_FLAGS) $(CXX_DEFINES) -DLINUX64 coreruncommon.cpp -I. -fstack-protector-strong -shared -o libcorerun.so -lpthread
+	$(CXX) $(CXX_FLAGS) $(CXX_DEFINES) -DLINUX64 coreruncommon.cpp -I. -fstack-protector-strong -shared -o libcorerun.so -lpthread -ldl
 
 clean:
 ifeq ($(UNAME),Linux)
