@@ -75,10 +75,11 @@ struct BinaryLoaderArgs
 #if defined (__linux__)
 RemoteThreadArgs * m_RemoteThread = NULL;
 
-EXPORT void* RemoteThreadMailbox = m_RemoteThread;
+EXPORT void* RemoteThreadMailbox = NULL;
 
 void * CreateRemoteThread(void * args)
 {
+    m_RemoteThread = (RemoteThreadArgs*)RemoteThreadMailbox;    
     if(m_RemoteThread == NULL) {
         printf("RemoteThreading not initialized!\n");
         return NULL;
@@ -347,7 +348,6 @@ int ExecuteManagedAssembly(
 {
     // Indicates failure
     int exitCode = -1;
-
 #ifdef _ARM_
     // libunwind library is used to unwind stack frame, but libunwind for ARM
     // does not support ARM vfpv3/NEON registers in DWARF format correctly.
@@ -710,7 +710,7 @@ EXPORT int LoadManagedAssembly(
             {
                 m_HostHandle = hostHandle;
                 m_DomainId = domainId;
-                printf("Start CLR host with handle %p, domain id %d...\n", hostHandle, m_DomainId);
+                printf("Start CLR host with handle %p, domain id %d...\n", hostHandle, domainId);
                 exitCode = 0;
             }
         }
@@ -972,9 +972,9 @@ __attribute__((destructor))
 void ExitFunc()
 {
   #if defined (__linux__)
-      if(m_RemoteThread != NULL)
+      if(RemoteThreadMailbox != NULL)
       {
-          free(m_RemoteThread);
+          free(RemoteThreadMailbox);
       }
   #endif
 }
@@ -983,8 +983,8 @@ void EntryPoint()
 {
   printf("Loaded corerun dynamic library\n");
 #if defined (__linux__)
-  m_RemoteThread = (RemoteThreadArgs*)malloc(sizeof(RemoteThreadArgs));
-  memset(m_RemoteThread, 0, sizeof(RemoteThreadArgs));
+  RemoteThreadMailbox = (RemoteThreadArgs*)malloc(sizeof(RemoteThreadArgs));
+  memset(RemoteThreadMailbox, 0, sizeof(RemoteThreadArgs));
 
   pthread_t t;
   pthread_create(&t, NULL, CreateRemoteThread, NULL);
