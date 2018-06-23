@@ -339,220 +339,12 @@ const char* GetEnvValueBoolean(const char* envVariable)
     return (std::strcmp(envValue, "1") == 0 || strcasecmp(envValue, "true") == 0) ? "true" : "false";
 }
 
-int ExecuteManagedAssembly(
-            const char* currentExeAbsolutePath,
-            const char* clrFilesAbsolutePath,
-            const char* managedAssemblyAbsolutePath,
-            int managedAssemblyArgc,
-            const char** managedAssemblyArgv)
-{
-    // Indicates failure
-    int exitCode = -1;
-#ifdef _ARM_
-    // libunwind library is used to unwind stack frame, but libunwind for ARM
-    // does not support ARM vfpv3/NEON registers in DWARF format correctly.
-    // Therefore let's disable stack unwinding using DWARF information
-    // See https://github.com/dotnet/coreclr/issues/6698
-    //
-    // libunwind use following methods to unwind stack frame.
-    // UNW_ARM_METHOD_ALL          0xFF
-    // UNW_ARM_METHOD_DWARF        0x01
-    // UNW_ARM_METHOD_FRAME        0x02
-    // UNW_ARM_METHOD_EXIDX        0x04
-    putenv(const_cast<char *>("UNW_ARM_UNWIND_METHOD=6"));
-#endif // _ARM_
-
-    std::string coreClrDllPath(clrFilesAbsolutePath);
-    coreClrDllPath.append("/");
-    coreClrDllPath.append(coreClrDll);
-
-    if (coreClrDllPath.length() >= PATH_MAX)
-    {
-        fprintf(stderr, "Absolute path to libcoreclr.so too long\n");
-        return -1;
-    }
-
-    // Get just the path component of the managed assembly path
-    std::string appPath;
-    GetDirectory(managedAssemblyAbsolutePath, appPath);
-
-    std::string tpaList;
-    if (strlen(managedAssemblyAbsolutePath) > 0)
-    {
-        // Target assembly should be added to the tpa list. Otherwise corerun.exe
-        // may find wrong assembly to execute.
-        // Details can be found at https://github.com/dotnet/coreclr/issues/5631
-        tpaList = managedAssemblyAbsolutePath;
-        tpaList.append(":");
-    }
-
-    // Construct native search directory paths
-    std::string nativeDllSearchDirs(appPath);
-    char *coreLibraries = getenv("CORE_LIBRARIES");
-    if (coreLibraries)
-    {
-        nativeDllSearchDirs.append(":");
-        nativeDllSearchDirs.append(coreLibraries);
-        if (std::strcmp(coreLibraries, clrFilesAbsolutePath) != 0)
-        {
-            AddFilesFromDirectoryToTpaList(coreLibraries, tpaList);
-        }
-    }
-
-    nativeDllSearchDirs.append(":");
-    nativeDllSearchDirs.append(clrFilesAbsolutePath);
-
-    AddFilesFromDirectoryToTpaList(clrFilesAbsolutePath, tpaList);
-
-    void* coreclrLib = dlopen(coreClrDllPath.c_str(), RTLD_NOW | RTLD_LOCAL);
-    if (coreclrLib != nullptr)
-    {
-        coreclr_initialize_ptr initializeCoreCLR = (coreclr_initialize_ptr)dlsym(coreclrLib, "coreclr_initialize");
-        coreclr_execute_assembly_ptr executeAssembly = (coreclr_execute_assembly_ptr)dlsym(coreclrLib, "coreclr_execute_assembly");
-        coreclr_shutdown_2_ptr shutdownCoreCLR = (coreclr_shutdown_2_ptr)dlsym(coreclrLib, "coreclr_shutdown_2");
-        coreclr_create_delegate_ptr createDelegate = (coreclr_create_delegate_ptr)dlsym(coreclrLib, "coreclr_create_delegate");
-
-        if (initializeCoreCLR == nullptr)
-        {
-            fprintf(stderr, "Function coreclr_initialize not found in the libcoreclr.so\n");
-        }
-        else if (executeAssembly == nullptr)
-        {
-            fprintf(stderr, "Function coreclr_execute_assembly not found in the libcoreclr.so\n");
-        }
-        else if (shutdownCoreCLR == nullptr)
-        {
-            fprintf(stderr, "Function coreclr_shutdown_2 not found in the libcoreclr.so\n");
-        }
-        else
-        {
-            // Check whether we are enabling server GC (off by default)
-            const char* useServerGc = GetEnvValueBoolean(serverGcVar);
-
-            // Check Globalization Invariant mode (false by default)
-            const char* globalizationInvariant = GetEnvValueBoolean(globalizationInvariantVar);
-
-            // Allowed property names:
-            // APPBASE
-            // - The base path of the application from which the exe and other assemblies will be loaded
-            //
-            // TRUSTED_PLATFORM_ASSEMBLIES
-            // - The list of complete paths to each of the fully trusted assemblies
-            //
-            // APP_PATHS
-            // - The list of paths which will be probed by the assembly loader
-            //
-            // APP_NI_PATHS
-            // - The list of additional paths that the assembly loader will probe for ngen images
-            //
-            // NATIVE_DLL_SEARCH_DIRECTORIES
-            // - The list of paths that will be probed for native DLLs called by PInvoke
-            //
-            const char *propertyKeys[] = {
-                "TRUSTED_PLATFORM_ASSEMBLIES",
-                "APP_PATHS",
-                "APP_NI_PATHS",
-                "NATIVE_DLL_SEARCH_DIRECTORIES",
-                "System.GC.Server",
-                "System.Globalization.Invariant",
-            };
-            const char *propertyValues[] = {
-                // TRUSTED_PLATFORM_ASSEMBLIES
-                tpaList.c_str(),
-                // APP_PATHS
-                appPath.c_str(),
-                // APP_NI_PATHS
-                appPath.c_str(),
-                // NATIVE_DLL_SEARCH_DIRECTORIES
-                nativeDllSearchDirs.c_str(),
-                // System.GC.Server
-                useServerGc,
-                // System.Globalization.Invariant
-                globalizationInvariant,
-            };
-
-            void* hostHandle;
-            unsigned int domainId;
-
-            int st = initializeCoreCLR(
-                        currentExeAbsolutePath,
-                        "unixcorerun",
-                        sizeof(propertyKeys) / sizeof(propertyKeys[0]),
-                        propertyKeys,
-                        propertyValues,
-                        &hostHandle,
-                        &domainId);
-
-            if (!SUCCEEDED(st))
-            {
-                fprintf(stderr, "coreclr_initialize failed - status: 0x%08x\n", st);
-                exitCode = -1;
-            }
-            else
-            {
-                printf("executeAssembly...\n");
-                st = executeAssembly(
-                        hostHandle,
-                        domainId,
-                        managedAssemblyArgc,
-                        managedAssemblyArgv,
-                        managedAssemblyAbsolutePath,
-                        (unsigned int*)&exitCode);
-
-                /*
-                typedef void (MainMethodFp)(const void* args);
-
-                void *pfnDelegate = NULL;
-
-                st = createDelegate(
-                    hostHandle,
-                    domainId,
-                    "Assembly", // Target managed assembly
-                    "ClassType", // Target managed type
-                    "Main", // Target entry point (static method)
-                    &pfnDelegate
-                );
-                ((MainMethodFp*)pfnDelegate)(NULL);
-                */
-                if (!SUCCEEDED(st))
-                {
-                    fprintf(stderr, "coreclr_execute_assembly failed - status: 0x%08x\n", st);
-                    exitCode = -1;
-                }
-
-                int latchedExitCode = 0;
-                st = shutdownCoreCLR(hostHandle, domainId, &latchedExitCode);
-                if (!SUCCEEDED(st))
-                {
-                    fprintf(stderr, "coreclr_shutdown failed - status: 0x%08x\n", st);
-                    exitCode = -1;
-                }
-
-                if (exitCode != -1)
-                {
-                    exitCode = latchedExitCode;
-                }
-            }
-        }
-
-        if (dlclose(coreclrLib) != 0)
-        {
-            fprintf(stderr, "Warning - dlclose failed\n");
-        }
-    }
-    else
-    {
-        const char* error = dlerror();
-        fprintf(stderr, "dlopen failed to open the libcoreclr.so with error %s\n", error);
-    }
-
-    return exitCode;
-}
-
-
 int m_DomainId = -1;
 void * m_HostHandle = NULL;
 coreclr_create_delegate_ptr createDelegate = NULL;
+coreclr_shutdown_2_ptr shutdownCoreCLR = NULL;
+coreclr_execute_assembly_ptr executeAssembly = NULL;
+coreclr_initialize_ptr initializeCoreCLR = NULL;
 
 extern "C"
 EXPORT int LoadManagedAssembly(
@@ -624,9 +416,9 @@ EXPORT int LoadManagedAssembly(
     void* coreclrLib = dlopen(coreClrDllPath.c_str(), RTLD_NOW | RTLD_LOCAL);
     if (coreclrLib != nullptr)
     {
-        coreclr_initialize_ptr initializeCoreCLR = (coreclr_initialize_ptr)dlsym(coreclrLib, "coreclr_initialize");
-        coreclr_execute_assembly_ptr executeAssembly = (coreclr_execute_assembly_ptr)dlsym(coreclrLib, "coreclr_execute_assembly");
-        coreclr_shutdown_2_ptr shutdownCoreCLR = (coreclr_shutdown_2_ptr)dlsym(coreclrLib, "coreclr_shutdown_2");
+        initializeCoreCLR = (coreclr_initialize_ptr)dlsym(coreclrLib, "coreclr_initialize");
+        executeAssembly = (coreclr_execute_assembly_ptr)dlsym(coreclrLib, "coreclr_execute_assembly");
+        shutdownCoreCLR = (coreclr_shutdown_2_ptr)dlsym(coreclrLib, "coreclr_shutdown_2");
         createDelegate = (coreclr_create_delegate_ptr)dlsym(coreclrLib, "coreclr_create_delegate");
 
         if (initializeCoreCLR == nullptr)
@@ -728,7 +520,58 @@ EXPORT int LoadManagedAssembly(
 
     return exitCode;
 }
+int ExecuteManagedAssembly(
+            const char* currentExeAbsolutePath,
+            const char* clrFilesAbsolutePath,
+            const char* managedAssemblyAbsolutePath,
+            int managedAssemblyArgc,
+            const char** managedAssemblyArgv)
+{
+    // Indicates failure
+    int exitCode = -1;
+    int st = LoadManagedAssembly(currentExeAbsolutePath,
+        clrFilesAbsolutePath,
+        managedAssemblyAbsolutePath,
+        managedAssemblyArgc,
+        managedAssemblyArgv);
 
+    if (!SUCCEEDED(st))
+    {
+        fprintf(stderr, "coreclr_initialize failed - status: 0x%08x\n", st);
+        exitCode = -1;
+    }
+    else
+    {
+        printf("executeAssembly...\n");
+        st = executeAssembly(
+                m_HostHandle,
+                m_DomainId,
+                managedAssemblyArgc,
+                managedAssemblyArgv,
+                managedAssemblyAbsolutePath,
+                (unsigned int*)&exitCode);
+
+        if (!SUCCEEDED(st))
+        {
+            fprintf(stderr, "coreclr_execute_assembly failed - status: 0x%08x\n", st);
+            exitCode = -1;
+        }
+
+        int latchedExitCode = 0;
+        st = shutdownCoreCLR(m_HostHandle, m_DomainId, &latchedExitCode);
+        if (!SUCCEEDED(st))
+        {
+            fprintf(stderr, "coreclr_shutdown failed - status: 0x%08x\n", st);
+            exitCode = -1;
+        }
+
+        if (exitCode != -1)
+        {
+            exitCode = latchedExitCode;
+        }
+    }
+    return exitCode;
+}
 #define BYTE unsigned char
 
 struct AssemblyFunctionCall
