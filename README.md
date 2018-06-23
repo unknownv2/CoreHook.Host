@@ -11,7 +11,7 @@ cd CoreHook.Host
 ```
 
 ### Linux and macOS
-Make sure you have `clang` installed, then run:
+Make sure you have `clang++` installed, then run:
 
 ```
 cd Unix
