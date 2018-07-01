@@ -56,7 +56,7 @@ struct RemoteThreadArgs {
     uint64_t    Result;
     uint32_t    ThreadAttributes;
     uint32_t    CreationFlags;
-    size_t      StackSize;
+    uint64_t    StackSize;
     void *      StartAddress;
     void *      Params;
 };
