@@ -4,14 +4,14 @@ Dynamic libraries for hosting .NET Core with [CoreHook](https://github.com/unkno
 
 ## Building
 
-First checkout the repository to a folder
+First checkout the repository to a folder by running:
 ```
 git clone https://github.com/unknownv2/CoreHook.Host.git
 cd CoreHook.Host
 ```
-## Unix
+## Unix (x64, ARM32, ARM64)
 
-### Linux and macOS (x64)
+### Linux and macOS
 Make sure you have `clang++` installed, then run:
 
 ```
