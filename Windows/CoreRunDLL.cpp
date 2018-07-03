@@ -22,15 +22,22 @@ struct AssemblyFunctionCall
 	wchar_t Assembly[256];
 	wchar_t Class[256];
 	wchar_t Function[256];
-	BYTE Arguments[256];
+	BYTE Arguments[512];
+};
+
+struct RemoteFunctionArgs
+{
+	const BYTE* UserData;
+	ULONG UserDataSize;
 };
 
 struct RemoteEntryInfo
 {
 	ULONG HostPID;
-	const BYTE* UserData;
-	ULONG UserDataSize;
+	RemoteFunctionArgs Args;
 };
+
+
 
 ICLRRuntimeHost4 *m_Host;
 
@@ -567,14 +574,18 @@ bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
         return false;
     }
 
-    char ParamString[17];
-    LONGLONG arg = *(LONGLONG*)arguments;
-    EntryInfo.UserData = (BYTE*)arg;
-    EntryInfo.UserDataSize = 0x400;
+	RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
+	if (remoteArgs != NULL) {
+		char ParamString[17];
+		EntryInfo.Args.UserData = remoteArgs->UserData;
+		EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-    RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
-    ((MainMethodFp*)pfnDelegate)(ParamString);
-
+		RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+		((MainMethodFp*)pfnDelegate)(ParamString);
+	}
+	else {
+		((MainMethodFp*)pfnDelegate)(NULL);
+	}
     log << W("App exit value = ") << exitCode << Logger::endl;
 
     return true;
