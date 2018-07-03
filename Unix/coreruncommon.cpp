@@ -579,16 +579,24 @@ struct AssemblyFunctionCall
 	char Assembly[256];
 	char Class[256];
 	char Function[256];
-	BYTE Arguments[256];
+	BYTE Arguments[512];
 };
+
 #define ULONG       uint64_t
 #define LONGLONG    int64_t
-struct RemoteEntryInfo
+
+struct RemoteFunctionArgs
 {
-	pid_t HostPID;
 	const BYTE* UserData;
 	ULONG UserDataSize;
 };
+
+struct RemoteEntryInfo
+{
+	pid_t HostPID;
+	RemoteFunctionArgs Args;
+};
+
 void RtlLongLongToAsciiHex(LONGLONG InValue, char* InBuffer)
 {
 	ULONG           Index;
@@ -643,13 +651,13 @@ EXPORT int ExecuteManagedAssemblyClassFunction(AssemblyFunctionCall * args)
             exitCode = -1;
         }
         else {
-            LONGLONG argPtr = *(LONGLONG*)args->Arguments;
-            if(argPtr != 0) {
-              EntryInfo.UserData = (BYTE*)argPtr;
-              EntryInfo.UserDataSize = 0x400;
+            RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)args->Arguments;
+            if (remoteArgs != NULL) {
+                EntryInfo.Args.UserData = remoteArgs->UserData;
+                EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-              RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
-              ((MainMethodFp*)pfnDelegate)(ParamString);
+                RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+                ((MainMethodFp*)pfnDelegate)(ParamString);
             }
             else {
                 ((MainMethodFp*)pfnDelegate)(NULL);
