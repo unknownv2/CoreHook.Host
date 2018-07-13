@@ -37,8 +37,6 @@ struct RemoteEntryInfo
 	RemoteFunctionArgs Args;
 };
 
-
-
 ICLRRuntimeHost4 *m_Host;
 
 DWORD m_domainId;
@@ -47,9 +45,7 @@ DWORD m_domainId;
 Logger *m_Log;
 
 void SetGlobalHost(ICLRRuntimeHost4* host) {
-    if (host) {
-        m_Host = host;
-    }
+    m_Host = host;    
 }
 
 ICLRRuntimeHost4* GetGlobalHost() {
@@ -125,6 +121,14 @@ static const wchar_t *coreCLRDll = W("CoreCLR.dll");
 // The location where CoreCLR is expected to be installed. If CoreCLR.dll isn't
 //  found in the same directory as the host, it will be looked for here.
 static const wchar_t *coreCLRInstallDirectory = W("%windir%\\system32\\");
+
+// DLL exports
+extern "C" DllExport void UnloadRunTime();
+extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * args);
+extern "C" DllExport void LoadAssembly(const BinaryLoaderArgs * args);
+extern "C" DllExport void ExecuteAssembly(const BinaryLoaderArgs * args);
+extern "C" DllExport int StartCLRAndLoadAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries);
+extern "C" DllExport int StartCLRAndExecuteAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries);
 
 // Encapsulates the environment that CoreCLR will run in, including the TPALIST
 class HostEnvironment 
@@ -634,6 +638,10 @@ bool UnloadStopHost(Logger &log) {
 
     host->Release();
 
+	SetGlobalHost(NULL);
+
+	SetDomainId(-1);
+
     return true;
 }
 bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const bool verbose, 
@@ -729,7 +737,6 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     }
 
     HRESULT hr;
-
 
     STARTUP_FLAGS flags = CreateStartupFlags();
     log << W("Setting ICLRRuntimeHost4 startup flags") << Logger::endl;
@@ -872,7 +879,6 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
         SetGlobalHost(host);
 
         SetDomainId(domainId);
-
     }
 
     return true;
@@ -894,12 +900,13 @@ extern "C" DllExport int StartCLRAndExecuteAssembly(const wchar_t* dllPath, bool
     const wchar_t * params[] = {
         dllPath 
     };
+
     DWORD paramCount = 1;
     auto success = LoadStartHost(paramCount, params, log, verbose, waitForDebugger, exitCode, coreRoot, coreLibraries, true);
-    if (success) {
-        success = ExecuteAssemblyMain(paramCount, params, log);
-    }
+
     log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
+
+	UnloadRunTime();
 
     return exitCode; 
 }
