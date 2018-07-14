@@ -41,8 +41,10 @@ ICLRRuntimeHost4 *m_Host;
 
 DWORD m_domainId;
 
-
 Logger *m_Log;
+
+HANDLE m_Mutex;
+
 
 void SetGlobalHost(ICLRRuntimeHost4* host) {
     m_Host = host;    
@@ -72,6 +74,7 @@ Logger& GetLogger() {
 	}
     return *m_Log;
 }
+
 void RtlLongLongToAsciiHex(LONGLONG InValue, char* InBuffer)
 {
 	ULONG           Index;
@@ -376,7 +379,9 @@ public:
 				coreLibraries.Append(W('\\'));
 				AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
 			}
-            AddFilesFromDirectoryToTPAList(m_coreCLRDirectoryPath, rgTPAExtensions, _countof(rgTPAExtensions));
+			if (coreLibraries.CompareCaseInsensitive(m_coreCLRDirectoryPath)) {
+				AddFilesFromDirectoryToTPAList(m_coreCLRDirectoryPath, rgTPAExtensions, _countof(rgTPAExtensions));
+			}
         }
 
         return m_tpaList;
@@ -422,8 +427,6 @@ public:
 
         return m_CLRRuntimeHost;
     }
-
-
 };
 
 int PrintModules()
@@ -551,47 +554,65 @@ bool ExecuteAssemblyMain(const int argc, const wchar_t* argv[], Logger &log) {
 
 bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
     const wchar_t * type, const wchar_t * entry, const BYTE* arguments) {
+
     HRESULT hr;
-    DWORD exitCode = -1;
+    DWORD exitCode = -1, dwWaitResult = -1;
     RemoteEntryInfo EntryInfo;
-
-    EntryInfo.HostPID = GetCurrentProcessId();
-
-    typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
-
-    void *pfnDelegate = NULL;
-
+	void *pfnDelegate = NULL;
 	ICLRRuntimeHost4 * host = NULL;
-	while (!host) {
+	typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
+
+	dwWaitResult = WaitForSingleObject(
+		m_Mutex,
+		INFINITE);
+
+	if (dwWaitResult != WAIT_OBJECT_0 ) {
+		return exitCode;
+	}
+
+	__try {
 		host = GetGlobalHost();
+		if(!host)
+		{
+			// attempting to load an assembly without a runtime
+			return false;
+		}
+
+		EntryInfo.HostPID = GetCurrentProcessId();
+
+		hr = host->CreateDelegate(
+			GetDomainId(),
+			assembly, // Target managed assembly
+			type, // Target managed type
+			entry, // Target entry point (static method)
+			(INT_PTR*)&pfnDelegate);
+
+		if (FAILED(hr) || pfnDelegate == NULL)
+		{
+			log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+			return false;
+		}
+
+		RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
+		if (remoteArgs != NULL) {
+			char ParamString[17];
+			EntryInfo.Args.UserData = remoteArgs->UserData;
+			EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
+
+			RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+			((MainMethodFp*)pfnDelegate)(ParamString);
+		}
+		else {
+			((MainMethodFp*)pfnDelegate)(NULL);
+		}		
 	}
-    hr = host->CreateDelegate(
-        GetDomainId(),
-        assembly, // Target managed assembly
-        type, // Target managed type
-        entry, // Target entry point (static method)
-        (INT_PTR*)&pfnDelegate);
-
-    if (FAILED(hr))
-    {
-        log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-        return false;
-    }
-
-	RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
-	if (remoteArgs != NULL) {
-		char ParamString[17];
-		EntryInfo.Args.UserData = remoteArgs->UserData;
-		EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
-
-		RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
-		((MainMethodFp*)pfnDelegate)(ParamString);
+	__finally {
+		log << W("App exit value = ") << exitCode << Logger::endl;
+		if (!ReleaseMutex(m_Mutex))
+		{
+			return false;
+		}
 	}
-	else {
-		((MainMethodFp*)pfnDelegate)(NULL);
-	}
-    log << W("App exit value = ") << exitCode << Logger::endl;
-
     return true;
 }
 
@@ -638,18 +659,27 @@ bool UnloadStopHost(Logger &log) {
 
     host->Release();
 
-	SetGlobalHost(NULL);
+	SetGlobalHost(nullptr);
 
 	SetDomainId(-1);
 
     return true;
+}
+void ReleaseMutexHandle(HANDLE mutex, Logger* log)
+{
+	if (!ReleaseMutex(m_Mutex))
+	{
+		if (log != NULL) {
+			*log << W("Failed call to release mutex.") << Logger::endl;
+		}
+	}
 }
 bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const bool verbose, 
     const bool waitForDebugger, DWORD &exitCode, const wchar_t* coreRoot, const wchar_t* coreLibraries, bool executeAssembly)
 {
     // Assume failure
     exitCode = -1;
-
+	
     HostEnvironment hostEnvironment(&log, coreRoot);
 
     //-------------------------------------------------------------
@@ -730,7 +760,13 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     nativeDllSearchDirs.Append(hostEnvironment.m_coreCLRDirectoryPath);
 
     // Start the CoreCLR
-
+	DWORD dwWaitResult = WaitForSingleObject(
+		m_Mutex,
+		INFINITE);
+	if (dwWaitResult != WAIT_OBJECT_0) {
+		log << W("Failed to acquire mutex") << Logger::endl;
+		return false;
+	}
     ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
     if (!host) {
         return false;
@@ -844,8 +880,10 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
         property_values,
         &domainId);
 
+
     if (FAILED(hr)) {
         log << W("Failed call to CreateAppDomainWithManager. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+		ReleaseMutexHandle(m_Mutex, &log);
         return false;
     }
 
@@ -870,6 +908,7 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
         hr = host->ExecuteAssembly(domainId, managedAssemblyFullName, argc - 1, (argc - 1) ? &(argv[1]) : NULL, &exitCode);
         if (FAILED(hr)) {
             log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+			ReleaseMutexHandle(m_Mutex, &log);
             return false;
         }
 
@@ -880,6 +919,8 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
 
         SetDomainId(domainId);
     }
+
+	ReleaseMutexHandle(m_Mutex, &log);
 
     return true;
 }
@@ -959,20 +1000,28 @@ BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle,
     IN LPVOID    Reserved)
 {
     BOOLEAN bSuccess = TRUE;
-    //  Perform global initialization.
-
     switch (nReason)
     {
         case DLL_PROCESS_ATTACH:
-         //  For optimization.
-            break;
+		{
+			m_Mutex = CreateMutexW(
+				NULL,
+				FALSE,
+				NULL);
 
+			if (m_Mutex == NULL)
+			{
+				printf("CreateMutex error: %d\n", GetLastError());
+				return 1;
+			}
+		}
+        break;
         case DLL_PROCESS_DETACH:
-            break;
+		{
+			CloseHandle(m_Mutex);
+		}
+        break;
     }
 
-    //  Perform type-specific initialization.
-
     return bSuccess;
-
 }
