@@ -507,6 +507,16 @@ STARTUP_FLAGS CreateStartupFlags() {
     return initialFlags;
 }
 
+void ReleaseMutexHandle(HANDLE mutex, Logger* log)
+{
+	if (!ReleaseMutex(m_Mutex))
+	{
+		if (log != NULL) {
+			*log << W("Failed call to release mutex.") << Logger::endl;
+		}
+	}
+}
+
 bool ExecuteAssemblyMain(const int argc, const wchar_t* argv[], Logger &log) {
     HRESULT hr;
     DWORD exitCode = -1;
@@ -618,7 +628,16 @@ bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
 
 bool UnloadStopHost(Logger &log) {
     HRESULT hr;
-    DWORD exitCode = -1;
+	DWORD exitCode = -1, dwWaitResult = -1;
+
+	dwWaitResult = WaitForSingleObject(
+		m_Mutex,
+		INFINITE);
+
+	if (dwWaitResult != WAIT_OBJECT_0) {
+		return exitCode;
+	}
+
     //-------------------------------------------------------------
 
     // Unload the AppDomain
@@ -663,17 +682,11 @@ bool UnloadStopHost(Logger &log) {
 
 	SetDomainId(-1);
 
+	ReleaseMutexHandle(m_Mutex, &log);
+
     return true;
 }
-void ReleaseMutexHandle(HANDLE mutex, Logger* log)
-{
-	if (!ReleaseMutex(m_Mutex))
-	{
-		if (log != NULL) {
-			*log << W("Failed call to release mutex.") << Logger::endl;
-		}
-	}
-}
+
 bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const bool verbose, 
     const bool waitForDebugger, DWORD &exitCode, const wchar_t* coreRoot, const wchar_t* coreLibraries, bool executeAssembly)
 {
