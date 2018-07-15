@@ -43,8 +43,8 @@ DWORD m_domainId;
 
 Logger *m_Log;
 
-HANDLE m_Mutex;
-
+static CRITSEC_COOKIE g_pLock = nullptr;
+static HRESULT InitializeLock();
 
 void SetGlobalHost(ICLRRuntimeHost4* host) {
     m_Host = host;    
@@ -75,6 +75,12 @@ Logger& GetLogger() {
     return *m_Log;
 }
 
+void DeleteLogger()
+{
+	if (m_Log != nullptr) {
+		delete m_Log;
+	}
+}
 void RtlLongLongToAsciiHex(LONGLONG InValue, char* InBuffer)
 {
 	ULONG           Index;
@@ -507,19 +513,11 @@ STARTUP_FLAGS CreateStartupFlags() {
     return initialFlags;
 }
 
-void ReleaseMutexHandle(HANDLE mutex, Logger* log)
-{
-	if (!ReleaseMutex(m_Mutex))
-	{
-		if (log != NULL) {
-			*log << W("Failed call to release mutex.") << Logger::endl;
-		}
-	}
-}
-
 bool ExecuteAssemblyMain(const int argc, const wchar_t* argv[], Logger &log) {
     HRESULT hr;
     DWORD exitCode = -1;
+	CRITSEC_Holder lock(g_pLock);
+
     const wchar_t* exeName = argc > 0 ? argv[0] : nullptr;
     if (exeName == nullptr)
     {
@@ -572,71 +570,54 @@ bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
 	ICLRRuntimeHost4 * host = NULL;
 	typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
 
-	dwWaitResult = WaitForSingleObject(
-		m_Mutex,
-		INFINITE);
 
-	if (dwWaitResult != WAIT_OBJECT_0 ) {
-		return exitCode;
+	CRITSEC_Holder lock(g_pLock);
+
+	host = GetGlobalHost();
+	if(!host)
+	{
+		// attempting to load an assembly without a runtime
+		return false;
 	}
 
-	__try {
-		host = GetGlobalHost();
-		if(!host)
-		{
-			// attempting to load an assembly without a runtime
-			return false;
-		}
+	EntryInfo.HostPID = GetCurrentProcessId();
 
-		EntryInfo.HostPID = GetCurrentProcessId();
+	hr = host->CreateDelegate(
+		GetDomainId(),
+		assembly, // Target managed assembly
+		type, // Target managed type
+		entry, // Target entry point (static method)
+		(INT_PTR*)&pfnDelegate);
 
-		hr = host->CreateDelegate(
-			GetDomainId(),
-			assembly, // Target managed assembly
-			type, // Target managed type
-			entry, // Target entry point (static method)
-			(INT_PTR*)&pfnDelegate);
-
-		if (FAILED(hr) || pfnDelegate == NULL)
-		{
-			log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-			return false;
-		}
-
-		RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
-		if (remoteArgs != NULL) {
-			char ParamString[17];
-			EntryInfo.Args.UserData = remoteArgs->UserData;
-			EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
-
-			RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
-			((MainMethodFp*)pfnDelegate)(ParamString);
-		}
-		else {
-			((MainMethodFp*)pfnDelegate)(NULL);
-		}		
+	if (FAILED(hr) || pfnDelegate == NULL)
+	{
+		log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+		return false;
 	}
-	__finally {
-		log << W("App exit value = ") << exitCode << Logger::endl;
-		if (!ReleaseMutex(m_Mutex))
-		{
-			return false;
-		}
+
+	RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
+	if (remoteArgs != NULL) {
+		char ParamString[17];
+		EntryInfo.Args.UserData = remoteArgs->UserData;
+		EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
+
+		RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+		((MainMethodFp*)pfnDelegate)(ParamString);
 	}
+	else {
+		((MainMethodFp*)pfnDelegate)(NULL);
+	}		
+
+	log << W("App exit value = ") << exitCode << Logger::endl;
+	
     return true;
 }
 
 bool UnloadStopHost(Logger &log) {
     HRESULT hr;
-	DWORD exitCode = -1, dwWaitResult = -1;
+	DWORD exitCode = -1;
 
-	dwWaitResult = WaitForSingleObject(
-		m_Mutex,
-		INFINITE);
-
-	if (dwWaitResult != WAIT_OBJECT_0) {
-		return exitCode;
-	}
+	CRITSEC_Holder lock(g_pLock);
 
     //-------------------------------------------------------------
 
@@ -681,8 +662,6 @@ bool UnloadStopHost(Logger &log) {
 	SetGlobalHost(nullptr);
 
 	SetDomainId(-1);
-
-	ReleaseMutexHandle(m_Mutex, &log);
 
     return true;
 }
@@ -773,13 +752,8 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     nativeDllSearchDirs.Append(hostEnvironment.m_coreCLRDirectoryPath);
 
     // Start the CoreCLR
-	DWORD dwWaitResult = WaitForSingleObject(
-		m_Mutex,
-		INFINITE);
-	if (dwWaitResult != WAIT_OBJECT_0) {
-		log << W("Failed to acquire mutex") << Logger::endl;
-		return false;
-	}
+	//EnterCriticalSection(m_Lock);
+	CRITSEC_Holder lock(g_pLock);
     ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
     if (!host) {
         return false;
@@ -895,8 +869,9 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
 
 
     if (FAILED(hr)) {
+		//LeaveCriticalSection(m_Lock);
+
         log << W("Failed call to CreateAppDomainWithManager. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-		ReleaseMutexHandle(m_Mutex, &log);
         return false;
     }
 
@@ -920,8 +895,9 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     if (executeAssembly) {
         hr = host->ExecuteAssembly(domainId, managedAssemblyFullName, argc - 1, (argc - 1) ? &(argv[1]) : NULL, &exitCode);
         if (FAILED(hr)) {
+			//LeaveCriticalSection(m_Lock);
+
             log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-			ReleaseMutexHandle(m_Mutex, &log);
             return false;
         }
 
@@ -932,8 +908,6 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
 
         SetDomainId(domainId);
     }
-
-	ReleaseMutexHandle(m_Mutex, &log);
 
     return true;
 }
@@ -1007,7 +981,26 @@ extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * a
 extern "C" DllExport void UnloadRunTime() {
     UnloadStopHost(GetLogger());
 }
+static HRESULT InitializeLock()
+{
+	STATIC_CONTRACT_LIMITED_METHOD;
+	HRESULT hr = S_OK;
 
+	CRITSEC_COOKIE pLock = ClrCreateCriticalSection(CrstLeafLock, CRST_REENTRANCY);
+	IfNullRet(pLock);
+	if (InterlockedCompareExchangeT<CRITSEC_COOKIE>(&g_pLock, pLock, nullptr) != nullptr)
+	{
+		ClrDeleteCriticalSection(pLock);
+	}
+
+	return S_OK;
+}
+static void DeleteLock()
+{
+	if (g_pLock != nullptr) {
+		ClrDeleteCriticalSection(g_pLock);
+	}
+}
 BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle,
     IN DWORD     nReason,
     IN LPVOID    Reserved)
@@ -1017,21 +1010,14 @@ BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle,
     {
         case DLL_PROCESS_ATTACH:
 		{
-			m_Mutex = CreateMutexW(
-				NULL,
-				FALSE,
-				NULL);
-
-			if (m_Mutex == NULL)
-			{
-				printf("CreateMutex error: %d\n", GetLastError());
-				return 1;
-			}
+			InitializeLock();
 		}
         break;
         case DLL_PROCESS_DETACH:
 		{
-			CloseHandle(m_Mutex);
+			DeleteLock();
+
+			DeleteLogger();
 		}
         break;
     }
