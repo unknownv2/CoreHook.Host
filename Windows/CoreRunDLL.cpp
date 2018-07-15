@@ -6,6 +6,9 @@
 #include "palclr.h"
 #include "sstring.h"
 
+#define FunctionNameSize			256
+#define AssemblyFunCallArgsSize		512
+
 struct BinaryLoaderArgs
 {
 	bool Verbose;
@@ -16,8 +19,6 @@ struct BinaryLoaderArgs
 	wchar_t CoreRootPath[MAX_LONGPATH];
 	wchar_t CoreLibrariesPath[MAX_LONGPATH];
 };
-#define FunctionNameSize			256
-#define AssemblyFunCallArgsSize		512
 
 struct AssemblyFunctionCall
 {
@@ -83,6 +84,7 @@ void DeleteLogger()
 		delete m_Log;
 	}
 }
+
 void RtlLongLongToAsciiHex(LONGLONG InValue, char* InBuffer)
 {
 	ULONG           Index;
