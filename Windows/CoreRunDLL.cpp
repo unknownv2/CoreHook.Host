@@ -16,13 +16,15 @@ struct BinaryLoaderArgs
 	wchar_t CoreRootPath[MAX_LONGPATH];
 	wchar_t CoreLibrariesPath[MAX_LONGPATH];
 };
+#define FunctionNameSize			256
+#define AssemblyFunCallArgsSize		512
 
 struct AssemblyFunctionCall
 {
-	wchar_t Assembly[256];
-	wchar_t Class[256];
-	wchar_t Function[256];
-	BYTE Arguments[512];
+	wchar_t Assembly[FunctionNameSize];
+	wchar_t Class[FunctionNameSize];
+	wchar_t Function[FunctionNameSize];
+	BYTE Arguments[AssemblyFunCallArgsSize];
 };
 
 struct RemoteFunctionArgs
@@ -136,8 +138,7 @@ extern "C" DllExport void UnloadRunTime();
 extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * args);
 extern "C" DllExport void LoadAssembly(const BinaryLoaderArgs * args);
 extern "C" DllExport void ExecuteAssembly(const BinaryLoaderArgs * args);
-extern "C" DllExport int StartCLRAndLoadAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries);
-extern "C" DllExport int StartCLRAndExecuteAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries);
+extern "C" DllExport DWORD StartCLRAndLoadAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries, bool execute);
 
 // Encapsulates the environment that CoreCLR will run in, including the TPALIST
 class HostEnvironment 
@@ -549,17 +550,24 @@ bool ExecuteAssemblyMain(const int argc, const wchar_t* argv[], Logger &log) {
     }
 
     managedAssemblyFullName.Set(appPathPtr);
+
     auto host = GetGlobalHost();
-    hr = host->ExecuteAssembly(GetDomainId(), managedAssemblyFullName, argc - 1, (argc - 1) ? &(argv[1]) : NULL, &exitCode);
-    if (FAILED(hr)) {
-        log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-        return false;
-    }
+	if (host != nullptr) {
+
+		lock.Release();
+
+		hr = host->ExecuteAssembly(GetDomainId(), managedAssemblyFullName, argc - 1, (argc - 1) ? &(argv[1]) : NULL, &exitCode);
+		if (FAILED(hr)) {
+			log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+			return false;
+		}
+	}
 
     log << W("App exit value = ") << exitCode << Logger::endl;
     return true;
 }
 
+// Execute a method from a class located inside a .NET Core Library Assembly
 bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
     const wchar_t * type, const wchar_t * entry, const BYTE* arguments) {
 
@@ -570,44 +578,43 @@ bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
 	ICLRRuntimeHost4 * host = NULL;
 	typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
 
-
 	CRITSEC_Holder lock(g_pLock);
-
+	
 	host = GetGlobalHost();
-	if(!host)
-	{
-		// attempting to load an assembly without a runtime
-		return false;
+
+	if (host != nullptr) {
+
+		EntryInfo.HostPID = GetCurrentProcessId();
+
+		hr = host->CreateDelegate(
+			GetDomainId(),
+			assembly, // Target managed assembly
+			type, // Target managed type
+			entry, // Target entry point (static method)
+			(INT_PTR*)&pfnDelegate);
+
+		if (FAILED(hr) || pfnDelegate == NULL)
+		{
+			log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+			return false;
+		}
+		lock.Release();
+		RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
+		if (remoteArgs != NULL) {
+			char ParamString[17];
+
+			// parse entry arguments
+			EntryInfo.Args.UserData = remoteArgs->UserData;
+			EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
+
+			RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+
+			((MainMethodFp*)pfnDelegate)(ParamString);
+		}
+		else {
+			((MainMethodFp*)pfnDelegate)(NULL);
+		}
 	}
-
-	EntryInfo.HostPID = GetCurrentProcessId();
-
-	hr = host->CreateDelegate(
-		GetDomainId(),
-		assembly, // Target managed assembly
-		type, // Target managed type
-		entry, // Target entry point (static method)
-		(INT_PTR*)&pfnDelegate);
-
-	if (FAILED(hr) || pfnDelegate == NULL)
-	{
-		log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-		return false;
-	}
-
-	RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
-	if (remoteArgs != NULL) {
-		char ParamString[17];
-		EntryInfo.Args.UserData = remoteArgs->UserData;
-		EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
-
-		RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
-		((MainMethodFp*)pfnDelegate)(ParamString);
-	}
-	else {
-		((MainMethodFp*)pfnDelegate)(NULL);
-	}		
-
 	log << W("App exit value = ") << exitCode << Logger::endl;
 	
     return true;
@@ -624,41 +631,43 @@ bool UnloadStopHost(Logger &log) {
     // Unload the AppDomain
 
     ICLRRuntimeHost4 * host = GetGlobalHost();
-    log << W("Unloading the AppDomain") << Logger::endl;
+	if (host != nullptr) {
 
-    hr = host->UnloadAppDomain2(
-        GetDomainId(),
-        true,
-        (int *)&exitCode);                          // Wait until done
+		log << W("Unloading the AppDomain") << Logger::endl;
 
-    if (FAILED(hr)) {
-        log << W("Failed to unload the AppDomain. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-        return false;
-    }
+		hr = host->UnloadAppDomain2(
+			GetDomainId(),
+			true,
+			(int *)&exitCode);                          // Wait until done
 
-    log << W("App domain unloaded exit value = ") << exitCode << Logger::endl;
+		if (FAILED(hr)) {
+			log << W("Failed to unload the AppDomain. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+			return false;
+		}
 
-    //-------------------------------------------------------------
-    //PrintModules();
-    // Stop the host
+		log << W("App domain unloaded exit value = ") << exitCode << Logger::endl;
 
-    log << W("Stopping the host") << Logger::endl;
+		//-------------------------------------------------------------
+		//PrintModules();
+		// Stop the host
 
-    hr = host->Stop();
+		log << W("Stopping the host") << Logger::endl;
 
-    if (FAILED(hr)) {
-        log << W("Failed to stop the host. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-        return false;
-    }
+		hr = host->Stop();
 
-    //-------------------------------------------------------------
+		if (FAILED(hr)) {
+			log << W("Failed to stop the host. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+			return false;
+		}
 
-    // Release the reference to the host
+		//-------------------------------------------------------------
 
-    log << W("Releasing ICLRRuntimeHost4") << Logger::endl;
+		// Release the reference to the host
 
-    host->Release();
+		log << W("Releasing ICLRRuntimeHost4") << Logger::endl;
 
+		host->Release();
+	}
 	SetGlobalHost(nullptr);
 
 	SetDomainId(-1);
@@ -752,8 +761,8 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     nativeDllSearchDirs.Append(hostEnvironment.m_coreCLRDirectoryPath);
 
     // Start the CoreCLR
-	//EnterCriticalSection(m_Lock);
 	CRITSEC_Holder lock(g_pLock);
+
     ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
     if (!host) {
         return false;
@@ -869,7 +878,6 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
 
 
     if (FAILED(hr)) {
-		//LeaveCriticalSection(m_Lock);
 
         log << W("Failed call to CreateAppDomainWithManager. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
         return false;
@@ -895,7 +903,6 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
     if (executeAssembly) {
         hr = host->ExecuteAssembly(domainId, managedAssemblyFullName, argc - 1, (argc - 1) ? &(argv[1]) : NULL, &exitCode);
         if (FAILED(hr)) {
-			//LeaveCriticalSection(m_Lock);
 
             log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
             return false;
@@ -911,71 +918,92 @@ bool LoadStartHost(const int argc, const wchar_t* argv[], Logger &log, const boo
 
     return true;
 }
-
-// Load a .NET Core DLL Application into the Host Application and execute the Main function
-extern "C" DllExport int StartCLRAndExecuteAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries)
+DWORD ValidateArgument(const wchar_t * argument, DWORD maxSize)
 {
-    // Parse the options from the command line
-    DWORD exitCode;
-	Logger log = GetLogger();
-    if (verbose) {
-        log.Enable();
-    }
-    else {
-        log.Disable();
-    }
-
-    const wchar_t * params[] = {
-        dllPath 
-    };
-
-    DWORD paramCount = 1;
-    auto success = LoadStartHost(paramCount, params, log, verbose, waitForDebugger, exitCode, coreRoot, coreLibraries, true);
-
-    log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
-
-	UnloadRunTime();
-
-    return exitCode; 
+	if (argument != nullptr) {
+		const size_t dirLength = wcslen(argument);
+		if (dirLength >= maxSize) {
+			return E_INVALIDARG;
+		}
+	}
+	else {
+		return E_INVALIDARG;
+	}
+	return S_OK;
 }
-// Load a .NET Core DLL Library into the Host Application without executing any functions
-extern "C" DllExport int StartCLRAndLoadAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries)
+
+DWORD ValidateAssemblyFunctionCallArgs(const AssemblyFunctionCall * args) {
+	if (args != nullptr) {
+		if (SUCCEEDED(ValidateArgument(args->Assembly, FunctionNameSize))
+			&& SUCCEEDED(ValidateArgument(args->Class, FunctionNameSize))
+			&& SUCCEEDED(ValidateArgument(args->Function, FunctionNameSize))) {
+			return S_OK;
+		}
+	}
+	return E_INVALIDARG;
+}
+DWORD ValidateBinaryLoaderArgs(const BinaryLoaderArgs * args) {
+	if (args != nullptr) {
+		if (SUCCEEDED(ValidateArgument(args->BinaryFilePath, MAX_LONGPATH))
+			&& SUCCEEDED(ValidateArgument(args->CoreRootPath, MAX_LONGPATH))
+			&& SUCCEEDED(ValidateArgument(args->CoreLibrariesPath, MAX_LONGPATH))) {
+			return S_OK;
+		}
+	}
+
+	return E_INVALIDARG;
+}
+
+// Load a .NET Core DLL Application or Library into the Host Application and also execute it if desired
+extern "C" DllExport DWORD StartCLRAndLoadAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries, bool executeAssembly)
 {
     // Parse the options from the command line
-    DWORD exitCode;
-	Logger log = GetLogger();
-    if (verbose) {
-		log.Enable();
-    }
-    else {
-		log.Disable();
-    }
+    DWORD exitCode = -1;
+	if (SUCCEEDED(ValidateArgument(dllPath, MAX_LONGPATH))
+		&& SUCCEEDED(ValidateArgument(coreRoot, MAX_LONGPATH))
+		&& SUCCEEDED(ValidateArgument(coreLibraries, MAX_LONGPATH))) {
 
-    const wchar_t * params[] = {
-        dllPath
-    };
-    DWORD paramCount = 1;
-    auto success = LoadStartHost(paramCount, params, log, verbose, waitForDebugger, exitCode, coreRoot, coreLibraries, false);
+		Logger log = GetLogger();
+		if (verbose) {
+			log.Enable();
+		}
+		else {
+			log.Disable();
+		}
 
-    log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
+		const wchar_t * params[] = {
+			dllPath
+		};
+		DWORD paramCount = 1;
+		auto success = LoadStartHost(paramCount, params, log, verbose, waitForDebugger, exitCode, coreRoot, coreLibraries, executeAssembly);
 
+		log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
+	}
     return exitCode;
 }
+
 extern "C" DllExport void ExecuteAssembly(const BinaryLoaderArgs * args) {
-    StartCLRAndExecuteAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath);
+	if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
+		StartCLRAndLoadAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath, true);
+	}
 }
 
 extern "C" DllExport void LoadAssembly(const BinaryLoaderArgs * args) {
-    if (args->StartAssembly) {
-        StartCLRAndExecuteAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath);
-    }
-    else {
-        StartCLRAndLoadAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath);
-    }
+	if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
+		if (args->StartAssembly) {
+			StartCLRAndLoadAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath, true);
+		}
+		else {
+			StartCLRAndLoadAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath, false);
+		}
+	}
 }
 
+
 extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * args) {
-    ExecuteAssemblyClassFunction(GetLogger(), args->Assembly, args->Class, args->Function, args->Arguments);
+	if (SUCCEEDED(ValidateAssemblyFunctionCallArgs(args))) {
+		ExecuteAssemblyClassFunction(GetLogger(), args->Assembly, args->Class, args->Function, args->Arguments);
+	}
 }
 
 extern "C" DllExport void UnloadRunTime() {
@@ -995,12 +1023,7 @@ static HRESULT InitializeLock()
 
 	return S_OK;
 }
-static void DeleteLock()
-{
-	if (g_pLock != nullptr) {
-		ClrDeleteCriticalSection(g_pLock);
-	}
-}
+
 BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle,
     IN DWORD     nReason,
     IN LPVOID    Reserved)
@@ -1015,7 +1038,7 @@ BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle,
         break;
         case DLL_PROCESS_DETACH:
 		{
-			DeleteLock();
+			VoidClrDeleteCriticalSection(g_pLock);
 
 			DeleteLogger();
 		}
