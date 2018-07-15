@@ -6,7 +6,7 @@
 #include "palclr.h"
 #include "sstring.h"
 
-#define FunctionNameSize				256
+#define FunctionNameSize		256
 #define AssemblyFunCallArgsSize		512
 
 struct BinaryLoaderArgs
