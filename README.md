@@ -24,17 +24,17 @@ It will produce a file called `libcorerun.so` (Linux) or `libcorerun.dylib` (mac
 
 ### Windows (x86, x64)
 
-Open the `Visual Studio` solution file in the [Windows](https://github.com/unknownv2/CoreHook.Host/Windows) folder and build for the `Win32` or `x64` platform.
+Open the `Visual Studio` solution file in the [Windows](https://github.com/unknownv2/CoreHook.Host/tree/master/Windows) folder and build for the `Win32` or `x64` platform.
 
 #### Releases 
- You can download the 32-bit and 64-bit Windows binaries from [here](https://github.com/unknownv2/CoreHook.Host/releases). Extract the `zip` file, then place the `CoreRunDLL32.dll` or `CoreRunDLL64.dll` in the build output directory of your program, which is usually a folder called `netcoreapp2.1`.
+ You can download the 32-bit and 64-bit Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases). Extract the `zip` file, then place the `CoreRunDLL32.dll` or `CoreRunDLL64.dll` in the build output directory of your program, which is usually a folder called `netcoreapp2.1`.
 
 ### Windows (ARM, ARM64)
 
-Open the `Visual Studio` solution file in the [Windows](https://github.com/unknownv2/CoreHook.Host/Windows) folder and build for the `ARM` or `ARM64` platform.
+Open the `Visual Studio` solution file in the [Windows](https://github.com/unknownv2/CoreHook.Host/tree/master/Windows) folder and build for the `ARM` or `ARM64` platform.
 
 #### Releases 
-You can download the ARM and ARM64 Windows binaries from [here](https://github.com/unknownv2/CoreHook.Host/releases). Extract the `*-arm.zip` file , then place the `CoreRunDLL32.dll` or `CoreRunDLL64.dll` in the output directory created when you publish a program with `dotnet publish -r win-arm`, which is usually a folder called `publish`.
+You can download the ARM and ARM64 Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases). Extract the `*-arm.zip` file , then place the `CoreRunDLL32.dll` or `CoreRunDLL64.dll` in the output directory created when you publish a program with `dotnet publish -r win-arm`, which is usually a folder called `publish`.
 
 ## Notes
 
