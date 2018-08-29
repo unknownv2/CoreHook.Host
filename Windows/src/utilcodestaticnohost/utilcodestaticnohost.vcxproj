@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{5F86E210-9E9F-4227-BD1A-674336EABD06}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>utilcodestaticnohost</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.X64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.X86\$(Configuration)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.X86\$(Configuration)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.X64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;_AMD64_;_WIN64;AMD64;BIT64=1;FEATURE_DEFAULT_INTERFACES=1;_TARGET_AMD64_=1;DBG_TARGET_64BIT=1;DBG_TARGET_AMD64=1;DBG_TARGET_WIN64=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 /IGNORE:4221</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;CMAKE_INTDIR="Debug";_ARM64_;_TARGET_ARM64_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /IGNORE:4221</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;CMAKE_INTDIR="Debug";_X86_;_TARGET_X86_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /IGNORE:4221</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;CMAKE_INTDIR="Debug";_ARM_;_TARGET_ARM_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /IGNORE:4221</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;_X86_;_TARGET_X86_</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x86 /IGNORE:4221</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;_ARM_;_TARGET_ARM_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /IGNORE:4221</AdditionalOptions>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;_AMD64_;_WIN64;AMD64;BIT64=1;FEATURE_DEFAULT_INTERFACES=1;_TARGET_AMD64_=1;DBG_TARGET_64BIT=1;DBG_TARGET_AMD64=1;DBG_TARGET_WIN64=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <SupportJustMyCode>false</SupportJustMyCode>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>false</OmitFramePointers>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 /IGNORE:4221</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;SELF_NO_HOST;_CRTIMP=;_ARM64_;_TARGET_ARM64_</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /IGNORE:4221</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\utilcode\appxutil.cpp" />
+    <ClCompile Include="..\utilcode\arraylist.cpp" />
+    <ClCompile Include="..\utilcode\bitvector.cpp" />
+    <ClCompile Include="..\utilcode\ccomprc.cpp" />
+    <ClCompile Include="..\utilcode\check.cpp" />
+    <ClCompile Include="..\utilcode\clrconfig.cpp" />
+    <ClCompile Include="..\utilcode\clrhelpers.cpp" />
+    <ClCompile Include="..\utilcode\clrhost.cpp" />
+    <ClCompile Include="..\utilcode\clrhost_nodependencies.cpp" />
+    <ClCompile Include="..\utilcode\collections.cpp" />
+    <ClCompile Include="..\utilcode\comex.cpp" />
+    <ClCompile Include="..\utilcode\configuration.cpp" />
+    <ClCompile Include="..\utilcode\corimage.cpp" />
+    <ClCompile Include="..\utilcode\cycletimer.cpp" />
+    <ClCompile Include="..\utilcode\dacutil.cpp" />
+    <ClCompile Include="..\utilcode\debug.cpp" />
+    <ClCompile Include="..\utilcode\delayloadhelpers.cpp" />
+    <ClCompile Include="..\utilcode\dlwrap.cpp" />
+    <ClCompile Include="..\utilcode\downlevel.cpp" />
+    <ClCompile Include="..\utilcode\ex.cpp" />
+    <ClCompile Include="..\utilcode\format1.cpp" />
+    <ClCompile Include="..\utilcode\fstream.cpp" />
+    <ClCompile Include="..\utilcode\fstring.cpp" />
+    <ClCompile Include="..\utilcode\guidfromname.cpp" />
+    <ClCompile Include="..\utilcode\hostimpl.cpp" />
+    <ClCompile Include="..\utilcode\iallocator.cpp" />
+    <ClCompile Include="..\utilcode\ilformatter.cpp" />
+    <ClCompile Include="..\utilcode\jithost.cpp" />
+    <ClCompile Include="..\utilcode\jitperf.cpp" />
+    <ClCompile Include="..\utilcode\lazycow.cpp" />
+    <ClCompile Include="..\utilcode\loaderheap.cpp" />
+    <ClCompile Include="..\utilcode\loadrc.cpp" />
+    <ClCompile Include="..\utilcode\log.cpp" />
+    <ClCompile Include="..\utilcode\longfilepathwrappers.cpp" />
+    <ClCompile Include="..\utilcode\makepath.cpp" />
+    <ClCompile Include="..\utilcode\md5.cpp" />
+    <ClCompile Include="..\utilcode\memorypool.cpp" />
+    <ClCompile Include="..\utilcode\namespaceutil.cpp" />
+    <ClCompile Include="..\utilcode\newapis.cpp" />
+    <ClCompile Include="..\utilcode\opinfo.cpp" />
+    <ClCompile Include="..\utilcode\outstring.cpp" />
+    <ClCompile Include="..\utilcode\pedecoder.cpp" />
+    <ClCompile Include="..\utilcode\peinformation.cpp" />
+    <ClCompile Include="..\utilcode\posterror.cpp" />
+    <ClCompile Include="..\utilcode\prettyprintsig.cpp" />
+    <ClCompile Include="..\utilcode\regutil.cpp" />
+    <ClCompile Include="..\utilcode\safewrap.cpp" />
+    <ClCompile Include="..\utilcode\sbuffer.cpp" />
+    <ClCompile Include="..\utilcode\securityutil.cpp" />
+    <ClCompile Include="..\utilcode\securitywrapper.cpp" />
+    <ClCompile Include="..\utilcode\sigbuilder.cpp" />
+    <ClCompile Include="..\utilcode\sigparser.cpp" />
+    <ClCompile Include="..\utilcode\splitpath.cpp" />
+    <ClCompile Include="..\utilcode\sstring.cpp" />
+    <ClCompile Include="..\utilcode\sstring_com.cpp" />
+    <ClCompile Include="..\utilcode\stacktrace.cpp" />
+    <ClCompile Include="..\utilcode\stdafx.cpp" />
+    <ClCompile Include="..\utilcode\stgpool.cpp" />
+    <ClCompile Include="..\utilcode\stgpooli.cpp" />
+    <ClCompile Include="..\utilcode\stgpoolreadonly.cpp" />
+    <ClCompile Include="..\utilcode\stresslog.cpp" />
+    <ClCompile Include="..\utilcode\util.cpp" />
+    <ClCompile Include="..\utilcode\utilmessagebox.cpp" />
+    <ClCompile Include="..\utilcode\util_nodependencies.cpp" />
+    <ClCompile Include="..\utilcode\utsem.cpp" />
+    <ClCompile Include="..\utilcode\winfix.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
