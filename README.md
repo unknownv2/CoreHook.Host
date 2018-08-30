@@ -32,7 +32,7 @@ Open the `Visual Studio` solution file in the [Windows](Windows) folder and buil
 | Target    | Folder Name   |
 | --------  |:-------------:|
 | Win32     | bin.X86       |
-| X64       | bin.64        |
+| X64       | bin.X64       |
 | ARM       | bin.ARM       |
 | ARM64     | bin.ARM64     |
 
