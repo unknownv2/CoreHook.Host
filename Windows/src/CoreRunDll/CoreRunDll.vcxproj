@@ -131,44 +131,44 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>CoreRunDLL$(PlatformArchitecture)</TargetName>
+    <TargetName>corerundll$(PlatformArchitecture)</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin.X64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <TargetName>CoreRunDLL64</TargetName>
+    <TargetName>corerundll64</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>CoreRunDLL$(PlatformArchitecture)</TargetName>
+    <TargetName>corerundll$(PlatformArchitecture)</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin.X86\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <TargetName>CoreRunDLL32</TargetName>
+    <TargetName>corerundll32</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin.X64\$(Configuration)\</OutDir>
-    <TargetName>CoreRunDLL$(PlatformArchitecture)</TargetName>
+    <TargetName>corerundll$(PlatformArchitecture)</TargetName>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin.X86\$(Configuration)\</OutDir>
-    <TargetName>CoreRunDLL$(PlatformArchitecture)</TargetName>
+    <TargetName>corerundll$(PlatformArchitecture)</TargetName>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
-    <TargetName>CoreRunDLL32</TargetName>
+    <TargetName>corerundll32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin.$(Platform)\$(Configuration)\</OutDir>
-    <TargetName>CoreRunDLL64</TargetName>
+    <TargetName>corerundll64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
