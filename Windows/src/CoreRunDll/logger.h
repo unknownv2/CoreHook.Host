@@ -20,7 +20,7 @@ public:
         m_prefixRequired(true),
         m_formatHRESULT(false) { }
 
-    ~Logger() { }
+	~Logger();
 
     // Enables output from the logger
     void Enable();

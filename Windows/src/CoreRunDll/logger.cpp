@@ -8,11 +8,18 @@
 #include <windows.h>
 #include "logger.h"
 #include "palclr.h"
+#include "pipelogger.h"
 
 void Logger::Enable() {
     m_isEnabled = true;
+
+	// initialize pipe logger
+	SyelogOpen("corerundll", SYELOG_FACILITY_APPLICATION);
 }
 
+Logger::~Logger() {
+	SyelogClose(TRUE);
+}
 void Logger::Disable() {
     m_isEnabled = false;
 }
@@ -32,6 +39,8 @@ void print(const wchar_t *val) {
         ::wcsncpy_s(chunk, chunkSize, val + i, _TRUNCATE);
 
         ::wprintf(W("%s"), chunk);
+
+		Syelog(SYELOG_SEVERITY_INFORMATION, "%ls\n", chunk);
     }
 }
 
