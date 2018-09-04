@@ -182,7 +182,7 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <CompileAs>CompileAsCpp</CompileAs>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -230,7 +230,7 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <CompileAs>CompileAsCpp</CompileAs>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -294,7 +294,7 @@
       <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8 /homeparams</AdditionalOptions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <SupportJustMyCode>false</SupportJustMyCode>
@@ -345,7 +345,7 @@
       <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8 /homeparams</AdditionalOptions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <SupportJustMyCode>false</SupportJustMyCode>
@@ -378,7 +378,7 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -421,7 +421,7 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -464,7 +464,7 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;_AMD64_;_WIN64;AMD64;BIT64=1;FEATURE_DEFAULT_INTERFACES=1;_TARGET_AMD64_=1;DBG_TARGET_64BIT=1;DBG_TARGET_AMD64=1;DBG_TARGET_WIN64=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -510,7 +510,7 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\obj\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
