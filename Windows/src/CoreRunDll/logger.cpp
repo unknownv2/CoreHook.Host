@@ -9,6 +9,9 @@
 #include "logger.h"
 #include "palclr.h"
 #include "pipelogger.h"
+#include <string>
+
+std::wstring logEntry;
 
 void Logger::Enable() {
     m_isEnabled = true;
@@ -18,7 +21,10 @@ void Logger::Enable() {
 }
 
 Logger::~Logger() {
-	SyelogClose(TRUE);
+	// do not terminate server application
+	BOOL fRequestExitOnClose = FALSE;
+	Syelog(SYELOG_SEVERITY_INFORMATION, "Closing logger...");
+	SyelogClose(fRequestExitOnClose);
 }
 void Logger::Disable() {
     m_isEnabled = false;
@@ -34,13 +40,14 @@ void print(const wchar_t *val) {
 
     auto valLength = ::wcslen(val);
 
+
     for (size_t i = 0 ; i < valLength ; i += chunkSize) {
 
         ::wcsncpy_s(chunk, chunkSize, val + i, _TRUNCATE);
 
         ::wprintf(W("%s"), chunk);
 
-		Syelog(SYELOG_SEVERITY_INFORMATION, "%ls\n", chunk);
+		logEntry += chunk;
     }
 }
 
@@ -266,6 +273,8 @@ Logger& Logger::endl (Logger& log) {
         print(W("\r\n"));
         log.m_prefixRequired = true;
         log.m_formatHRESULT = false;
+        Syelog(SYELOG_SEVERITY_INFORMATION, "%ls", logEntry.c_str());
+        logEntry.clear();
     }
     return log;
 }
