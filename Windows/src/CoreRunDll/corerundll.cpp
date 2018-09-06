@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include "logger.h"
 #include "mscoree.h"
-#include "sstring.h"
+#include "ex.h"
+
 
 #define FunctionNameSize			256
 #define AssemblyFunCallArgsSize		512
@@ -584,7 +585,7 @@ bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
 	host = GetGlobalHost();
 
 	if (host != nullptr) {
-
+		
 		EntryInfo.HostPID = GetCurrentProcessId();
 
 		hr = host->CreateDelegate(
@@ -600,21 +601,30 @@ bool ExecuteAssemblyClassFunction(Logger &log, const wchar_t * assembly,
 			return false;
 		}
 		lock.Release();
-		RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
-		if (remoteArgs != NULL) {
-			char ParamString[17];
+		EX_TRY {
+			RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
+			if (remoteArgs != NULL) {
+				char ParamString[17];
 
-			// parse entry arguments
-			EntryInfo.Args.UserData = remoteArgs->UserData;
-			EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
+				// parse entry arguments
+				EntryInfo.Args.UserData = remoteArgs->UserData;
+				EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-			RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+				RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
 
-			((MainMethodFp*)pfnDelegate)(ParamString);
+				((MainMethodFp*)pfnDelegate)(ParamString);
+			}
+			else {
+				((MainMethodFp*)pfnDelegate)(NULL);
+			}
 		}
-		else {
-			((MainMethodFp*)pfnDelegate)(NULL);
+		EX_CATCH{
+			Exception *e = GET_EXCEPTION();
+			SString errorMsg;
+			e->GetMessage(errorMsg);
+			log << W("An error occured while loading the managed assembly: ") << errorMsg << Logger::endl;
 		}
+		EX_END_CATCH(SwallowAllExceptions)
 	}
 	log << W("App exit value = ") << exitCode << Logger::endl;
 
@@ -1009,6 +1019,13 @@ extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * a
 extern "C" DllExport void UnloadRunTime() {
 	UnloadStopHost(*GetLogger());
 }
+
+extern "C" DllExport void LogMessage(const wchar_t * message) {
+	if (message != nullptr) {
+		*GetLogger() << message << Logger::endl;
+	}
+}
+
 static HRESULT InitializeLock()
 {
 	STATIC_CONTRACT_LIMITED_METHOD;
