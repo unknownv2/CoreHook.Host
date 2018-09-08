@@ -45,7 +45,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{56ECC22A-A4DB-409B-826E-D3637CC647E6}</ProjectGuid>
     <RootNamespace>corerundll</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
