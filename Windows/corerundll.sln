@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utilcodestaticnohost", "src\utilcodestaticnohost\utilcodestaticnohost.vcxproj", "{5F86E210-9E9F-4227-BD1A-674336EABD06}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreRunDll", "src\CoreRunDll\CoreRunDll.vcxproj", "{56ECC22A-A4DB-409B-826E-D3637CC647E6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "corerundll", "src\corerundll\corerundll.vcxproj", "{56ECC22A-A4DB-409B-826E-D3637CC647E6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5F86E210-9E9F-4227-BD1A-674336EABD06} = {5F86E210-9E9F-4227-BD1A-674336EABD06}
 	EndProjectSection
