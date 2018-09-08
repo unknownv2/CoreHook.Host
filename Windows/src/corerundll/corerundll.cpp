@@ -991,12 +991,8 @@ extern "C" DllExport void ExecuteAssembly(const BinaryLoaderArgs * args) {
 
 extern "C" DllExport void LoadAssembly(const BinaryLoaderArgs * args) {
 	if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
-		if (args->StartAssembly) {
-			StartCLRAndLoadAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath, true);
-		}
-		else {
-			StartCLRAndLoadAssembly(args->BinaryFilePath, args->Verbose, args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath, false);
-		}
+		StartCLRAndLoadAssembly(args->BinaryFilePath, args->Verbose,
+			args->WaitForDebugger, args->CoreRootPath, args->CoreLibrariesPath, args->StartAssembly);
 	}
 }
 
