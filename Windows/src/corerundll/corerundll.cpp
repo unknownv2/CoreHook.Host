@@ -71,38 +71,45 @@ Logger *m_Log;
 
 static CRITSEC_COOKIE g_pLock = nullptr;
 
-static HRESULT InitializeLock();
+static HRESULT InitializeLock (
+	VOID
+    );
 
-// DLL exports
+// Declare DLL exports used for starting and stopping the CoreCLR Runtime
 CDllExport
-void
-UnloadRunTime();
-
-CDllExport
-void
-ExecuteAssemblyFunction(
-	const AssemblyFunctionCall * args
+VOID
+UnloadRunTime (
+	VOID
     );
 
 CDllExport
-void
+VOID
+ExecuteAssemblyFunction(
+	IN CONST AssemblyFunctionCall* args
+    );
+
+CDllExport
+VOID
 LoadAssembly(
-	const BinaryLoaderArgs * args);
+	IN CONST BinaryLoaderArgs* args
+    );
 
 CDllExport
-void 
+VOID
 ExecuteAssembly(
-	const BinaryLoaderArgs * args);
+	IN CONST BinaryLoaderArgs* args
+    );
 
 CDllExport
-DWORD 
+DWORD
 StartCLRAndLoadAssembly(
-	const wchar_t* dllPath,
-	bool verbose,
-	bool waitForDebugger,
-	const wchar_t* coreRoot,
-	const wchar_t* coreLibraries,
-	bool execute);
+	IN CONST WCHAR*  dllPath,
+	IN CONST BOOLEAN verbose,
+	IN CONST BOOLEAN waitForDebugger,
+	IN CONST WCHAR*  coreRoot,
+	IN CONST WCHAR*  coreLibraries,
+	IN CONST BOOLEAN executeAssembly
+    );
 
 // Encapsulates the environment that CoreCLR will run in, including the TPALIST
 class HostEnvironment
@@ -420,7 +427,7 @@ public:
 	}
 };
 
-void
+VOID
 SetGlobalHost (
 	ICLRRuntimeHost4* host
     )
@@ -436,9 +443,9 @@ GetGlobalHost (
 	return m_Host;
 }
 
-void
+VOID
 SetDomainId (
-	DWORD domainId
+	IN CONST DWORD domainId
     )
 {
 	m_domainId = domainId;
@@ -454,7 +461,7 @@ GetDomainId (
 
 VOID
 SetLogger (
-	Logger* log
+	IN Logger* log
     )
 {
 	if (m_Log == NULL) {
@@ -464,6 +471,7 @@ SetLogger (
 
 Logger*
 GetLogger (
+	VOID
     )
 {
 	if (m_Log == NULL) {
@@ -472,7 +480,8 @@ GetLogger (
 	return m_Log;
 }
 
-void DeleteLogger (
+VOID 
+DeleteLogger (
 	VOID
     )
 {
@@ -481,10 +490,10 @@ void DeleteLogger (
 	}
 }
 
-void
+VOID
 RtlLongLongToAsciiHex (
-	LONGLONG InValue,
-	char* InBuffer
+	IN CONST LONGLONG InValue,
+	IN CHAR* InBuffer
     )
 {
 	ULONG           Index;
@@ -513,7 +522,7 @@ RtlLongLongToAsciiHex (
 	InBuffer[16] = 0;
 }
 
-int
+INT32
 PrintModules (
 	VOID
     ) 
@@ -599,10 +608,10 @@ CreateStartupFlags (
 	return initialFlags;
 }
 
-bool
+BOOLEAN
 ExecuteAssemblyMain (
-	const int argc,
-	const wchar_t* argv[],
+	IN CONST INT32 argc,
+	IN CONST WCHAR* argv[],
 	Logger &log
     )
 {
@@ -663,14 +672,14 @@ ExecuteAssemblyMain (
 }
 
 // Execute a method from a class located inside a .NET Core Library Assembly
-bool 
+BOOLEAN 
 ExecuteAssemblyClassFunction (
 	Logger &log,
-	const wchar_t * assembly,
-	const wchar_t * type,
-	const wchar_t * entry,
-	const BYTE* arguments
-   )
+	IN CONST WCHAR* assembly,
+	IN CONST WCHAR* type,
+	IN CONST WCHAR* entry,
+	IN CONST BYTE*  arguments
+    )
 {
 	HRESULT hr;
 	DWORD exitCode = -1, dwWaitResult = -1;
@@ -721,10 +730,10 @@ ExecuteAssemblyClassFunction (
 	return true;
 }
 
-bool
+BOOLEAN
 UnloadStopHost (
 	Logger &log
-   )
+    )
 {
 	HRESULT hr;
 	DWORD exitCode = -1;
@@ -780,17 +789,17 @@ UnloadStopHost (
 	return true;
 }
 
-bool
+BOOLEAN
 LoadStartHost(
-	const int argc,
-	const wchar_t* argv[],
+	IN CONST INT32 argc,
+	IN CONST WCHAR* argv[],
 	Logger &log,
-	const bool verbose,
-	const bool waitForDebugger,
+	IN CONST BOOLEAN verbose,
+	IN CONST BOOLEAN waitForDebugger,
 	DWORD &exitCode,
-	const wchar_t* coreRoot, 
-	const wchar_t* coreLibraries,
-	const bool executeAssembly
+	IN CONST WCHAR* coreRoot,
+	IN CONST WCHAR* coreLibraries,
+	IN CONST BOOLEAN executeAssembly
     )
 {
 
@@ -1041,10 +1050,11 @@ LoadStartHost(
 
 	return true;
 }
+
 DWORD
 ValidateArgument (
-	const wchar_t * argument, 
-	DWORD maxSize
+	IN CONST WCHAR* argument,
+	IN DWORD maxSize
     )
 {
 	if (argument != nullptr) {
@@ -1061,7 +1071,7 @@ ValidateArgument (
 
 DWORD
 ValidateAssemblyFunctionCallArgs (
-	const AssemblyFunctionCall * args
+	IN CONST AssemblyFunctionCall* args
     ) 
 {
 	if (args != nullptr) {
@@ -1075,7 +1085,7 @@ ValidateAssemblyFunctionCallArgs (
 }
 DWORD 
 ValidateBinaryLoaderArgs (
-	const BinaryLoaderArgs * args
+	IN CONST BinaryLoaderArgs* args
     )
 {
 	if (args != nullptr) {
@@ -1093,12 +1103,12 @@ ValidateBinaryLoaderArgs (
 CDllExport
 DWORD
 StartCLRAndLoadAssembly (
-	const wchar_t* dllPath, 
-	const bool verbose,
-	const bool waitForDebugger,
-	const wchar_t* coreRoot,
-	const wchar_t* coreLibraries,
-	const bool executeAssembly
+	IN CONST WCHAR*  dllPath,
+	IN CONST BOOLEAN verbose,
+	IN CONST BOOLEAN waitForDebugger,
+	IN CONST WCHAR*  coreRoot,
+	IN CONST WCHAR*  coreLibraries,
+	IN CONST BOOLEAN executeAssembly
     )
 {
 
@@ -1139,9 +1149,9 @@ StartCLRAndLoadAssembly (
 }
 
 CDllExport
-void
+VOID
 ExecuteAssembly (
-	const BinaryLoaderArgs * args
+	IN CONST BinaryLoaderArgs* args
     )
 {
 	if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
@@ -1157,9 +1167,9 @@ ExecuteAssembly (
 }
 
 CDllExport
-void
+VOID
 LoadAssembly (
-	const BinaryLoaderArgs * args
+	IN CONST BinaryLoaderArgs* args
     )
 {
 	if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
@@ -1174,9 +1184,9 @@ LoadAssembly (
 }
 
 CDllExport
-void 
+VOID
 ExecuteAssemblyFunction (
-	const AssemblyFunctionCall * args
+	IN CONST AssemblyFunctionCall* args
     )
 {
 	if (SUCCEEDED(ValidateAssemblyFunctionCallArgs(args))) {
@@ -1190,12 +1200,14 @@ ExecuteAssemblyFunction (
 }
 
 CDllExport
-void 
+VOID
 UnloadRunTime(
 	VOID
-) {
+    ) 
+{
 	UnloadStopHost(*GetLogger());
 }
+
 static 
 HRESULT
 InitializeLock(
@@ -1226,18 +1238,18 @@ DllMain(
 	BOOLEAN bSuccess = TRUE;
 	switch (nReason)
 	{
-	case DLL_PROCESS_ATTACH:
-	{
-		InitializeLock();
-	}
-	break;
-	case DLL_PROCESS_DETACH:
-	{
-		VoidClrDeleteCriticalSection(g_pLock);
+		case DLL_PROCESS_ATTACH:
+		{
+			InitializeLock();
+		}
+		break;
+		case DLL_PROCESS_DETACH:
+		{
+			VoidClrDeleteCriticalSection(g_pLock);
 
-		DeleteLogger();
-	}
-	break;
+			DeleteLogger();
+		}
+		break;
 	}
 
 	return bSuccess;
