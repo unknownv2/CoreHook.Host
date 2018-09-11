@@ -76,7 +76,13 @@ extern "C" DllExport void UnloadRunTime();
 extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * args);
 extern "C" DllExport void LoadAssembly(const BinaryLoaderArgs * args);
 extern "C" DllExport void ExecuteAssembly(const BinaryLoaderArgs * args);
-extern "C" DllExport DWORD StartCLRAndLoadAssembly(const wchar_t* dllPath, bool verbose, bool waitForDebugger, const wchar_t* coreRoot, const wchar_t* coreLibraries, bool execute);
+extern "C" DllExport DWORD StartCLRAndLoadAssembly(
+	const wchar_t* dllPath,
+	bool verbose,
+	bool waitForDebugger,
+	const wchar_t* coreRoot,
+	const wchar_t* coreLibraries,
+	bool execute);
 
 // Encapsulates the environment that CoreCLR will run in, including the TPALIST
 class HostEnvironment
@@ -211,7 +217,10 @@ public:
 		}
 	}
 
-	bool TPAListContainsFile(_In_z_ wchar_t* fileNameWithoutExtension, _In_reads_(countExtensions) const wchar_t** rgTPAExtensions, int countExtensions)
+	bool TPAListContainsFile(
+		_In_z_ wchar_t* fileNameWithoutExtension,
+		_In_reads_(countExtensions) const wchar_t** rgTPAExtensions, 
+		int countExtensions)
 	{
 		if (m_tpaList.IsEmpty()) return false;
 
@@ -251,7 +260,10 @@ public:
 		}
 	}
 
-	void AddFilesFromDirectoryToTPAList(_In_z_ const wchar_t* targetPath, _In_reads_(countExtensions) const wchar_t** rgTPAExtensions, int countExtensions)
+	void AddFilesFromDirectoryToTPAList(
+		_In_z_ const wchar_t* targetPath,
+		_In_reads_(countExtensions) const wchar_t** rgTPAExtensions,
+		int countExtensions)
 	{
 		*m_log << W("Adding assemblies from ") << targetPath << W(" to the TPA list") << Logger::endl;
 		StackSString assemblyPath;
@@ -295,7 +307,11 @@ public:
 						}
 						else
 						{
-							*m_log << W("Not adding ") << targetPath << data.cFileName << W(" to the TPA list because another file with the same name is already present on the list") << Logger::endl;
+							*m_log << W("Not adding ")
+								<< targetPath 
+								<< data.cFileName
+								<< W(" to the TPA list because another file with the same name is already present on the list")
+								<< Logger::endl;
 						}
 					}
 				} while (0 != WszFindNextFile(findHandle, &data));
@@ -310,7 +326,9 @@ public:
 	const wchar_t * GetTpaList(const wchar_t * coreLibsPath) {
 		if (m_tpaList.IsEmpty()) {
 			const wchar_t *rgTPAExtensions[] = {
-						W("*.ni.dll"),		// Probe for .ni.dll first so that it's preferred if ni and il coexist in the same dir
+				        // Probe for .ni.dll first so that it's preferred
+				        // if ni and il coexist in the same dir
+						W("*.ni.dll"),		
 						W("*.dll"),
 						W("*.ni.exe"),
 						W("*.exe"),
@@ -366,7 +384,11 @@ public:
 
 			HRESULT hr = pfnGetCLRRuntimeHost(IID_ICLRRuntimeHost4, (IUnknown**)&m_CLRRuntimeHost);
 			if (FAILED(hr)) {
-				*m_log << W("Failed to get ICLRRuntimeHost4 interface. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+				*m_log 
+					<< W("Failed to get ICLRRuntimeHost4 interface. ERRORCODE: ")
+					<< Logger::hresult
+					<< hr
+					<< Logger::endl;
 				return nullptr;
 			}
 		}
