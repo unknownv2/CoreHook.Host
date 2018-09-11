@@ -426,11 +426,11 @@ VOID SetLogger(Logger* log) {
 	}
 }
 
-Logger& GetLogger() {
+Logger* GetLogger() {
 	if (m_Log == NULL) {
 		m_Log = new Logger();
 	}
-	return *m_Log;
+	return m_Log;
 }
 
 void DeleteLogger() {
@@ -1017,12 +1017,12 @@ extern "C" DllExport DWORD StartCLRAndLoadAssembly(
 		&& SUCCEEDED(ValidateArgument(coreRoot, MAX_LONGPATH))
 		&& SUCCEEDED(ValidateArgument(coreLibraries, MAX_LONGPATH))) {
 
-		Logger log = GetLogger();
+		Logger* log = GetLogger();
 		if (verbose) {
-			log.Enable();
+			log->Enable();
 		}
 		else {
-			log.Disable();
+			log->Disable();
 		}
 
 		const wchar_t * params[] = {
@@ -1034,7 +1034,7 @@ extern "C" DllExport DWORD StartCLRAndLoadAssembly(
 			LoadStartHost(
 			  paramCount,
 			  params,
-			  log,
+			  *log,
 			  verbose,
 			  waitForDebugger,
 			  exitCode, 
@@ -1042,7 +1042,7 @@ extern "C" DllExport DWORD StartCLRAndLoadAssembly(
 			  coreLibraries,
 			  executeAssembly);
 
-		log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
+		*log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
 	}
 	return exitCode;
 }
@@ -1075,7 +1075,7 @@ extern "C" DllExport void LoadAssembly(const BinaryLoaderArgs * args) {
 extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * args) {
 	if (SUCCEEDED(ValidateAssemblyFunctionCallArgs(args))) {
 
-		ExecuteAssemblyClassFunction(GetLogger(),
+		ExecuteAssemblyClassFunction(*GetLogger(),
 			args->Assembly,
 			args->Class,
 			args->Function,
@@ -1084,7 +1084,7 @@ extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * a
 }
 
 extern "C" DllExport void UnloadRunTime() {
-	UnloadStopHost(GetLogger());
+	UnloadStopHost(*GetLogger());
 }
 static HRESULT InitializeLock() {
 	STATIC_CONTRACT_LIMITED_METHOD;

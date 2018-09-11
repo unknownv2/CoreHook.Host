@@ -28,7 +28,6 @@ public:
     // Disables output from the logger
     void Disable();
 
-  
     Logger& operator<< (bool val);
     Logger& operator<< (short val);
     Logger& operator<< (unsigned short val);
