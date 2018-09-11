@@ -49,8 +49,3 @@ public:
 private:
     void EnsurePrefixIsPrinted();
 };
-
-
-
-
-
