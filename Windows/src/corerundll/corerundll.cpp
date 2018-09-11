@@ -73,9 +73,16 @@ static HRESULT InitializeLock();
 
 // DLL exports
 extern "C" DllExport void UnloadRunTime();
-extern "C" DllExport void ExecuteAssemblyFunction(const AssemblyFunctionCall * args);
-extern "C" DllExport void LoadAssembly(const BinaryLoaderArgs * args);
-extern "C" DllExport void ExecuteAssembly(const BinaryLoaderArgs * args);
+
+extern "C" DllExport void ExecuteAssemblyFunction(
+	const AssemblyFunctionCall * args);
+
+extern "C" DllExport void LoadAssembly(
+	const BinaryLoaderArgs * args);
+
+extern "C" DllExport void ExecuteAssembly(
+	const BinaryLoaderArgs * args);
+
 extern "C" DllExport DWORD StartCLRAndLoadAssembly(
 	const wchar_t* dllPath,
 	bool verbose,
@@ -326,8 +333,8 @@ public:
 	const wchar_t * GetTpaList(const wchar_t * coreLibsPath) {
 		if (m_tpaList.IsEmpty()) {
 			const wchar_t *rgTPAExtensions[] = {
-				        // Probe for .ni.dll first so that it's preferred
-				        // if ni and il coexist in the same dir
+						// Probe for .ni.dll first so that it's preferred
+						// if ni and il coexist in the same dir
 						W("*.ni.dll"),		
 						W("*.dll"),
 						W("*.ni.exe"),
