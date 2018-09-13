@@ -8,6 +8,7 @@
 // Function export macro
 #define DllExport __declspec(dllexport)
 
+// Export functions with their plain name
 #define DllApi extern "C" DllExport
 
 // Utility macro for testing whether or not a flag is set.
@@ -28,7 +29,9 @@ static const wchar_t *coreCLRDll = W("CoreCLR.dll");
 //  found in the same directory as the host, it will be looked for here.
 static const wchar_t *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
+// The max length of a function to be executed in a .NET class
 #define FunctionNameSize			256
+// The max length of arguments to be parsed and passed to a .NET function
 #define AssemblyFunCallArgsSize		512
 
 struct BinaryLoaderArgs
@@ -62,19 +65,16 @@ struct RemoteEntryInfo
 	RemoteFunctionArgs Args;
 };
 
-ICLRRuntimeHost4 *m_Host;
+// Handle to the CoreCLR runtime hosting interface
+std::shared_ptr<ICLRRuntimeHost4> m_Host;
 
+// Handle to a logger which writes to the standard output
+std::shared_ptr<Logger> m_Log;
+
+// The AppDomain ID in  which .NET assemblies will be executed in
 DWORD m_domainId;
 
-Logger *m_Log;
-
-//static CRITSEC_COOKIE g_pLock = nullptr;
-
-static HRESULT InitializeLock (
-	VOID
-    );
-
-// Declare DLL exports used for starting and stopping the CoreCLR Runtime
+// DLL exports used for starting and stopping the CoreCLR Runtime
 DllApi
 VOID
 UnloadRunTime (
@@ -444,15 +444,16 @@ public:
 	}
 };
 
-VOID
+const std::shared_ptr<ICLRRuntimeHost4>&
 SetGlobalHost (
 	ICLRRuntimeHost4* host
     )
 {
-	m_Host = host;
+	m_Host.reset(host);
+	return m_Host;
 }
 
-ICLRRuntimeHost4*
+const std::shared_ptr<ICLRRuntimeHost4>&
 GetGlobalHost (
 	VOID
     )
@@ -476,35 +477,15 @@ GetDomainId (
 	return m_domainId;
 }
 
-VOID
-SetLogger (
-	IN Logger* log
-    )
-{
-	if (m_Log == NULL) {
-		m_Log = log;
-	}
-}
-
-Logger*
+const std::shared_ptr<Logger>&
 GetLogger (
 	VOID
     )
 {
-	if (m_Log == NULL) {
-		m_Log = new Logger();
+	if (m_Log == nullptr) {
+		m_Log = std::make_shared<Logger>();
 	}
 	return m_Log;
-}
-
-VOID 
-DeleteLogger (
-	VOID
-    )
-{
-	if (m_Log != nullptr) {
-		delete m_Log;
-	}
 }
 
 INT32
@@ -517,12 +498,11 @@ PrintModules (
 	DWORD cbNeeded;
 	unsigned int i;
 	DWORD processID = GetCurrentProcessId();
-	// Print the process identifier.
 
+	// Print the process identifier.
 	printf("\nProcess ID: %u\n", processID);
 
 	// Get a handle to the process.
-
 	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
 		PROCESS_VM_READ,
 		FALSE, processID);
@@ -530,7 +510,6 @@ PrintModules (
 		return 1;
 
 	// Get a list of all the modules in this process.
-
 	if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
 	{
 		for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
@@ -538,12 +517,10 @@ PrintModules (
 			TCHAR szModName[MAX_PATH];
 
 			// Get the full path to the module's file.
-
 			if (GetModuleFileNameEx(hProcess, hMods[i], szModName,
 				sizeof(szModName) / sizeof(TCHAR)))
 			{
 				// Print the module name and handle value.
-
 				wprintf(TEXT("\t%s (0x%llX)\n"), szModName, (UINT64)hMods[i]);
 			}
 		}
@@ -602,7 +579,6 @@ ExecuteAssemblyMain (
 {
 	HRESULT hr;
 	DWORD exitCode = -1;
-	//CRITSEC_Holder lock(g_pLock);
 
 	const wchar_t* exeName = argc > 0 ? argv[0] : nullptr;
 	if (exeName == nullptr)
@@ -635,8 +611,6 @@ ExecuteAssemblyMain (
 	auto host = GetGlobalHost();
 	if (host != nullptr) {
 
-		//lock.Release();
-
 		hr = host->ExecuteAssembly(
 			GetDomainId(),
 			managedAssemblyFullName.c_str(),
@@ -654,11 +628,18 @@ ExecuteAssemblyMain (
 	return true;
 }
 
-template <typename I> std::string n2hexstr(I w, size_t hex_len = sizeof(I) << 1) {
+template <typename I>
+std::string
+ConvertToHexString (
+	I w, 
+	size_t hex_len = sizeof(I) << 1
+    )
+{
 	static const char* digits = "0123456789ABCDEF";
 	std::string rc(hex_len, '0');
-	for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4)
+	for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4) {
 		rc[i] = digits[(w >> j) & 0x0f];
+	}
 	return rc;
 }
 
@@ -675,13 +656,10 @@ ExecuteAssemblyClassFunction (
 	HRESULT hr;
 	DWORD exitCode = -1, dwWaitResult = -1;
 	RemoteEntryInfo EntryInfo;
-	ICLRRuntimeHost4 * host = NULL;
 	typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
 	MainMethodFp *pfnDelegate = NULL;
 
-	//CRITSEC_Holder lock(g_pLock);
-
-	host = GetGlobalHost();
+	auto host = GetGlobalHost();
 
 	if (host != nullptr) {
 
@@ -699,7 +677,7 @@ ExecuteAssemblyClassFunction (
 			log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
 			return false;
 		}
-		//lock.Release();
+
 		RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
 		if (remoteArgs != NULL) {
 
@@ -708,12 +686,12 @@ ExecuteAssemblyClassFunction (
 			EntryInfo.Args.UserData = remoteArgs->UserData;
 			EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-			std::string paramString = n2hexstr((LONGLONG)&EntryInfo, 16);
+			std::string paramString = ConvertToHexString((LONGLONG)&EntryInfo, 16);
 
 			pfnDelegate(paramString.c_str());
 		}
 		else {
-			pfnDelegate(NULL);
+			pfnDelegate(nullptr);
 		}
 	}
 	log << W("App exit value = ") << exitCode << Logger::endl;
@@ -729,13 +707,11 @@ UnloadStopHost (
 	HRESULT hr;
 	DWORD exitCode = -1;
 
-	//CRITSEC_Holder lock(g_pLock);
-
 	//-------------------------------------------------------------
 
 	// Unload the AppDomain
 
-	ICLRRuntimeHost4 * host = GetGlobalHost();
+	auto host = GetGlobalHost();
 	if (host != nullptr) {
 
 		log << W("Unloading the AppDomain") << Logger::endl;
@@ -792,6 +768,11 @@ LoadStartHost(
 	IN CONST BOOLEAN executeAssembly
     )
 {
+	if (GetGlobalHost() != nullptr) {
+		log << W(".NET Core runtime has already been started.") << Logger::endl;
+		return false;
+	}
+
 	// Assume failure
 	exitCode = -1;
 
@@ -877,13 +858,14 @@ LoadStartHost(
 	wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, coreRoot);
 
 	// Start the CoreCLR
-	//CRITSEC_Holder lock(g_pLock);
 
-	ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
-	if (!host) {
+	ICLRRuntimeHost4 *hostPtr = hostEnvironment.GetCLRRuntimeHost();
+	if (!hostPtr) {
 		log << W("Unable to get ICLRRuntimeHost4 handle") << Logger::endl;
 		return false;
 	}
+
+	auto host = SetGlobalHost(hostPtr);
 
 	HRESULT hr;
 
@@ -1031,8 +1013,6 @@ LoadStartHost(
 		log << W("App exit value = ") << exitCode << Logger::endl;
 	}
 	else {
-		SetGlobalHost(host);
-
 		SetDomainId(domainId);
 	}
 
@@ -1106,7 +1086,7 @@ StartCLRAndLoadAssembly (
 		&& SUCCEEDED(ValidateArgument(coreRoot, MAX_PATH))
 		&& SUCCEEDED(ValidateArgument(coreLibraries, MAX_PATH))) {
 
-		Logger* log = GetLogger();
+		auto log = GetLogger();
 		if (verbose) {
 			log->Enable();
 		}
@@ -1196,16 +1176,6 @@ UnloadRunTime(
 	UnloadStopHost(*GetLogger());
 }
 
-static 
-HRESULT
-InitializeLock(
-	VOID
-    )
-{
-
-	return S_OK;
-}
-
 BOOLEAN 
 WINAPI
 DllMain(
@@ -1223,8 +1193,6 @@ DllMain(
 		break;
 		case DLL_PROCESS_DETACH:
 		{
-
-			DeleteLogger();
 		}
 		break;
 	}
