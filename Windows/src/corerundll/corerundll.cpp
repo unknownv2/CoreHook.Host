@@ -73,7 +73,7 @@ DWORD m_domainId;
 
 Logger *m_Log;
 
-static CRITSEC_COOKIE g_pLock = nullptr;
+//static CRITSEC_COOKIE g_pLock = nullptr;
 
 static HRESULT InitializeLock (
 	VOID
@@ -154,6 +154,7 @@ class HostEnvironment
 			return GetLastError();
 		}
 		buffer.assign(buf);
+		return ret;
 	}
 
 	// Attempts to load CoreCLR.dll from the given directory.
@@ -241,8 +242,8 @@ public:
 		if (!m_coreCLRModule) {
 
 			// Failed to load. Try to load from the well-known location.
-			wchar_t coreCLRInstallPath[MAX_LONGPATH];
-			::ExpandEnvironmentStringsW(coreCLRInstallDirectory, coreCLRInstallPath, MAX_LONGPATH);
+			wchar_t coreCLRInstallPath[MAX_PATH];
+			::ExpandEnvironmentStringsW(coreCLRInstallDirectory, coreCLRInstallPath, MAX_PATH);
 			m_coreCLRModule = TryLoadCoreCLR(coreCLRInstallPath);
 
 		}
@@ -279,7 +280,7 @@ public:
 		_In_reads_(countExtensions) const wchar_t** rgTPAExtensions, 
 		int countExtensions)
 	{
-		if (m_tpaList.size() == 0) return false;
+		if (m_tpaList.empty()) return false;
 
 		for (int iExtension = 0; iExtension < countExtensions; iExtension++)
 		{
@@ -321,20 +322,20 @@ public:
 	}
 
 	void AddFilesFromDirectoryToTPAList(
-		_In_z_ const wchar_t* targetPath,
+		_In_z_ const std::wstring& targetPath,
 		_In_reads_(countExtensions) const wchar_t** rgTPAExtensions,
 		int countExtensions)
 	{
 		*m_log << W("Adding assemblies from ") << targetPath << W(" to the TPA list") << Logger::endl;
 		std::wstring assemblyPath;
-		const size_t dirLength = wcslen(targetPath);
+		const size_t dirLength = targetPath.size();
 
 		for (int iExtension = 0; iExtension < countExtensions; iExtension++)
 		{
 			assemblyPath.assign(targetPath);
 			assemblyPath.append(rgTPAExtensions[iExtension]);
 			WIN32_FIND_DATA data;
-			HANDLE findHandle = WszFindFirstFile(assemblyPath, &data);
+			HANDLE findHandle = FindFirstFileW(assemblyPath.c_str(), &data);
 
 			if (findHandle != INVALID_HANDLE_VALUE) {
 				do {
@@ -360,10 +361,10 @@ public:
 						// Add to the list if not already on it
 						if (!TPAListContainsFile(fileNameWithoutExtension, rgTPAExtensions, countExtensions))
 						{
-							assemblyPath.Truncate(assemblyPath.Begin() + (DWORD)dirLength);
-							assemblyPath.Append(data.cFileName);
-							m_tpaList.Append(assemblyPath);
-							m_tpaList.Append(W(';'));
+							assemblyPath.resize(dirLength);
+							assemblyPath.append(data.cFileName);
+							m_tpaList.append(assemblyPath);
+							m_tpaList.append(W(";"));
 						}
 						else
 						{
@@ -374,7 +375,7 @@ public:
 								<< Logger::endl;
 						}
 					}
-				} while (0 != WszFindNextFile(findHandle, &data));
+				} while (0 != FindNextFileW(findHandle, &data));
 
 				FindClose(findHandle);
 			}
@@ -384,7 +385,7 @@ public:
 	// Returns the semicolon-separated list of paths to runtime dlls that are considered trusted.
 	// On first call, scans the coreclr directory for dlls and adds them all to the list.
 	const wchar_t * GetTpaList(const wchar_t * coreLibsPath) {
-		if (m_tpaList.IsEmpty()) {
+		if (m_tpaList.empty()) {
 			const wchar_t *rgTPAExtensions[] = {
 						// Probe for .ni.dll first so that it's preferred
 						// if ni and il coexist in the same dir
@@ -397,23 +398,23 @@ public:
 			};
 
 			// Add files from %CORE_LIBRARIES% if specified
-			StackSString coreLibraries;
+			std::wstring coreLibraries;
 			if (coreLibsPath) {
-				coreLibraries.Append(coreLibsPath);
-				coreLibraries.Append(W('\\'));
+				coreLibraries.append(coreLibsPath);
+				coreLibraries.append(W("\\"));
 				AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
 			}
-			if (coreLibraries.CompareCaseInsensitive(m_coreCLRDirectoryPath)) {
+			if (coreLibraries.compare(m_coreCLRDirectoryPath) != 0) {
 				AddFilesFromDirectoryToTPAList(m_coreCLRDirectoryPath, rgTPAExtensions, _countof(rgTPAExtensions));
 			}
 		}
 
-		return m_tpaList;
+		return m_tpaList.c_str();
 	}
 
 	// Returns the path to the host module
 	const wchar_t * GetHostPath() {
-		return m_hostPath;
+		return m_hostPath.c_str();
 	}
 
 	// Returns the path to the host module
@@ -647,7 +648,7 @@ ExecuteAssemblyMain (
 {
 	HRESULT hr;
 	DWORD exitCode = -1;
-	CRITSEC_Holder lock(g_pLock);
+	//CRITSEC_Holder lock(g_pLock);
 
 	const wchar_t* exeName = argc > 0 ? argv[0] : nullptr;
 	if (exeName == nullptr)
@@ -656,20 +657,18 @@ ExecuteAssemblyMain (
 		return false;
 	}
 
-	StackSString appPath;
-	StackSString managedAssemblyFullName;
+	std::wstring appPath;
+	std::wstring managedAssemblyFullName;
 
 	wchar_t* filePart = NULL;
 
-	COUNT_T size = MAX_LONGPATH;
-	wchar_t* appPathPtr = appPath.OpenUnicodeBuffer(size - 1);
-	DWORD length = WszGetFullPathName(exeName, size, appPathPtr, &filePart);
+	DWORD size = MAX_PATH;
+	wchar_t appPathPtr[MAX_PATH];
+	DWORD length = GetFullPathNameW(exeName, size, appPathPtr, &filePart);
 	if (length >= size)
 	{
-		appPath.CloseBuffer();
 		size = length;
-		appPathPtr = appPath.OpenUnicodeBuffer(size - 1);
-		length = WszGetFullPathName(exeName, size, appPathPtr, &filePart);
+		length = GetFullPathNameW(exeName, size, appPathPtr, &filePart);
 	}
 	if (length == 0 || length >= size || filePart == NULL) {
 		log << W("Failed to get full path: ") << exeName << Logger::endl;
@@ -677,16 +676,16 @@ ExecuteAssemblyMain (
 		return false;
 	}
 
-	managedAssemblyFullName.Set(appPathPtr);
+	managedAssemblyFullName.assign(appPathPtr);
 
 	auto host = GetGlobalHost();
 	if (host != nullptr) {
 
-		lock.Release();
+		//lock.Release();
 
 		hr = host->ExecuteAssembly(
 			GetDomainId(),
-			managedAssemblyFullName,
+			managedAssemblyFullName.c_str(),
 			argc - 1,
 			(argc - 1) ? &(argv[1]) : NULL,
 			&exitCode);
@@ -718,7 +717,7 @@ ExecuteAssemblyClassFunction (
 	ICLRRuntimeHost4 * host = NULL;
 	typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
 
-	CRITSEC_Holder lock(g_pLock);
+	//CRITSEC_Holder lock(g_pLock);
 
 	host = GetGlobalHost();
 
@@ -738,7 +737,7 @@ ExecuteAssemblyClassFunction (
 			log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
 			return false;
 		}
-		lock.Release();
+		//lock.Release();
 		RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
 		if (remoteArgs != NULL) {
 			char ParamString[17];
@@ -768,7 +767,7 @@ UnloadStopHost (
 	HRESULT hr;
 	DWORD exitCode = -1;
 
-	CRITSEC_Holder lock(g_pLock);
+	//CRITSEC_Holder lock(g_pLock);
 
 	//-------------------------------------------------------------
 
@@ -850,73 +849,83 @@ LoadStartHost(
 		return false;
 	}
 
-	StackSString appPath;
-	StackSString appNiPath;
-	StackSString managedAssemblyFullName;
-	StackSString appLocalWinmetadata;
+	// The managed application to run should be the first command-line parameter.
+	// Subsequent command line parameters will be passed to the managed app later in this host.
+	wchar_t targetApp[MAX_PATH];
+	GetFullPathNameW(argv[1], MAX_PATH, targetApp, NULL);
+	// </Snippet1>
 
-	wchar_t* filePart = NULL;
-
-	COUNT_T size = MAX_LONGPATH;
-	wchar_t* appPathPtr = appPath.OpenUnicodeBuffer(size - 1);
-	DWORD length = WszGetFullPathName(exeName, size, appPathPtr, &filePart);
-	if (length >= size)
-	{
-		appPath.CloseBuffer();
-		size = length;
-		appPathPtr = appPath.OpenUnicodeBuffer(size - 1);
-		length = WszGetFullPathName(exeName, size, appPathPtr, &filePart);
-	}
-	if (length == 0 || length >= size || filePart == NULL) {
-		log << W("Failed to get full path: ") << exeName << Logger::endl;
-		log << W("Error code: ") << GetLastError() << Logger::endl;
-		return false;
-	}
-
-	managedAssemblyFullName.Set(appPathPtr);
-
-	*(filePart) = W('\0');
-
-	appPath.CloseBuffer(DWORD(filePart - appPathPtr));
-
-	log << W("Loading: ") << managedAssemblyFullName.GetUnicode() << Logger::endl;
-
-	appLocalWinmetadata.Set(appPath);
-	appLocalWinmetadata.Append(W("\\WinMetadata"));
-
-	DWORD dwAttrib = WszGetFileAttributes(appLocalWinmetadata);
-	bool appLocalWinMDexists = dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY);
-
-	if (!appLocalWinMDexists) {
-		appLocalWinmetadata.Clear();
-	}
-
-	appNiPath.Set(appPath);
-	appNiPath.Append(W("NI"));
-	appNiPath.Append(W(";"));
-	appNiPath.Append(appPath);
+	// Also note the directory the target app is in, as it will be referenced later.
+	// The directory is determined by simply truncating the target app's full path
+	// at the last path delimiter (\)
+	wchar_t targetAppPath[MAX_PATH];
+	wcscpy_s(targetAppPath, targetApp);
+	size_t i = wcslen(targetAppPath) - 1;
+	while (i >= 0 && targetAppPath[i] != L'\\') i--;
+	targetAppPath[i] = L'\0';
 
 
-	StackSString managedAssemblyDirectory = managedAssemblyFullName;
+	//DWORD length = WszGetFullPathName(exeName, size, appPathPtr, &filePart);
+
+
+	std::wstring appPath = targetAppPath;
+	std::wstring appNiPath;
+	std::wstring managedAssemblyFullName;
+	std::wstring appLocalWinmetadata;
+
+
+	managedAssemblyFullName.assign(targetApp);
+
+
+	log << W("Loading: ") << managedAssemblyFullName << Logger::endl;
+
+
+	appNiPath.assign(appPath);
+	appNiPath.append(W("NI"));
+	appNiPath.append(W(";"));
+	appNiPath.append(appPath);
+
+	// APP_PATHS
+	// App paths are directories to probe in for assemblies which are not one of the well-known Framework assemblies
+	// included in the TPA list.
+	//
+	// For this simple sample, we just include the directory the target application is in.
+	// More complex hosts may want to also check the current working directory or other
+	// locations known to contain application assets.
+	wchar_t appPaths[MAX_PATH * 50];
+
+	// Just use the targetApp provided by the user and remove the file name
+	wcscpy_s(appPaths, targetAppPath);
+
+	std::wstring managedAssemblyDirectory = managedAssemblyFullName;
 
 	// Search for the last backslash and terminate it there to keep just the directory path with trailing slash
-	SString::Iterator lastBackslash = managedAssemblyDirectory.End();
-	managedAssemblyDirectory.FindBack(lastBackslash, W('\\'));
-	managedAssemblyDirectory.Truncate(lastBackslash + 1);
+
+	auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
+	managedAssemblyDirectory.resize(lastBackslash + 1);
 
 	// Construct native search directory paths
-	StackSString nativeDllSearchDirs(appPath);
+	std::wstring nativeDllSearchDirs(appPath);
 
-	nativeDllSearchDirs.Append(W(";"));
-	nativeDllSearchDirs.Append(managedAssemblyDirectory);
+	nativeDllSearchDirs.append(W(";"));
+	nativeDllSearchDirs.append(managedAssemblyDirectory);
 
-	nativeDllSearchDirs.Append(W(";"));
-	nativeDllSearchDirs.Append(coreLibraries);
-	nativeDllSearchDirs.Append(W(";"));
-	nativeDllSearchDirs.Append(hostEnvironment.m_coreCLRDirectoryPath);
+	nativeDllSearchDirs.append(W(";"));
+	nativeDllSearchDirs.append(coreLibraries);
+	nativeDllSearchDirs.append(W(";"));
+	nativeDllSearchDirs.append(hostEnvironment.m_coreCLRDirectoryPath);
+
+
+	// NATIVE_DLL_SEARCH_DIRECTORIES
+	// Native dll search directories are paths that the runtime will probe for native DLLs called via PInvoke
+	wchar_t nativeDllSearchDirectories[MAX_PATH * 50];
+	wcscpy_s(nativeDllSearchDirectories, appPaths);
+	wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, L";");
+	wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, coreRoot);
+
 
 	// Start the CoreCLR
-	CRITSEC_Holder lock(g_pLock);
+	//CRITSEC_Holder lock(g_pLock);
 
 	ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
 	if (!host) {
@@ -946,17 +955,17 @@ LoadStartHost(
 		return false;
 	}
 
-	StackSString tpaList;
-	if (!managedAssemblyFullName.IsEmpty())
+	std::wstring  tpaList;
+	if (!managedAssemblyFullName.empty())
 	{
 		// Target assembly should be added to the tpa list. Otherwise corerun.exe
 		// may find wrong assembly to execute.
 		// Details can be found at https://github.com/dotnet/coreclr/issues/5631
 		tpaList = managedAssemblyFullName;
-		tpaList.Append(W(';'));
+		tpaList.append(W(";"));
 	}
 
-	tpaList.Append(hostEnvironment.GetTpaList(coreLibraries));
+	tpaList.append(hostEnvironment.GetTpaList(coreLibraries));
 
 	//-------------------------------------------------------------
 
@@ -982,20 +991,17 @@ LoadStartHost(
 		W("TRUSTED_PLATFORM_ASSEMBLIES"),
 		W("APP_PATHS"),
 		W("APP_NI_PATHS"),
-		W("NATIVE_DLL_SEARCH_DIRECTORIES"),
-		W("APP_LOCAL_WINMETADATA")
+		W("NATIVE_DLL_SEARCH_DIRECTORIES")
 	};
 	const wchar_t *property_values[] = {
 		// TRUSTED_PLATFORM_ASSEMBLIES
-		tpaList,
+		tpaList.c_str(),
 		// APP_PATHS
-		appPath,
+		appPath.c_str(),
 		// APP_NI_PATHS
-		appNiPath,
+		appNiPath.c_str(),
 		// NATIVE_DLL_SEARCH_DIRECTORIES
-		nativeDllSearchDirs,
-		// APP_LOCAL_WINMETADATA
-		appLocalWinmetadata
+		nativeDllSearchDirs.c_str()
 	};
 
 	log << W("Creating an AppDomain") << Logger::endl;
@@ -1060,7 +1066,7 @@ LoadStartHost(
 
 		hr = host->ExecuteAssembly(
 			domainId,
-			managedAssemblyFullName,
+			managedAssemblyFullName.c_str(),
 			argc - 1,
 			(argc - 1) ? &(argv[1]) : NULL,
 			&exitCode);
@@ -1245,17 +1251,7 @@ InitializeLock(
 	VOID
     )
 {
-	/*
-	STATIC_CONTRACT_LIMITED_METHOD;
-	HRESULT hr = S_OK;
 
-	CRITSEC_COOKIE pLock = ClrCreateCriticalSection(CrstLeafLock, CRST_REENTRANCY);
-	IfNullRet(pLock);
-	if (InterlockedCompareExchangeT<CRITSEC_COOKIE>(&g_pLock, pLock, nullptr) != nullptr)
-	{
-		ClrDeleteCriticalSection(pLock);
-	}
-	*/
 	return S_OK;
 }
 
@@ -1272,12 +1268,10 @@ DllMain(
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			//InitializeLock();
 		}
 		break;
 		case DLL_PROCESS_DETACH:
 		{
-			//VoidClrDeleteCriticalSection(g_pLock);
 
 			DeleteLogger();
 		}
