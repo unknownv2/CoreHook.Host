@@ -114,18 +114,16 @@ StartCLRAndLoadAssembly(
 class HostEnvironment
 {
 	// The path to this module
-	//PathString m_hostPath;
 	std::wstring m_hostPath;
 	// The path to the directory containing this module
-	//PathString m_hostDirectoryPath;
 	std::wstring m_hostDirectoryPath;
 
 	// The name of this module, without the path
 	std::wstring m_hostExeName;
 
 	// The list of paths to the assemblies that will be trusted by CoreCLR
-	//SString m_tpaList;
 	std::wstring m_tpaList;
+
 	ICLRRuntimeHost4* m_CLRRuntimeHost;
 
 	HMODULE m_coreCLRModule;
@@ -157,7 +155,6 @@ class HostEnvironment
 	// On failure returns nullptr.
 	HMODULE TryLoadCoreCLR(const std::wstring& directoryPath) {
 
-		//StackSString coreCLRPath(directoryPath);
 		std::wstring coreCLRPath(directoryPath);
 
 		coreCLRPath.append(coreCLRDll);
@@ -756,7 +753,6 @@ UnloadStopHost (
 		log << W("App domain unloaded exit value = ") << exitCode << Logger::endl;
 
 		//-------------------------------------------------------------
-		//PrintModules();
 		// Stop the host
 
 		log << W("Stopping the host") << Logger::endl;
@@ -796,7 +792,6 @@ LoadStartHost(
 	IN CONST BOOLEAN executeAssembly
     )
 {
-
 	// Assume failure
 	exitCode = -1;
 
@@ -818,7 +813,6 @@ LoadStartHost(
 	// Subsequent command line parameters will be passed to the managed app later in this host.
 	wchar_t targetApp[MAX_PATH];
 	GetFullPathNameW(argv[0], MAX_PATH, targetApp, NULL);
-	// </Snippet1>
 
 	// Also note the directory the target app is in, as it will be referenced later.
 	// The directory is determined by simply truncating the target app's full path
@@ -826,24 +820,19 @@ LoadStartHost(
 	wchar_t targetAppPath[MAX_PATH];
 	wcscpy_s(targetAppPath, targetApp);
 	size_t i = wcslen(targetAppPath) - 1;
-	while (i >= 0 && targetAppPath[i] != L'\\') i--;
+	while (i >= 0 && targetAppPath[i] != L'\\') {
+		i--;
+	}
 	targetAppPath[i] = L'\0';
-
-
-	//DWORD length = WszGetFullPathName(exeName, size, appPathPtr, &filePart);
-
 
 	std::wstring appPath = targetAppPath;
 	std::wstring appNiPath;
 	std::wstring managedAssemblyFullName;
 	std::wstring appLocalWinmetadata;
 
-
 	managedAssemblyFullName.assign(targetApp);
 
-
 	log << W("Loading: ") << managedAssemblyFullName << Logger::endl;
-
 
 	appNiPath.assign(appPath);
 	appNiPath.append(W("NI"));
@@ -880,14 +869,12 @@ LoadStartHost(
 	nativeDllSearchDirs.append(W(";"));
 	nativeDllSearchDirs.append(hostEnvironment.m_coreCLRDirectoryPath);
 
-
 	// NATIVE_DLL_SEARCH_DIRECTORIES
 	// Native dll search directories are paths that the runtime will probe for native DLLs called via PInvoke
 	wchar_t nativeDllSearchDirectories[MAX_PATH * 50];
 	wcscpy_s(nativeDllSearchDirectories, appPaths);
 	wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, L";");
 	wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, coreRoot);
-
 
 	// Start the CoreCLR
 	//CRITSEC_Holder lock(g_pLock);
@@ -1002,7 +989,6 @@ LoadStartHost(
 		property_keys,
 		property_values,
 		&domainId);
-
 
 	if (FAILED(hr)) {
 
