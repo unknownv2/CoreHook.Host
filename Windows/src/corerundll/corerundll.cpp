@@ -3,13 +3,17 @@
 #include <stdio.h>
 #include "logger.h"
 #include "mscoree.h"
-#include "sstring.h"
-
+//#include "sstring.h"
+//#include <string>
 
 // Function export macro
 #define DllExport __declspec(dllexport)
 
 #define CDllExport extern "C" DllExport
+
+#if !defined(MAX_LONGPATH)
+#define MAX_LONGPATH   260 /* max. length of full pathname */
+#endif
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
@@ -115,87 +119,111 @@ StartCLRAndLoadAssembly(
 class HostEnvironment
 {
 	// The path to this module
-	PathString m_hostPath;
-
+	//PathString m_hostPath;
+	std::wstring m_hostPath;
 	// The path to the directory containing this module
-	PathString m_hostDirectoryPath;
+	//PathString m_hostDirectoryPath;
+	std::wstring m_hostDirectoryPath;
 
 	// The name of this module, without the path
 	const wchar_t *m_hostExeName;
 
 	// The list of paths to the assemblies that will be trusted by CoreCLR
-	SString m_tpaList;
-
+	//SString m_tpaList;
+	std::wstring m_tpaList;
 	ICLRRuntimeHost4* m_CLRRuntimeHost;
 
 	HMODULE m_coreCLRModule;
 
 	Logger *m_log;
 
+	DWORD GetModuleFileNameWrapper(
+		IN HMODULE hModule,
+		std::wstring& buffer
+	   )
+	{
+		WCHAR buf[MAX_PATH];
+		DWORD size = MAX_PATH;
+		DWORD ret = GetModuleFileNameW(
+			hModule,
+			buf,
+			size
+		);
+		if (ret == 0)
+		{
+			return GetLastError();
+		}
+		buffer.assign(buf);
+	}
 
 	// Attempts to load CoreCLR.dll from the given directory.
 	// On success pins the dll, sets m_coreCLRDirectoryPath and returns the HMODULE.
 	// On failure returns nullptr.
-	HMODULE TryLoadCoreCLR(const wchar_t* directoryPath) {
+	HMODULE TryLoadCoreCLR(const std::wstring& directoryPath) {
 
-		StackSString coreCLRPath(directoryPath);
-		coreCLRPath.Append(coreCLRDll);
+		//StackSString coreCLRPath(directoryPath);
+		std::wstring coreCLRPath(directoryPath);
 
-		*m_log << W("Attempting to load: ") << coreCLRPath.GetUnicode() << Logger::endl;
+		coreCLRPath.append(coreCLRDll);
 
-		HMODULE result = WszLoadLibraryEx(coreCLRPath, NULL, 0);
+		*m_log << W("Attempting to load: ") << coreCLRPath << Logger::endl;
+
+		HMODULE result = LoadLibraryExW(coreCLRPath.c_str(), NULL, 0);
 		if (!result) {
-			*m_log << W("Failed to load: ") << coreCLRPath.GetUnicode() << Logger::endl;
+			*m_log << W("Failed to load: ") << coreCLRPath << Logger::endl;
 			*m_log << W("Error code: ") << GetLastError() << Logger::endl;
 			return nullptr;
 		}
 
 		// Pin the module - CoreCLR.dll does not support being unloaded.
 		HMODULE dummy_coreCLRModule;
-		if (!::GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_PIN, coreCLRPath, &dummy_coreCLRModule)) {
-			*m_log << W("Failed to pin: ") << coreCLRPath.GetUnicode() << Logger::endl;
+		if (!::GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_PIN, coreCLRPath.c_str(), &dummy_coreCLRModule)) {
+			*m_log << W("Failed to pin: ") << coreCLRPath << Logger::endl;
 			return nullptr;
 		}
 
-		StackSString coreCLRLoadedPath;
-		WszGetModuleFileName(result, coreCLRLoadedPath);
+		std::wstring coreCLRLoadedPath;
+		GetModuleFileNameWrapper(result, coreCLRLoadedPath);
 
-		*m_log << W("Loaded: ") << coreCLRLoadedPath.GetUnicode() << Logger::endl;
+		*m_log << W("Loaded: ") << coreCLRLoadedPath << Logger::endl;
 
 		return result;
 	}
 
 public:
 	// The path to the directory that CoreCLR is in
-	PathString m_coreCLRDirectoryPath;
+	std::wstring m_coreCLRDirectoryPath;
 
 	HostEnvironment(Logger *logger, const wchar_t * coreRootPath)
 		: m_log(logger), m_CLRRuntimeHost(nullptr) {
 
 		// Discover the path to this exe's module. All other files are expected to be in the same directory.
-		WszGetModuleFileName(::GetModuleHandleW(nullptr), m_hostPath);
+		GetModuleFileNameWrapper(::GetModuleHandleW(nullptr), m_hostPath);
 
 		// Search for the last backslash in the host path.
-		SString::CIterator lastBackslash = m_hostPath.End();
-		m_hostPath.FindBack(lastBackslash, W('\\'));
+		std::size_t lastBackslash = m_hostPath.find_last_of(W('\\'));
+
+		//SString::CIterator lastBackslash = m_hostPath.End();
+		//m_hostPath.FindBack(lastBackslash, W('\\'));
 
 		// Copy the directory path
-		m_hostDirectoryPath.Set(m_hostPath, m_hostPath.Begin(), lastBackslash + 1);
-
+		//m_hostDirectoryPath.Set(m_hostPath, m_hostPath.Begin(), lastBackslash + 1);
+		m_hostDirectoryPath = m_hostPath.substr(0, lastBackslash);
 		// Save the exe name
-		m_hostExeName = m_hostPath.GetUnicode(lastBackslash + 1);
+		//m_hostExeName = m_hostPath.GetUnicode(lastBackslash + 1);
+		m_hostExeName = m_hostPath.substr(lastBackslash).c_str();
 
-		*m_log << W("Host directory: ") << m_hostDirectoryPath.GetUnicode() << Logger::endl;
+		*m_log << W("Host directory: ") << m_hostDirectoryPath << Logger::endl;
 
 		// Check for %CORE_ROOT% and try to load CoreCLR.dll from it if it is set
-		StackSString coreRoot;
+		std::wstring coreRoot;
 
 		m_coreCLRModule = NULL; // Initialize this here since we don't call TryLoadCoreCLR if CORE_ROOT is unset.
 
 		if (coreRootPath)
 		{
-			coreRoot.Append(coreRootPath);
-			coreRoot.Append(W('\\'));
+			coreRoot.append(coreRootPath);
+			coreRoot.append(W("\\"));
 			m_coreCLRModule = TryLoadCoreCLR(coreRoot);
 		}
 		else
@@ -222,12 +250,14 @@ public:
 		if (m_coreCLRModule) {
 
 			// Save the directory that CoreCLR was found in
-			DWORD modulePathLength = WszGetModuleFileName(m_coreCLRModule, m_coreCLRDirectoryPath);
+			DWORD modulePathLength = GetModuleFileNameWrapper(m_coreCLRModule, m_coreCLRDirectoryPath);
 
 			// Search for the last backslash and terminate it there to keep just the directory path with trailing slash
-			SString::Iterator lastBackslash = m_coreCLRDirectoryPath.End();
-			m_coreCLRDirectoryPath.FindBack(lastBackslash, W('\\'));
-			m_coreCLRDirectoryPath.Truncate(lastBackslash + 1);
+			//SString::Iterator lastBackslash = m_coreCLRDirectoryPath.End();
+			//m_coreCLRDirectoryPath.FindBack(lastBackslash, W('\\'));
+			//m_coreCLRDirectoryPath.Truncate(lastBackslash + 1);
+			std::size_t lastBackslash = m_coreCLRDirectoryPath.find_last_of(W('\\'));
+			m_coreCLRDirectoryPath.resize(lastBackslash);
 
 		}
 		else {
@@ -249,17 +279,17 @@ public:
 		_In_reads_(countExtensions) const wchar_t** rgTPAExtensions, 
 		int countExtensions)
 	{
-		if (m_tpaList.IsEmpty()) return false;
+		if (m_tpaList.size() == 0) return false;
 
 		for (int iExtension = 0; iExtension < countExtensions; iExtension++)
 		{
-			StackSString fileName;
-			fileName.Append(W("\\")); // So that we don't match other files that end with the current file name
-			fileName.Append(fileNameWithoutExtension);
-			fileName.Append(rgTPAExtensions[iExtension] + 1);
-			fileName.Append(W(";")); // So that we don't match other files that begin with the current file name
+			std::wstring fileName;
+			fileName.append(W("\\")); // So that we don't match other files that end with the current file name
+			fileName.append(fileNameWithoutExtension);
+			fileName.append(rgTPAExtensions[iExtension] + 1);
+			fileName.append(W(";")); // So that we don't match other files that begin with the current file name
 
-			if (m_tpaList.Find(m_tpaList.Begin(), fileName))
+			if (m_tpaList.find(fileName) != std::string::npos)
 			{
 				return true;
 			}
@@ -296,13 +326,13 @@ public:
 		int countExtensions)
 	{
 		*m_log << W("Adding assemblies from ") << targetPath << W(" to the TPA list") << Logger::endl;
-		StackSString assemblyPath;
+		std::wstring assemblyPath;
 		const size_t dirLength = wcslen(targetPath);
 
 		for (int iExtension = 0; iExtension < countExtensions; iExtension++)
 		{
-			assemblyPath.Set(targetPath, (DWORD)dirLength);
-			assemblyPath.Append(rgTPAExtensions[iExtension]);
+			assemblyPath.assign(targetPath);
+			assemblyPath.append(rgTPAExtensions[iExtension]);
 			WIN32_FIND_DATA data;
 			HANDLE findHandle = WszFindFirstFile(assemblyPath, &data);
 
@@ -322,8 +352,8 @@ public:
 						}
 
 						// Remove extension
-						wchar_t fileNameWithoutExtension[MAX_PATH_FNAME];
-						wcscpy_s(fileNameWithoutExtension, MAX_PATH_FNAME, data.cFileName);
+						wchar_t fileNameWithoutExtension[MAX_PATH];
+						wcscpy_s(fileNameWithoutExtension, MAX_PATH, data.cFileName);
 
 						RemoveExtensionAndNi(fileNameWithoutExtension);
 
@@ -890,6 +920,7 @@ LoadStartHost(
 
 	ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
 	if (!host) {
+		log << W("Unable to get ICLRRuntimeHost4 handle") << Logger::endl;
 		return false;
 	}
 
@@ -1214,6 +1245,7 @@ InitializeLock(
 	VOID
     )
 {
+	/*
 	STATIC_CONTRACT_LIMITED_METHOD;
 	HRESULT hr = S_OK;
 
@@ -1223,7 +1255,7 @@ InitializeLock(
 	{
 		ClrDeleteCriticalSection(pLock);
 	}
-
+	*/
 	return S_OK;
 }
 
@@ -1240,12 +1272,12 @@ DllMain(
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			InitializeLock();
+			//InitializeLock();
 		}
 		break;
 		case DLL_PROCESS_DETACH:
 		{
-			VoidClrDeleteCriticalSection(g_pLock);
+			//VoidClrDeleteCriticalSection(g_pLock);
 
 			DeleteLogger();
 		}
