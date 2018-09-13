@@ -121,7 +121,7 @@ class HostEnvironment
 	std::wstring m_hostDirectoryPath;
 
 	// The name of this module, without the path
-	const wchar_t *m_hostExeName;
+	std::wstring m_hostExeName;
 
 	// The list of paths to the assemblies that will be trusted by CoreCLR
 	//SString m_tpaList;
@@ -197,19 +197,16 @@ public:
 		GetModuleFileNameWrapper(::GetModuleHandleW(nullptr), m_hostPath);
 
 		// Search for the last backslash in the host path.
-		std::size_t lastBackslash = m_hostPath.find_last_of(W('\\'));
-
-		//SString::CIterator lastBackslash = m_hostPath.End();
-		//m_hostPath.FindBack(lastBackslash, W('\\'));
+		std::size_t lastBackslash = m_hostPath.find_last_of(W('\\')) + 1;
 
 		// Copy the directory path
-		//m_hostDirectoryPath.Set(m_hostPath, m_hostPath.Begin(), lastBackslash + 1);
 		m_hostDirectoryPath = m_hostPath.substr(0, lastBackslash);
+
 		// Save the exe name
-		//m_hostExeName = m_hostPath.GetUnicode(lastBackslash + 1);
-		m_hostExeName = m_hostPath.substr(lastBackslash).c_str();
+		m_hostExeName = m_hostPath.substr(lastBackslash);
 
 		*m_log << W("Host directory: ") << m_hostDirectoryPath << Logger::endl;
+		*m_log << W("Host Exe: ") << m_hostExeName << Logger::endl;
 
 		// Check for %CORE_ROOT% and try to load CoreCLR.dll from it if it is set
 		std::wstring coreRoot;
@@ -249,9 +246,6 @@ public:
 			DWORD modulePathLength = GetModuleFileNameWrapper(m_coreCLRModule, m_coreCLRDirectoryPath);
 
 			// Search for the last backslash and terminate it there to keep just the directory path with trailing slash
-			//SString::Iterator lastBackslash = m_coreCLRDirectoryPath.End();
-			//m_coreCLRDirectoryPath.FindBack(lastBackslash, W('\\'));
-			//m_coreCLRDirectoryPath.Truncate(lastBackslash + 1);
 			std::size_t lastBackslash = m_coreCLRDirectoryPath.find_last_of(W('\\'));
 			m_coreCLRDirectoryPath.resize(lastBackslash);
 
@@ -414,7 +408,7 @@ public:
 
 	// Returns the path to the host module
 	const wchar_t * GetHostExeName() {
-		return m_hostExeName;
+		return m_hostExeName.c_str();
 	}
 
 	// Returns the ICLRRuntimeHost4 instance, loading it from CoreCLR.dll if necessary, or nullptr on failure.
@@ -514,38 +508,6 @@ DeleteLogger (
 	if (m_Log != nullptr) {
 		delete m_Log;
 	}
-}
-
-VOID
-RtlLongLongToAsciiHex (
-	IN CONST LONGLONG InValue,
-	IN CHAR* InBuffer
-    )
-{
-	ULONG           Index;
-	ULONG           iChar;
-	WCHAR           c;
-
-	for (Index = 0, iChar = 0; Index < 64; Index += 4, iChar++)
-	{
-#ifdef _M_X64
-		c = ((LONGLONG)InValue >> Index) & 0x0F;
-#else
-		if (Index < 32)
-			c = (char)(((LONG)InValue >> Index) & 0x0F);
-		else
-			c = 0;
-#endif
-
-		if (c < 10)
-			c += '0';
-		else
-			c += 'A' - 10;
-
-		InBuffer[15 - iChar] = (char)c;
-	}
-
-	InBuffer[16] = 0;
 }
 
 INT32
@@ -695,6 +657,14 @@ ExecuteAssemblyMain (
 	return true;
 }
 
+template <typename I> std::string n2hexstr(I w, size_t hex_len = sizeof(I) << 1) {
+	static const char* digits = "0123456789ABCDEF";
+	std::string rc(hex_len, '0');
+	for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4)
+		rc[i] = digits[(w >> j) & 0x0f];
+	return rc;
+}
+
 // Execute a method from a class located inside a .NET Core Library Assembly
 BOOLEAN 
 ExecuteAssemblyClassFunction (
@@ -708,9 +678,9 @@ ExecuteAssemblyClassFunction (
 	HRESULT hr;
 	DWORD exitCode = -1, dwWaitResult = -1;
 	RemoteEntryInfo EntryInfo;
-	void *pfnDelegate = NULL;
 	ICLRRuntimeHost4 * host = NULL;
 	typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
+	MainMethodFp *pfnDelegate = NULL;
 
 	//CRITSEC_Holder lock(g_pLock);
 
@@ -735,18 +705,18 @@ ExecuteAssemblyClassFunction (
 		//lock.Release();
 		RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
 		if (remoteArgs != NULL) {
-			char ParamString[17];
+
 
 			// parse entry arguments
 			EntryInfo.Args.UserData = remoteArgs->UserData;
 			EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-			RtlLongLongToAsciiHex((LONGLONG)&EntryInfo, ParamString);
+			std::string paramString = n2hexstr((LONGLONG)&EntryInfo, 16);
 
-			((MainMethodFp*)pfnDelegate)(ParamString);
+			pfnDelegate(paramString.c_str());
 		}
 		else {
-			((MainMethodFp*)pfnDelegate)(NULL);
+			pfnDelegate(NULL);
 		}
 	}
 	log << W("App exit value = ") << exitCode << Logger::endl;
@@ -847,7 +817,7 @@ LoadStartHost(
 	// The managed application to run should be the first command-line parameter.
 	// Subsequent command line parameters will be passed to the managed app later in this host.
 	wchar_t targetApp[MAX_PATH];
-	GetFullPathNameW(argv[1], MAX_PATH, targetApp, NULL);
+	GetFullPathNameW(argv[0], MAX_PATH, targetApp, NULL);
 	// </Snippet1>
 
 	// Also note the directory the target app is in, as it will be referenced later.

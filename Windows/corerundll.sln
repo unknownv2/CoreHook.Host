@@ -3,12 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utilcodestaticnohost", "src\utilcodestaticnohost\utilcodestaticnohost.vcxproj", "{5F86E210-9E9F-4227-BD1A-674336EABD06}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "corerundll", "src\corerundll\corerundll.vcxproj", "{56ECC22A-A4DB-409B-826E-D3637CC647E6}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5F86E210-9E9F-4227-BD1A-674336EABD06} = {5F86E210-9E9F-4227-BD1A-674336EABD06}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,22 +17,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|ARM.ActiveCfg = Debug|ARM
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|ARM.Build.0 = Debug|ARM
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|ARM64.Build.0 = Debug|ARM64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|x64.ActiveCfg = Debug|x64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|x64.Build.0 = Debug|x64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|x86.ActiveCfg = Debug|Win32
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Debug|x86.Build.0 = Debug|Win32
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|ARM.ActiveCfg = Release|ARM
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|ARM.Build.0 = Release|ARM
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|ARM64.ActiveCfg = Release|ARM64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|ARM64.Build.0 = Release|ARM64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|x64.ActiveCfg = Release|x64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|x64.Build.0 = Release|x64
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|x86.ActiveCfg = Release|Win32
-		{5F86E210-9E9F-4227-BD1A-674336EABD06}.Release|x86.Build.0 = Release|Win32
 		{56ECC22A-A4DB-409B-826E-D3637CC647E6}.Debug|ARM.ActiveCfg = Debug|ARM
 		{56ECC22A-A4DB-409B-826E-D3637CC647E6}.Debug|ARM.Build.0 = Debug|ARM
 		{56ECC22A-A4DB-409B-826E-D3637CC647E6}.Debug|ARM64.ActiveCfg = Debug|ARM64
