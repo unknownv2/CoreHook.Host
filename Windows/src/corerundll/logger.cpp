@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include "logger.h"
-#include "palclr.h"
+//#include "palclr.h"
 
 void Logger::Enable() {
     m_isEnabled = true;
@@ -231,6 +231,14 @@ Logger& Logger::operator<< (const wchar_t *val) {
         print(val);
     }
     return *this;
+}
+
+Logger& Logger::operator<< (const std::wstring& val) {
+	if (m_isEnabled) {
+		EnsurePrefixIsPrinted();
+		print(val.c_str());
+	}
+	return *this;
 }
 
 Logger& Logger::operator<< (Logger& ( *pf )(Logger&)) {

@@ -8,6 +8,9 @@
 // Relies on the SYSCRT and therefore cannot use C++ libraries.
 //
 
+#include <string>
+
+#define W(str)  L##str
 
 class Logger {
     bool m_isEnabled;
@@ -41,6 +44,7 @@ public:
     Logger& operator<< (double val);
     Logger& operator<< (long double val);
     Logger& operator<< (const wchar_t* val);
+	Logger& operator<< (const std::wstring& val);
     Logger& operator<< (Logger& ( *pf )(Logger&));
     static Logger& endl ( Logger& log );
     static Logger& hresult ( Logger& log);

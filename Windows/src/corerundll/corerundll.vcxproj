@@ -190,19 +190,20 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;_X86_;_TARGET_X86_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
       <SupportJustMyCode>false</SupportJustMyCode>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)bin.X86\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions) /machine:x86 /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -238,12 +239,13 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;_ARM_;_TARGET_ARM_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
       <SupportJustMyCode>false</SupportJustMyCode>
@@ -252,7 +254,7 @@
       <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)bin.$(Platform)\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -289,21 +291,24 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
       <OmitFramePointers>false</OmitFramePointers>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;_AMD64_;_WIN64;AMD64;BIT64=1;FEATURE_DEFAULT_INTERFACES=1;_TARGET_AMD64_=1;DBG_TARGET_64BIT=1;DBG_TARGET_AMD64=1;DBG_TARGET_WIN64=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8 /homeparams</AdditionalOptions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <SupportJustMyCode>false</SupportJustMyCode>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)bin.X64\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -340,11 +345,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
       <OmitFramePointers>false</OmitFramePointers>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;_DBG;URTBLDENV_FRIENDLY=Checked;BUILDENV_CHECKED=1;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;_ARM64_;_TARGET_ARM64_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
       <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -356,7 +362,7 @@
       <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)bin.$(Platform)\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -382,7 +388,8 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -390,7 +397,8 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatWarningAsError>true</TreatWarningAsError>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
@@ -399,13 +407,13 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
-      <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;_X86_;_TARGET_X86_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)bin.X86\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
@@ -425,7 +433,8 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -433,7 +442,8 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatWarningAsError>true</TreatWarningAsError>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
@@ -455,7 +465,7 @@
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
       <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS /DEFAULTLIB:ucrt.lib</AdditionalOptions>
-      <AdditionalDependencies>$(SolutionDir)bin.$(Platform)\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -470,10 +480,11 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;_AMD64_;_WIN64;AMD64;BIT64=1;FEATURE_DEFAULT_INTERFACES=1;_TARGET_AMD64_=1;DBG_TARGET_64BIT=1;DBG_TARGET_AMD64=1;DBG_TARGET_WIN64=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <OmitFramePointers>false</OmitFramePointers>
       <StringPooling>true</StringPooling>
@@ -485,15 +496,17 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
+      <GenerateXMLDocumentationFiles />
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(SolutionDir)bin.X64\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
@@ -516,7 +529,8 @@
       <SDLCheck>
       </SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\pal\prebuilt\inc;..\clr\inc;..\inc;..\strongname\inc;..\inc\winrt;..\debug\inc;..\debug\inc\amd64;..\debug\inc\dump;..\md\inc;..\classlibnative\bcltype;..\classlibnative\inc;..\obj\inc\etw;..\md;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -524,7 +538,8 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <ForcedIncludeFiles>WarningControl.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <TreatWarningAsError>true</TreatWarningAsError>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
@@ -532,7 +547,7 @@
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
-      <PreprocessorDefinitions>NDEBUG;URTBLDENV_FRIENDLY=Retail;FEATURE_DEFAULT_INTERFACES=1;_BLD_CLR;DEBUGGING_SUPPORTED;PROFILING_SUPPORTED;WIN32;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x0602;WIN32_LEAN_AND_MEAN=1;_CRT_SECURE_NO_WARNINGS;EnC_SUPPORTED;FEATURE_APPDOMAIN_RESOURCE_MONITORING;FEATURE_APPX;FEATURE_ARRAYSTUB_AS_IL;FEATURE_MULTICASTSTUB_AS_IL;FEATURE_CODE_VERSIONING;FEATURE_COLLECTIBLE_TYPES;FEATURE_CLASSIC_COMINTEROP;FEATURE_COMINTEROP;FEATURE_COMINTEROP_APARTMENT_SUPPORT;FEATURE_COMINTEROP_UNMANAGED_ACTIVATION;FEATURE_COMINTEROP_WINRT_MANAGED_ACTIVATION;FEATURE_CORECLR;FEATURE_CORESYSTEM;FEATURE_CORRUPTING_EXCEPTIONS;FEATURE_EVENT_TRACE=1;FEATURE_PERFTRACING=1;FEATURE_HIJACK;FEATURE_ICASTABLE;FEATURE_INTEROP_DEBUGGING;FEATURE_ISYM_READER;FEATURE_JUMPSTAMP;FEATURE_LOADER_OPTIMIZATION;FEATURE_MANAGED_ETW;FEATURE_MANAGED_ETW_CHANNELS;FEATURE_MULTICOREJIT;FEATURE_PREJIT;FEATURE_READYTORUN;FEATURE_REJIT;FEATURE_STANDALONE_SN;FEATURE_STRONGNAME_DELAY_SIGNING_ALLOWED;FEATURE_STRONGNAME_MIGRATION;FEATURE_SVR_GC;FEATURE_SYMDIFF;FEATURE_TIERED_COMPILATION;FEATURE_UNIX_AMD64_STRUCT_PASSING_ITF;FEATURE_USE_ASM_GC_WRITE_BARRIERS;FEATURE_VERSIONING_LOG;FEATURE_WIN32_REGISTRY;FEATURE_LEGACYNETCF_DBG_HOST_CONTROL;FEATURE_WINDOWSPHONE;FEATURE_WINMD_RESILIENT;_SECURE_SCL=0;UNICODE;_UNICODE;FEATURE_STANDALONE_GC;_ARM64_;_TARGET_ARM64_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
       <WindowsSDKDesktopARMSupport>true</WindowsSDKDesktopARMSupport>
       <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
@@ -546,7 +561,7 @@
       <StackReserveSize>1572864</StackReserveSize>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>$(SolutionDir)bin.$(Platform)\$(Configuration)\utilcodestaticnohost.lib;advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS /DEFAULTLIB:ucrt.lib</AdditionalOptions>
     </Link>
     <ProjectReference>
