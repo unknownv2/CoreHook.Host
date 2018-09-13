@@ -3,17 +3,12 @@
 #include <stdio.h>
 #include "logger.h"
 #include "mscoree.h"
-//#include "sstring.h"
-//#include <string>
+#include <mutex>
 
 // Function export macro
 #define DllExport __declspec(dllexport)
 
-#define CDllExport extern "C" DllExport
-
-#if !defined(MAX_LONGPATH)
-#define MAX_LONGPATH   260 /* max. length of full pathname */
-#endif
+#define DllApi extern "C" DllExport
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
@@ -42,9 +37,9 @@ struct BinaryLoaderArgs
 	bool WaitForDebugger;
 	bool StartAssembly;
 	char Reserved[5];
-	wchar_t BinaryFilePath[MAX_LONGPATH];
-	wchar_t CoreRootPath[MAX_LONGPATH];
-	wchar_t CoreLibrariesPath[MAX_LONGPATH];
+	wchar_t BinaryFilePath[MAX_PATH];
+	wchar_t CoreRootPath[MAX_PATH];
+	wchar_t CoreLibrariesPath[MAX_PATH];
 };
 
 struct AssemblyFunctionCall
@@ -80,31 +75,31 @@ static HRESULT InitializeLock (
     );
 
 // Declare DLL exports used for starting and stopping the CoreCLR Runtime
-CDllExport
+DllApi
 VOID
 UnloadRunTime (
 	VOID
     );
 
-CDllExport
+DllApi
 VOID
 ExecuteAssemblyFunction(
 	IN CONST AssemblyFunctionCall* args
     );
 
-CDllExport
+DllApi
 VOID
 LoadAssembly(
 	IN CONST BinaryLoaderArgs* args
     );
 
-CDllExport
+DllApi
 VOID
 ExecuteAssembly(
 	IN CONST BinaryLoaderArgs* args
     );
 
-CDllExport
+DllApi
 DWORD
 StartCLRAndLoadAssembly(
 	IN CONST WCHAR*  dllPath,
@@ -1126,9 +1121,9 @@ ValidateBinaryLoaderArgs (
     )
 {
 	if (args != nullptr) {
-		if (SUCCEEDED(ValidateArgument(args->BinaryFilePath, MAX_LONGPATH))
-			&& SUCCEEDED(ValidateArgument(args->CoreRootPath, MAX_LONGPATH))
-			&& SUCCEEDED(ValidateArgument(args->CoreLibrariesPath, MAX_LONGPATH))) {
+		if (SUCCEEDED(ValidateArgument(args->BinaryFilePath, MAX_PATH))
+			&& SUCCEEDED(ValidateArgument(args->CoreRootPath, MAX_PATH))
+			&& SUCCEEDED(ValidateArgument(args->CoreLibrariesPath, MAX_PATH))) {
 			return S_OK;
 		}
 	}
@@ -1137,7 +1132,7 @@ ValidateBinaryLoaderArgs (
 }
 
 // Load a .NET Core DLL Application or Library into the Host Application and also execute it if desired
-CDllExport
+DllApi
 DWORD
 StartCLRAndLoadAssembly (
 	IN CONST WCHAR*  dllPath,
@@ -1151,9 +1146,9 @@ StartCLRAndLoadAssembly (
 
 	// Parse the options from the command line
 	DWORD exitCode = -1;
-	if (SUCCEEDED(ValidateArgument(dllPath, MAX_LONGPATH))
-		&& SUCCEEDED(ValidateArgument(coreRoot, MAX_LONGPATH))
-		&& SUCCEEDED(ValidateArgument(coreLibraries, MAX_LONGPATH))) {
+	if (SUCCEEDED(ValidateArgument(dllPath, MAX_PATH))
+		&& SUCCEEDED(ValidateArgument(coreRoot, MAX_PATH))
+		&& SUCCEEDED(ValidateArgument(coreLibraries, MAX_PATH))) {
 
 		Logger* log = GetLogger();
 		if (verbose) {
@@ -1185,7 +1180,7 @@ StartCLRAndLoadAssembly (
 	return exitCode;
 }
 
-CDllExport
+DllApi
 VOID
 ExecuteAssembly (
 	IN CONST BinaryLoaderArgs* args
@@ -1203,7 +1198,7 @@ ExecuteAssembly (
 	}
 }
 
-CDllExport
+DllApi
 VOID
 LoadAssembly (
 	IN CONST BinaryLoaderArgs* args
@@ -1220,7 +1215,7 @@ LoadAssembly (
 	}
 }
 
-CDllExport
+DllApi
 VOID
 ExecuteAssemblyFunction (
 	IN CONST AssemblyFunctionCall* args
@@ -1236,7 +1231,7 @@ ExecuteAssemblyFunction (
 	}
 }
 
-CDllExport
+DllApi
 VOID
 UnloadRunTime(
 	VOID
