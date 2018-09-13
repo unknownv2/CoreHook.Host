@@ -17,4 +17,4 @@ build:
   verbosity: detailed
 skip_commits:
   files:
-    - '**/*.md'  
+    - '**/*.md'
