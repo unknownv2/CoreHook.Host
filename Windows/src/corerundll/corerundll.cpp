@@ -445,13 +445,12 @@ public:
 	}
 };
 
-ICLRRuntimeHost4*
+VOID
 SetGlobalHost (
 	ICLRRuntimeHost4* host
     )
 {
 	m_Host = host;
-	return m_Host;
 }
 
 ICLRRuntimeHost4*
@@ -860,13 +859,13 @@ LoadStartHost(
 
 	// Start the CoreCLR
 
-	ICLRRuntimeHost4 *hostPtr = hostEnvironment.GetCLRRuntimeHost();
-	if (!hostPtr) {
+	ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
+	if (!host) {
 		log << W("Unable to get ICLRRuntimeHost4 handle") << Logger::endl;
 		return false;
 	}
 
-	auto host = SetGlobalHost(hostPtr);
+	SetGlobalHost(host);
 
 	HRESULT hr;
 
