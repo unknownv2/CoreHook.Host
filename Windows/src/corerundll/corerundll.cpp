@@ -67,7 +67,7 @@ struct RemoteEntryInfo
 };
 
 // Handle to the CoreCLR runtime hosting interface
-std::shared_ptr<ICLRRuntimeHost4> m_Host;
+ICLRRuntimeHost4* m_Host;
 
 // Handle to a logger which writes to the standard output
 std::shared_ptr<Logger> m_Log;
@@ -445,16 +445,16 @@ public:
 	}
 };
 
-const std::shared_ptr<ICLRRuntimeHost4>&
+ICLRRuntimeHost4*
 SetGlobalHost (
 	ICLRRuntimeHost4* host
     )
 {
-	m_Host.reset(host);
+	m_Host = host;
 	return m_Host;
 }
 
-const std::shared_ptr<ICLRRuntimeHost4>&
+ICLRRuntimeHost4*
 GetGlobalHost (
 	VOID
     )
@@ -478,7 +478,7 @@ GetDomainId (
 	return m_domainId;
 }
 
-const std::shared_ptr<Logger>&
+std::shared_ptr<Logger>
 GetLogger (
 	VOID
     )
