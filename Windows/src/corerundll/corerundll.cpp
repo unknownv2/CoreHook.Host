@@ -31,6 +31,7 @@ static const wchar_t *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
 // The max length of a function to be executed in a .NET class
 #define FunctionNameSize			256
+
 // The max length of arguments to be parsed and passed to a .NET function
 #define AssemblyFunCallArgsSize		512
 
@@ -74,7 +75,7 @@ std::shared_ptr<Logger> m_Log;
 // The AppDomain ID in  which .NET assemblies will be executed in
 DWORD m_domainId;
 
-// DLL exports used for starting and stopping the CoreCLR Runtime
+// DLL exports used for starting, executing in, and stopping the CoreCLR Runtime
 DllApi
 VOID
 UnloadRunTime (
