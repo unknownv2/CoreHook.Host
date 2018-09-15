@@ -37,10 +37,10 @@ static const wchar_t *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
 struct BinaryLoaderArgs
 {
-    bool Verbose;
-    bool WaitForDebugger;
-    bool StartAssembly;
-    char Reserved[5];
+    bool    Verbose;
+    bool    WaitForDebugger;
+    bool    StartAssembly;
+    char    Reserved[5];
     wchar_t BinaryFilePath[MAX_PATH];
     wchar_t CoreRootPath[MAX_PATH];
     wchar_t CoreLibrariesPath[MAX_PATH];
@@ -57,12 +57,12 @@ struct AssemblyFunctionCall
 struct RemoteFunctionArgs
 {
     const BYTE* UserData;
-    ULONG UserDataSize;
+    ULONG       UserDataSize;
 };
 
 struct RemoteEntryInfo
 {
-    ULONG HostPID;
+    ULONG              HostPID;
     RemoteFunctionArgs Args;
 };
 
