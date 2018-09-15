@@ -30,7 +30,7 @@ static const wchar_t *coreCLRDll = W("CoreCLR.dll");
 static const wchar_t *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
 // The max length of a function to be executed in a .NET class
-#define FunctionNameSize            256
+#define FunctionNameSize               256
 
 // The max length of arguments to be parsed and passed to a .NET function
 #define AssemblyFunCallArgsSize        512
