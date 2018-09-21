@@ -1,9 +1,7 @@
 #include "corerundll.h"
-
 #include "logger.h"
-#include <psapi.h>
-#include <stdio.h>
 #include "mscoree.h"
+#include <psapi.h>
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
