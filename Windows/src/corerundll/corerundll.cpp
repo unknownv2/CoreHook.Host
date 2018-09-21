@@ -1,70 +1,27 @@
-#include <windows.h>
+#include "corerundll.h"
+
+#include "logger.h"
 #include <psapi.h>
 #include <stdio.h>
-#include "logger.h"
 #include "mscoree.h"
-#include <mutex>
-
-// Function export macro
-#define DllExport __declspec(dllexport)
-
-// Export functions with their plain name
-#define DllApi extern "C" DllExport
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
 
 // Environment variable for setting whether or not to use Server GC.
 // Off by default.
-static const wchar_t *serverGcVar = W("CORECLR_SERVER_GC");
+static const WCHAR *serverGcVar = W("COMPlus_gcServer");
 
 // Environment variable for setting whether or not to use Concurrent GC.
 // On by default.
-static const wchar_t *concurrentGcVar = W("CORECLR_CONCURRENT_GC");
+static const WCHAR *concurrentGcVar = W("COMPlus_gcConcurrent");
 
 // The name of the CoreCLR native runtime DLL.
-static const wchar_t *coreCLRDll = W("CoreCLR.dll");
+static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 
 // The location where CoreCLR is expected to be installed. If CoreCLR.dll isn't
 //  found in the same directory as the host, it will be looked for here.
-static const wchar_t *coreCLRInstallDirectory = W("%windir%\\system32\\");
-
-// The max length of a function to be executed in a .NET class
-#define FunctionNameSize               256
-
-// The max length of arguments to be parsed and passed to a .NET function
-#define AssemblyFunCallArgsSize        512
-
-struct BinaryLoaderArgs
-{
-    bool    Verbose;
-    bool    WaitForDebugger;
-    bool    StartAssembly;
-    char    Reserved[5];
-    wchar_t BinaryFilePath[MAX_PATH];
-    wchar_t CoreRootPath[MAX_PATH];
-    wchar_t CoreLibrariesPath[MAX_PATH];
-};
-
-struct AssemblyFunctionCall
-{
-    wchar_t Assembly[FunctionNameSize];
-    wchar_t Class[FunctionNameSize];
-    wchar_t Function[FunctionNameSize];
-    BYTE    Arguments[AssemblyFunCallArgsSize];
-};
-
-struct RemoteFunctionArgs
-{
-    const BYTE* UserData;
-    ULONG       UserDataSize;
-};
-
-struct RemoteEntryInfo
-{
-    ULONG              HostPID;
-    RemoteFunctionArgs Args;
-};
+static const WCHAR *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
 // Handle to the CoreCLR runtime hosting interface
 ICLRRuntimeHost4* m_Host;
@@ -74,42 +31,6 @@ std::shared_ptr<Logger> m_Log;
 
 // The AppDomain ID in  which .NET assemblies will be executed in
 DWORD m_domainId;
-
-// DLL exports used for starting, executing in, and stopping the CoreCLR Runtime
-DllApi
-VOID
-UnloadRunTime (
-    VOID
-    );
-
-DllApi
-VOID
-ExecuteAssemblyFunction(
-    IN CONST AssemblyFunctionCall* args
-    );
-
-DllApi
-VOID
-LoadAssembly(
-    IN CONST BinaryLoaderArgs* args
-    );
-
-DllApi
-VOID
-ExecuteAssembly(
-    IN CONST BinaryLoaderArgs* args
-    );
-
-DllApi
-DWORD
-StartCLRAndLoadAssembly(
-    IN CONST WCHAR*  dllPath,
-    IN CONST BOOLEAN verbose,
-    IN CONST BOOLEAN waitForDebugger,
-    IN CONST WCHAR*  coreRoot,
-    IN CONST WCHAR*  coreLibraries,
-    IN CONST BOOLEAN executeAssembly
-    );
 
 // Encapsulates the environment that CoreCLR will run in, including the TPALIST
 class HostEnvironment
@@ -147,6 +68,7 @@ class HostEnvironment
         {
             return GetLastError();
         }
+
         buffer.assign(buf);
         return ret;
     }
@@ -188,7 +110,7 @@ public:
     // The path to the directory that CoreCLR is in
     std::wstring m_coreCLRDirectoryPath;
 
-    HostEnvironment(Logger *logger, const wchar_t * coreRootPath)
+    HostEnvironment(Logger *logger, const WCHAR * coreRootPath)
         : m_log(logger), m_CLRRuntimeHost(nullptr) {
 
         // Discover the path to this exe's module. All other files are expected to be in the same directory.
@@ -232,7 +154,7 @@ public:
         if (!m_coreCLRModule) {
 
             // Failed to load. Try to load from the well-known location.
-            wchar_t coreCLRInstallPath[MAX_PATH];
+            WCHAR coreCLRInstallPath[MAX_PATH];
             ::ExpandEnvironmentStringsW(coreCLRInstallDirectory, coreCLRInstallPath, MAX_PATH);
             m_coreCLRModule = TryLoadCoreCLR(coreCLRInstallPath);
 
@@ -263,8 +185,8 @@ public:
     }
 
     bool TPAListContainsFile(
-        _In_z_ wchar_t* fileNameWithoutExtension,
-        _In_reads_(countExtensions) const wchar_t** rgTPAExtensions, 
+        _In_z_ WCHAR* fileNameWithoutExtension,
+        _In_reads_(countExtensions) const WCHAR** rgTPAExtensions,
         int countExtensions)
     {
         if (m_tpaList.empty()) return false;
@@ -287,11 +209,11 @@ public:
 
     void
     RemoveExtensionAndNi(
-        _In_z_ wchar_t* fileName
+        _In_z_ WCHAR* fileName
         )
     {
         // Remove extension, if it exists
-        wchar_t* extension = wcsrchr(fileName, W('.'));
+        WCHAR* extension = wcsrchr(fileName, W('.'));
         if (extension != NULL)
         {
             extension[0] = W('\0');
@@ -310,7 +232,7 @@ public:
 
     void AddFilesFromDirectoryToTPAList(
         _In_z_ const std::wstring& targetPath,
-        _In_reads_(countExtensions) const wchar_t** rgTPAExtensions,
+        _In_reads_(countExtensions) const WCHAR** rgTPAExtensions,
         int countExtensions)
     {
         *m_log << W("Adding assemblies from ") << targetPath << W(" to the TPA list") << Logger::endl;
@@ -332,7 +254,7 @@ public:
                         // users the opportunity to override Framework assemblies by placing dlls in %CORE_LIBRARIES%
 
                         // ToLower for case-insensitive comparisons
-                        wchar_t* fileNameChar = data.cFileName;
+                        WCHAR* fileNameChar = data.cFileName;
                         while (*fileNameChar)
                         {
                             *fileNameChar = towlower(*fileNameChar);
@@ -340,7 +262,7 @@ public:
                         }
 
                         // Remove extension
-                        wchar_t fileNameWithoutExtension[MAX_PATH];
+                        WCHAR fileNameWithoutExtension[MAX_PATH];
                         wcscpy_s(fileNameWithoutExtension, MAX_PATH, data.cFileName);
 
                         RemoveExtensionAndNi(fileNameWithoutExtension);
@@ -371,9 +293,9 @@ public:
 
     // Returns the semicolon-separated list of paths to runtime dlls that are considered trusted.
     // On first call, scans the coreclr directory for dlls and adds them all to the list.
-    const wchar_t * GetTpaList(const wchar_t * coreLibsPath) {
+    const WCHAR * GetTpaList(const WCHAR * coreLibsPath) {
         if (m_tpaList.empty()) {
-            const wchar_t *rgTPAExtensions[] = {
+            const WCHAR *rgTPAExtensions[] = {
                         // Probe for .ni.dll first so that it's preferred
                         // if ni and il coexist in the same dir
                         W("*.ni.dll"),        
@@ -400,12 +322,12 @@ public:
     }
 
     // Returns the path to the host module
-    const wchar_t * GetHostPath() {
+    const WCHAR * GetHostPath() {
         return m_hostPath.c_str();
     }
 
     // Returns the path to the host module
-    const wchar_t * GetHostExeName() {
+    const WCHAR * GetHostExeName() {
         return m_hostExeName.c_str();
     }
 
@@ -548,8 +470,8 @@ CreateStartupFlags (
             STARTUP_FLAGS::STARTUP_CONCURRENT_GC);
 
     // server GC is off by default, concurrent GC is on by default.
-    auto checkVariable = [&](STARTUP_FLAGS flag, const wchar_t *var) {
-        wchar_t result[25];
+    auto checkVariable = [&](STARTUP_FLAGS flag, const WCHAR *var) {
+        WCHAR result[25];
         size_t outsize;
         if (_wgetenv_s(&outsize, result, 25, var) == 0 && outsize > 0) {
             // set the flag if the var is present and set to 1,
@@ -574,13 +496,13 @@ BOOLEAN
 ExecuteAssemblyMain (
     IN CONST INT32 argc,
     IN CONST WCHAR* argv[],
-    Logger &log
+    IN       Logger &log
     )
 {
     HRESULT hr;
     DWORD exitCode = -1;
 
-    const wchar_t* exeName = argc > 0 ? argv[0] : nullptr;
+    const WCHAR* exeName = argc > 0 ? argv[0] : nullptr;
     if (exeName == nullptr)
     {
         log << W("No exename specified.") << Logger::endl;
@@ -590,10 +512,10 @@ ExecuteAssemblyMain (
     std::wstring appPath;
     std::wstring managedAssemblyFullName;
 
-    wchar_t* filePart = NULL;
+    WCHAR* filePart = NULL;
 
     DWORD size = MAX_PATH;
-    wchar_t appPathPtr[MAX_PATH];
+    WCHAR appPathPtr[MAX_PATH];
     DWORD length = GetFullPathNameW(exeName, size, appPathPtr, &filePart);
     if (length >= size)
     {
@@ -631,14 +553,14 @@ ExecuteAssemblyMain (
 template <typename I>
 std::string
 ConvertToHexString (
-    I w, 
+    I input, 
     size_t hex_len = sizeof(I) << 1
     )
 {
     static const char* digits = "0123456789ABCDEF";
     std::string rc(hex_len, '0');
     for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4) {
-        rc[i] = digits[(w >> j) & 0x0f];
+        rc[i] = digits[(input >> j) & 0x0f];
     }
     return rc;
 }
@@ -646,7 +568,7 @@ ConvertToHexString (
 // Execute a method from a class located inside a .NET Core Library Assembly
 BOOLEAN 
 ExecuteAssemblyClassFunction (
-    Logger &log,
+    IN       Logger &log,
     IN CONST WCHAR* assembly,
     IN CONST WCHAR* type,
     IN CONST WCHAR* entry,
@@ -701,7 +623,7 @@ ExecuteAssemblyClassFunction (
 
 BOOLEAN
 UnloadStopHost (
-    Logger &log
+    IN Logger &log
     )
 {
     HRESULT hr;
@@ -759,10 +681,10 @@ BOOLEAN
 LoadStartHost(
     IN CONST INT32 argc,
     IN CONST WCHAR* argv[],
-    Logger &log,
+    IN       Logger &log,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    DWORD &exitCode,
+    _Inout_  DWORD &exitCode,
     IN CONST WCHAR* coreRoot,
     IN CONST WCHAR* coreLibraries,
     IN CONST BOOLEAN executeAssembly
@@ -783,7 +705,7 @@ LoadStartHost(
     // Find the specified exe. This is done using LoadLibrary so that
     // the OS library search semantics are used to find it.
 
-    const wchar_t* exeName = argc > 0 ? argv[0] : nullptr;
+    const WCHAR* exeName = argc > 0 ? argv[0] : nullptr;
     if (exeName == nullptr)
     {
         log << W("No exename specified.") << Logger::endl;
@@ -792,13 +714,13 @@ LoadStartHost(
 
     // The managed application to run should be the first command-line parameter.
     // Subsequent command line parameters will be passed to the managed app later in this host.
-    wchar_t targetApp[MAX_PATH];
+    WCHAR targetApp[MAX_PATH];
     GetFullPathNameW(argv[0], MAX_PATH, targetApp, NULL);
 
     // Also note the directory the target app is in, as it will be referenced later.
     // The directory is determined by simply truncating the target app's full path
     // at the last path delimiter (\)
-    wchar_t targetAppPath[MAX_PATH];
+    WCHAR targetAppPath[MAX_PATH];
     wcscpy_s(targetAppPath, targetApp);
     size_t i = wcslen(targetAppPath) - 1;
     while (i >= 0 && targetAppPath[i] != L'\\') {
@@ -827,7 +749,7 @@ LoadStartHost(
     // For this simple sample, we just include the directory the target application is in.
     // More complex hosts may want to also check the current working directory or other
     // locations known to contain application assets.
-    wchar_t appPaths[MAX_PATH * 50];
+    WCHAR appPaths[MAX_PATH * 50];
 
     // Just use the targetApp provided by the user and remove the file name
     wcscpy_s(appPaths, targetAppPath);
@@ -852,7 +774,7 @@ LoadStartHost(
 
     // NATIVE_DLL_SEARCH_DIRECTORIES
     // Native dll search directories are paths that the runtime will probe for native DLLs called via PInvoke
-    wchar_t nativeDllSearchDirectories[MAX_PATH * 50];
+    WCHAR nativeDllSearchDirectories[MAX_PATH * 50];
     wcscpy_s(nativeDllSearchDirectories, appPaths);
     wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, L";");
     wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, coreRoot);
@@ -921,13 +843,13 @@ LoadStartHost(
     // NATIVE_DLL_SEARCH_DIRECTORIES
     // - The list of paths that will be probed for native DLLs called by PInvoke
     //
-    const wchar_t *property_keys[] = {
+    const WCHAR *property_keys[] = {
         W("TRUSTED_PLATFORM_ASSEMBLIES"),
         W("APP_PATHS"),
         W("APP_NI_PATHS"),
         W("NATIVE_DLL_SEARCH_DIRECTORIES")
     };
-    const wchar_t *property_values[] = {
+    const WCHAR *property_values[] = {
         // TRUSTED_PLATFORM_ASSEMBLIES
         tpaList.c_str(),
         // APP_PATHS
@@ -939,7 +861,7 @@ LoadStartHost(
     };
 
     log << W("Creating an AppDomain") << Logger::endl;
-    for (int idx = 0; idx < sizeof(property_keys) / sizeof(wchar_t*); idx++)
+    for (int idx = 0; idx < sizeof(property_keys) / sizeof(WCHAR*); idx++)
     {
         log << property_keys[idx] << W("=") << property_values[idx] << Logger::endl;
     }
@@ -967,7 +889,7 @@ LoadStartHost(
         APPDOMAIN_DISABLE_TRANSPARENCY_ENFORCEMENT,
         NULL,                // Name of the assembly that contains the AppDomainManager implementation
         NULL,                    // The AppDomainManager implementation type name
-        sizeof(property_keys) / sizeof(wchar_t*),  // The number of properties
+        sizeof(property_keys) / sizeof(WCHAR*),  // The number of properties
         property_keys,
         property_values,
         &domainId);
@@ -1022,7 +944,7 @@ LoadStartHost(
 DWORD
 ValidateArgument (
     IN CONST WCHAR* argument,
-    IN DWORD maxSize
+    IN CONST DWORD maxSize
     )
 {
     if (argument != nullptr) {
@@ -1094,10 +1016,10 @@ StartCLRAndLoadAssembly (
             log->Disable();
         }
 
-        const wchar_t * params[] = {
+        const WCHAR * params[] = {
             dllPath
         };
-        DWORD paramCount = 1;
+        const DWORD paramCount = 1;
 
         const bool success =
             LoadStartHost(
@@ -1123,14 +1045,13 @@ ExecuteAssembly (
     )
 {
     if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
-
         StartCLRAndLoadAssembly(
             args->BinaryFilePath,
             args->Verbose, 
             args->WaitForDebugger,
             args->CoreRootPath, 
             args->CoreLibrariesPath,
-            true);
+            TRUE);
     }
 }
 
@@ -1182,7 +1103,7 @@ DllMain(
     IN HINSTANCE hDllHandle,
     IN DWORD     nReason,
     IN LPVOID    Reserved
-)
+    )
 {
     BOOLEAN bSuccess = TRUE;
     switch (nReason)

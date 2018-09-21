@@ -39,6 +39,7 @@
     <ClCompile Include="logger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="corerundll.h" />
     <ClInclude Include="logger.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -190,7 +191,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
@@ -239,7 +240,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_EXPORTING%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
@@ -291,7 +292,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
       <OmitFramePointers>false</OmitFramePointers>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
@@ -345,7 +346,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DisableSpecificWarnings>4960;4961;4603;4627;4838;4456;4457;4458;4459;4091</DisableSpecificWarnings>
       <OmitFramePointers>false</OmitFramePointers>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -407,7 +408,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -454,6 +455,7 @@
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
       <WindowsSDKDesktopARMSupport>true</WindowsSDKDesktopARMSupport>
       <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
+      <PreprocessorDefinitions>_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -484,7 +486,7 @@
       </AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>_MT</UndefinePreprocessorDefinitions>
       <OmitFramePointers>false</OmitFramePointers>
       <StringPooling>true</StringPooling>
@@ -547,7 +549,7 @@
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <TreatSpecificWarningsAsErrors>4640</TreatSpecificWarningsAsErrors>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>%(AdditionalOptions) /d2Zi+ /Zm200 /ZH:SHA_256 /source-charset:utf-8</AdditionalOptions>
       <WindowsSDKDesktopARMSupport>true</WindowsSDKDesktopARMSupport>
       <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
