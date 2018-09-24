@@ -19,11 +19,11 @@ skip_commits:
   files:
     - '**/*.md'
 artifacts:    
-- path: Windows\bin.X86\Release\corehook32.dll
+- path: Windows\bin.X86\Release\corerundll32.dll
   name: corehook-X86
-- path: Windows\bin.X64\Release\corehook64.dll
+- path: Windows\bin.X64\Release\corerundll64.dll
   name: CoreHook-X64  
-- path: Windows\bin.ARM\Release\corehook32.dll
+- path: Windows\bin.ARM\Release\corerundll32.dll
   name: corehook-ARM
-- path: Windows\bin.ARM64\Release\corehook64.dll
+- path: Windows\bin.ARM64\Release\corerundll64.dll
   name: corehook-ARM64
