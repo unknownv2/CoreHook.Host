@@ -18,6 +18,7 @@ build:
 skip_commits:
   files:
     - '**/*.md'
+artifacts:    
 - path: Windows\bin.X86\Release\corehook32.dll
   name: corehook-X86
 - path: Windows\bin.X64\Release\corehook64.dll
