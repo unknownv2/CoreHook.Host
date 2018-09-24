@@ -2,6 +2,7 @@ version: 1.0.{build}
 branches:
   only:
   - master
+  - develop
 skip_tags: true
 image: Visual Studio 2017
 platform:
@@ -18,3 +19,11 @@ build:
 skip_commits:
   files:
     - '**/*.md'
+- path: Windows\bin.X86\Release\corehook32.dll
+  name: corehook-X86
+- path: Windows\bin.X64\Release\corehook64.dll
+  name: CoreHook-X64  
+- path: Windows\bin.ARM\Release\corehook32.dll
+  name: corehook-ARM
+- path: Windows\bin.ARM64\Release\corehook64.dll
+  name: corehook-ARM64
