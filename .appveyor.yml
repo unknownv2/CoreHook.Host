@@ -2,28 +2,41 @@ version: 1.0.{build}
 branches:
   only:
   - master
-skip_tags: true
+
 image: Visual Studio 2017
+
 platform:
   - x86
   - x64
   - ARM
-  - ARM64  
+  - ARM64
+
 configuration:
   - Debug
   - Release
+
 build:
   project: Windows\corerundll.sln
   verbosity: detailed
+
 skip_commits:
   files:
     - '**/*.md'
-artifacts:    
-- path: Windows\bin.X86\Release\corerundll32.dll
-  name: corehook-X86
-- path: Windows\bin.X64\Release\corerundll64.dll
-  name: CoreHook-X64  
-- path: Windows\bin.ARM\Release\corerundll32.dll
-  name: corehook-ARM
-- path: Windows\bin.ARM64\Release\corerundll64.dll
-  name: corehook-ARM64
+  
+after_build:
+  7z a corerundll-%CONFIGURATION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\Windows\*\%CONFIGURATION%\corerundll*.dll
+
+artifacts:
+- path: corerundll-%CONFIGURATION%-%PLATFORM%.zip
+  name: Releases
+
+deploy:
+  provider: GitHub
+  description: "corerundll module"
+  auth_token:
+    secure: 99ssBJ/lNK6AL1FNajtOhloP5bXeUAm8m+cI0us6pW1hVw84MTKxwYzfurYMuaOQ
+  draft: false
+  prerelease: false
+  tag: $(APPVEYOR_REPO_TAG_NAME)
+  on:
+    appveyor_repo_tag: true
