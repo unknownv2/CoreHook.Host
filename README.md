@@ -46,9 +46,9 @@ Open the `Visual Studio` solution file in the [Windows](Windows) folder and buil
 #### Releases 
  You can also download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases).
  
- For `x86, x64`, extract the `*.zip` file, then place the `corerundll32.dll` or `corerundll64.dll` in the build output directory of your program.
+ For `x86, x64`, extract the zip corresponding to your target architecture, then place the `corerundll32.dll` or `corerundll64.dll` in the build output directory of your program.
  
- For `ARM, ARM64`, extract the `*-arm.zip` file , then place the `corerundll32.dll` or `corerundll64.dll` in the output directory created when you publish a program with `dotnet publish -r win-arm`, which is usually a folder called `publish`.
+ For `ARM, ARM64`,  extract the zip corresponding to your target architecture, then place the `corerundll32.dll` or `corerundll64.dll` in the output directory of your published program, created either from using the [Publishing Script](https://github.com/unknownv2/CoreHook#publishing-script) or the `dotnet publish` command.
 
 ## Notes
 
