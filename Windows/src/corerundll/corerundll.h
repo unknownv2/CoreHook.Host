@@ -48,7 +48,7 @@ struct RemoteEntryInfo
     RemoteFunctionArgs Args;
 };
 
-// DLL exports used for starting, executing in, and stopping the CoreCLR Runtime
+// DLL exports used for starting, executing in, and stopping the CoreCLR
 DllApi
 VOID
 UnloadRunTime(

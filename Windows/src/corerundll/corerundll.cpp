@@ -21,7 +21,7 @@ static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 //  found in the same directory as the host, it will be looked for here.
 static const WCHAR *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
-// Handle to the CoreCLR runtime hosting interface
+// Handle to the CoreCLR hosting interface
 ICLRRuntimeHost4* m_Host;
 
 // Handle to a logger which writes to the standard output
@@ -217,7 +217,7 @@ public:
             extension[0] = W('\0');
 
             // Check for .ni
-            size_t len = wcslen(fileName);
+            const size_t len = wcslen(fileName);
             if (len > 3 &&
                 fileName[len - 1] == W('i') &&
                 fileName[len - 2] == W('n') &&
@@ -597,7 +597,7 @@ ExecuteAssemblyClassFunction (
             log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
             return false;
         }
-
+        
         RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
         if (remoteArgs != NULL) {
 
@@ -759,7 +759,10 @@ LoadStartHost(
     auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
     managedAssemblyDirectory.resize(lastBackslash + 1);
 
-    // Construct native search directory paths
+
+    // NATIVE_DLL_SEARCH_DIRECTORIES
+    // Native dll search directories are paths that the runtime will probe for native DLLs called via PInvoke
+
     std::wstring nativeDllSearchDirs(appPath);
 
     nativeDllSearchDirs.append(W(";"));
@@ -769,13 +772,6 @@ LoadStartHost(
     nativeDllSearchDirs.append(coreLibraries);
     nativeDllSearchDirs.append(W(";"));
     nativeDllSearchDirs.append(hostEnvironment.m_coreCLRDirectoryPath);
-
-    // NATIVE_DLL_SEARCH_DIRECTORIES
-    // Native dll search directories are paths that the runtime will probe for native DLLs called via PInvoke
-    WCHAR nativeDllSearchDirectories[MAX_PATH * 50];
-    wcscpy_s(nativeDllSearchDirectories, appPaths);
-    wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, L";");
-    wcscat_s(nativeDllSearchDirectories, MAX_PATH * 50, coreRoot);
 
     // Start the CoreCLR
 
@@ -809,7 +805,7 @@ LoadStartHost(
         return false;
     }
 
-    std::wstring  tpaList;
+    std::wstring tpaList;
     if (!managedAssemblyFullName.empty())
     {
         // Target assembly should be added to the tpa list. Otherwise corerun.exe
@@ -820,6 +816,7 @@ LoadStartHost(
     }
 
     tpaList.append(hostEnvironment.GetTpaList(coreLibraries));
+    tpaList.append(hostEnvironment.GetTpaList(coreRoot));
 
     //-------------------------------------------------------------
 
