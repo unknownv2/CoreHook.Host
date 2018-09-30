@@ -1,5 +1,7 @@
 # CoreHook.Host
 
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/unknownv2/CoreHook.Host/blob/master/LICENSE)
+
 A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/CoreHook) in an unmanaged application on Linux, macOS, and Windows.
 
 ## Build status
