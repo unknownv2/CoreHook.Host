@@ -768,8 +768,10 @@ LoadStartHost(
     nativeDllSearchDirs.append(W(";"));
     nativeDllSearchDirs.append(managedAssemblyDirectory);
 
-    nativeDllSearchDirs.append(W(";"));
-    nativeDllSearchDirs.append(coreLibraries);
+    if (wcslen(coreLibraries) != 0) {
+        nativeDllSearchDirs.append(W(";"));
+        nativeDllSearchDirs.append(coreLibraries);
+    }
     nativeDllSearchDirs.append(W(";"));
     nativeDllSearchDirs.append(hostEnvironment.m_coreCLRDirectoryPath);
 
@@ -814,8 +816,9 @@ LoadStartHost(
         tpaList = managedAssemblyFullName;
         tpaList.append(W(";"));
     }
-
-    tpaList.append(hostEnvironment.GetTpaList(coreLibraries));
+    if (wcslen(coreLibraries) != 0) {
+        tpaList.append(hostEnvironment.GetTpaList(coreLibraries));
+    }
     tpaList.append(hostEnvironment.GetTpaList(coreRoot));
 
     //-------------------------------------------------------------
