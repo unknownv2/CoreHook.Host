@@ -292,30 +292,29 @@ public:
     // Returns the semicolon-separated list of paths to runtime dlls that are considered trusted.
     // On first call, scans the coreclr directory for dlls and adds them all to the list.
     const WCHAR * GetTpaList(const WCHAR * coreLibsPath) {
+        const WCHAR *rgTPAExtensions[] = {
+            // Probe for .ni.dll first so that it's preferred
+            // if ni and il coexist in the same dir
+            W("*.ni.dll"),
+            W("*.dll"),
+            W("*.ni.exe"),
+            W("*.exe"),
+            W("*.ni.winmd"),
+            W("*.winmd")
+        };
         if (m_tpaList.empty()) {
-            const WCHAR *rgTPAExtensions[] = {
-                        // Probe for .ni.dll first so that it's preferred
-                        // if ni and il coexist in the same dir
-                        W("*.ni.dll"),        
-                        W("*.dll"),
-                        W("*.ni.exe"),
-                        W("*.exe"),
-                        W("*.ni.winmd"),
-                        W("*.winmd")
-            };
-
-            // Add files from %CORE_LIBRARIES% if specified
-            std::wstring coreLibraries;
-            if (coreLibsPath) {
-                coreLibraries.append(coreLibsPath);
-                coreLibraries.append(W("\\"));
-                AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
-            }
-            if (coreLibraries.compare(m_coreCLRDirectoryPath) != 0) {
-                AddFilesFromDirectoryToTPAList(m_coreCLRDirectoryPath, rgTPAExtensions, _countof(rgTPAExtensions));
-            }
+            std::wstring coreCLRDirectoryPath = m_coreCLRDirectoryPath;
+            coreCLRDirectoryPath.append(W("\\"));
+            AddFilesFromDirectoryToTPAList(coreCLRDirectoryPath, rgTPAExtensions, _countof(rgTPAExtensions));
         }
-
+        // Add files from from coreLibsPath if it is a different path than our initial current root 
+        std::wstring coreLibraries;
+        coreLibraries.append(coreLibsPath);
+        if (coreLibraries.compare(m_coreCLRDirectoryPath) != 0) {
+            coreLibraries.append(W("\\"));
+            AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
+        }
+        
         return m_tpaList.c_str();
     }
 
