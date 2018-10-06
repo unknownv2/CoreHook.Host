@@ -589,7 +589,7 @@ ExecuteAssemblyClassFunction (
             assembly, // Target managed assembly
             type, // Target managed type
             entry, // Target entry point (static method)
-            (INT_PTR*)&pfnDelegate);
+            reinterpret_cast<INT_PTR*>(&pfnDelegate));
 
         if (FAILED(hr) || pfnDelegate == NULL)
         {
@@ -597,20 +597,22 @@ ExecuteAssemblyClassFunction (
             return false;
         }
         
-        RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
+        auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
         if (remoteArgs != NULL) {
 
-
-            // parse entry arguments
+            // construct a hex string for the address of the EntryInfo parameter
+            // which is passed to the .NET delegate function and execute the delegate
             EntryInfo.Args.UserData = remoteArgs->UserData;
             EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-            std::string paramString = ConvertToHexString((LONGLONG)&EntryInfo, 16);
+            auto paramString = ConvertToHexString((LONGLONG)&EntryInfo, 16);
 
             pfnDelegate(paramString.c_str());
         }
         else {
-            pfnDelegate(nullptr);
+            // No arguments were supplied to pass to the delegate function so pass an
+            // empty string
+            pfnDelegate(NULL);
         }
     }
     log << W("App exit value = ") << exitCode << Logger::endl;
@@ -757,7 +759,6 @@ LoadStartHost(
 
     auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
     managedAssemblyDirectory.resize(lastBackslash + 1);
-
 
     // NATIVE_DLL_SEARCH_DIRECTORIES
     // Native dll search directories are paths that the runtime will probe for native DLLs called via PInvoke
