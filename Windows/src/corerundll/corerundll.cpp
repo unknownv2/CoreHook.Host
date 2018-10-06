@@ -22,13 +22,13 @@ static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 static const WCHAR *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
 // Handle to the CoreCLR hosting interface
-ICLRRuntimeHost4* m_Host;
+ICLRRuntimeHost4* g_Host;
 
 // Handle to a logger which writes to the standard output
-std::shared_ptr<Logger> m_Log;
+std::shared_ptr<Logger> g_Log;
 
 // The AppDomain ID in  which .NET assemblies will be executed in
-DWORD m_domainId;
+DWORD g_domainId;
 
 // Encapsulates the environment that CoreCLR will run in, including the TPALIST
 class HostEnvironment
@@ -369,7 +369,7 @@ SetGlobalHost (
     ICLRRuntimeHost4* host
     )
 {
-    m_Host = host;
+    g_Host = host;
 }
 
 ICLRRuntimeHost4*
@@ -377,7 +377,7 @@ GetGlobalHost (
     VOID
     )
 {
-    return m_Host;
+    return g_Host;
 }
 
 VOID
@@ -385,7 +385,7 @@ SetDomainId (
     IN CONST DWORD domainId
     )
 {
-    m_domainId = domainId;
+    g_domainId = domainId;
 }
 
 DWORD
@@ -393,7 +393,7 @@ GetDomainId (
     VOID
     )
 {
-    return m_domainId;
+    return g_domainId;
 }
 
 std::shared_ptr<Logger>
@@ -401,10 +401,10 @@ GetLogger (
     VOID
     )
 {
-    if (m_Log == nullptr) {
-        m_Log = std::make_shared<Logger>();
+    if (g_Log == nullptr) {
+        g_Log = std::make_shared<Logger>();
     }
-    return m_Log;
+    return g_Log;
 }
 
 INT32
