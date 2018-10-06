@@ -108,7 +108,7 @@ public:
     // The path to the directory that CoreCLR is in
     std::wstring m_coreCLRDirectoryPath;
 
-    HostEnvironment(Logger *logger, const WCHAR * coreRootPath)
+    HostEnvironment(Logger *logger, const WCHAR *coreRootPath)
         : m_log(logger), m_CLRRuntimeHost(nullptr) {
 
         // Discover the path to this exe's module. All other files are expected to be in the same directory.
@@ -183,8 +183,8 @@ public:
     }
 
     bool TPAListContainsFile(
-        _In_z_ WCHAR* fileNameWithoutExtension,
-        _In_reads_(countExtensions) const WCHAR** rgTPAExtensions,
+        _In_z_ WCHAR *fileNameWithoutExtension,
+        _In_reads_(countExtensions) const WCHAR **rgTPAExtensions,
         int countExtensions)
     {
         if (m_tpaList.empty()) return false;
@@ -207,7 +207,7 @@ public:
 
     void
     RemoveExtensionAndNi(
-        _In_z_ WCHAR* fileName
+        _In_z_ WCHAR *fileName
         )
     {
         // Remove extension, if it exists
@@ -230,7 +230,7 @@ public:
 
     void AddFilesFromDirectoryToTPAList(
         _In_z_ const std::wstring& targetPath,
-        _In_reads_(countExtensions) const WCHAR** rgTPAExtensions,
+        _In_reads_(countExtensions) const WCHAR **rgTPAExtensions,
         int countExtensions)
     {
         *m_log << W("Adding assemblies from ") << targetPath << W(" to the TPA list") << Logger::endl;
@@ -241,6 +241,7 @@ public:
         {
             assemblyPath.assign(targetPath);
             assemblyPath.append(rgTPAExtensions[iExtension]);
+
             WIN32_FIND_DATA data;
             HANDLE findHandle = FindFirstFileW(assemblyPath.c_str(), &data);
 
@@ -291,7 +292,7 @@ public:
 
     // Returns the semicolon-separated list of paths to runtime dlls that are considered trusted.
     // On first call, scans the coreclr directory for dlls and adds them all to the list.
-    const WCHAR * GetTpaList(const WCHAR * coreLibsPath) {
+    const WCHAR * GetTpaList(const WCHAR *coreLibsPath) {
         const WCHAR *rgTPAExtensions[] = {
             // Probe for .ni.dll first so that it's preferred
             // if ni and il coexist in the same dir
@@ -319,12 +320,12 @@ public:
     }
 
     // Returns the path to the host module
-    const WCHAR * GetHostPath() {
+    const WCHAR* GetHostPath() {
         return m_hostPath.c_str();
     }
 
     // Returns the path to the host module
-    const WCHAR * GetHostExeName() {
+    const WCHAR* GetHostExeName() {
         return m_hostExeName.c_str();
     }
 
@@ -366,7 +367,7 @@ public:
 
 VOID
 SetGlobalHost (
-    ICLRRuntimeHost4* host
+    ICLRRuntimeHost4 *host
     )
 {
     g_Host = host;
@@ -492,7 +493,7 @@ CreateStartupFlags (
 BOOLEAN
 ExecuteAssemblyMain (
     IN CONST INT32 argc,
-    IN CONST WCHAR* argv[],
+    IN CONST WCHAR *argv[],
     IN       Logger &log
     )
 {
@@ -566,10 +567,10 @@ ConvertToHexString (
 BOOLEAN 
 ExecuteAssemblyClassFunction (
     IN       Logger &log,
-    IN CONST WCHAR* assembly,
-    IN CONST WCHAR* type,
-    IN CONST WCHAR* entry,
-    IN CONST BYTE*  arguments
+    IN CONST WCHAR  *assembly,
+    IN CONST WCHAR  *type,
+    IN CONST WCHAR  *entry,
+    IN CONST BYTE   *arguments
     )
 {
     HRESULT hr;
@@ -678,14 +679,14 @@ UnloadStopHost (
 
 BOOLEAN
 LoadStartHost(
-    IN CONST INT32 argc,
-    IN CONST WCHAR* argv[],
-    IN       Logger &log,
+    IN CONST INT32   argc,
+    IN CONST WCHAR   *argv[],
+    IN       Logger  &log,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    _Inout_  DWORD &exitCode,
-    IN CONST WCHAR* coreRoot,
-    IN CONST WCHAR* coreLibraries,
+    _Inout_  DWORD   &exitCode,
+    IN CONST WCHAR   *coreRoot,
+    IN CONST WCHAR   *coreLibraries,
     IN CONST BOOLEAN executeAssembly
     )
 {
@@ -941,7 +942,7 @@ LoadStartHost(
 
 DWORD
 ValidateArgument (
-    IN CONST WCHAR* argument,
+    IN CONST WCHAR *argument,
     IN CONST DWORD maxSize
     )
 {
@@ -959,7 +960,7 @@ ValidateArgument (
 
 DWORD
 ValidateAssemblyFunctionCallArgs (
-    IN CONST AssemblyFunctionCall* args
+    IN CONST AssemblyFunctionCall *args
     ) 
 {
     if (args != nullptr) {
@@ -973,7 +974,7 @@ ValidateAssemblyFunctionCallArgs (
 }
 DWORD 
 ValidateBinaryLoaderArgs (
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
     )
 {
     if (args != nullptr) {
@@ -991,15 +992,14 @@ ValidateBinaryLoaderArgs (
 DllApi
 DWORD
 StartCLRAndLoadAssembly (
-    IN CONST WCHAR*  dllPath,
+    IN CONST WCHAR   *dllPath,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    IN CONST WCHAR*  coreRoot,
-    IN CONST WCHAR*  coreLibraries,
+    IN CONST WCHAR   *coreRoot,
+    IN CONST WCHAR   *coreLibraries,
     IN CONST BOOLEAN executeAssembly
     )
 {
-
     // Parse the options from the command line
     DWORD exitCode = -1;
     if (SUCCEEDED(ValidateArgument(dllPath, MAX_PATH))
@@ -1039,7 +1039,7 @@ StartCLRAndLoadAssembly (
 DllApi
 VOID
 ExecuteAssembly (
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
     )
 {
     if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
@@ -1056,7 +1056,7 @@ ExecuteAssembly (
 DllApi
 VOID
 LoadAssembly (
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
     )
 {
     if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
@@ -1073,7 +1073,7 @@ LoadAssembly (
 DllApi
 VOID
 ExecuteAssemblyFunction (
-    IN CONST AssemblyFunctionCall* args
+    IN CONST AssemblyFunctionCall *args
     )
 {
     if (SUCCEEDED(ValidateAssemblyFunctionCallArgs(args))) {
@@ -1095,7 +1095,7 @@ UnloadRunTime(
     UnloadStopHost(*GetLogger());
 }
 
-BOOLEAN 
+BOOLEAN
 WINAPI
 DllMain(
     IN HINSTANCE hDllHandle,

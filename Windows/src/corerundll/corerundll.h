@@ -58,28 +58,28 @@ UnloadRunTime(
 DllApi
 VOID
 ExecuteAssemblyFunction(
-    IN CONST AssemblyFunctionCall* args
+    IN CONST AssemblyFunctionCall *args
 );
 
 DllApi
 VOID
 LoadAssembly(
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
 );
 
 DllApi
 VOID
 ExecuteAssembly(
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
 );
 
 DllApi
 DWORD
 StartCLRAndLoadAssembly(
-    IN CONST WCHAR*  dllPath,
+    IN CONST WCHAR   *dllPath,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    IN CONST WCHAR*  coreRoot,
-    IN CONST WCHAR*  coreLibraries,
+    IN CONST WCHAR   *coreRoot,
+    IN CONST WCHAR   *coreLibraries,
     IN CONST BOOLEAN executeAssembly
 );
