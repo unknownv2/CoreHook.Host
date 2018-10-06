@@ -35,6 +35,7 @@ class HostEnvironment
 {
     // The path to this module
     std::wstring m_hostPath;
+
     // The path to the directory containing this module
     std::wstring m_hostDirectoryPath;
 
@@ -988,7 +989,7 @@ ValidateBinaryLoaderArgs (
     return E_INVALIDARG;
 }
 
-// Load a .NET Core DLL Application or Library into the Host Application and also execute it if desired
+// Load a .NET Core DLL Application or Library into the Host Application and choose to execute its entry point
 DllApi
 DWORD
 StartCLRAndLoadAssembly (

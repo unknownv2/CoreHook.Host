@@ -17,6 +17,7 @@
 // The max length of arguments to be parsed and passed to a .NET function
 #define AssemblyFunCallArgsSize        512
 
+// Arguments for hosting the .NET Core runtime and loading an assembly into the
 struct BinaryLoaderArgs
 {
     BOOLEAN    Verbose;
@@ -28,6 +29,8 @@ struct BinaryLoaderArgs
     WCHAR      CoreLibrariesPath[MAX_PATH];
 };
 
+// Arguments for executing a function located in a .NET assembly,
+// with optional arguments passed to the function call
 struct AssemblyFunctionCall
 {
     WCHAR   Assembly[FunctionNameSize];
@@ -49,30 +52,38 @@ struct RemoteEntryInfo
 };
 
 // DLL exports used for starting, executing in, and stopping the CoreCLR
+
+// Stop the .NET Core host in the current application
 DllApi
 VOID
 UnloadRunTime(
     VOID
 );
 
+// Execute a function in a .NET assembly that has been loaded in the .NET Core runtime
 DllApi
 VOID
 ExecuteAssemblyFunction(
     IN CONST AssemblyFunctionCall *args
 );
 
+// Load a .NET assembly into the .NET Core runtime
 DllApi
 VOID
 LoadAssembly(
     IN CONST BinaryLoaderArgs *args
 );
 
+// Host the CoreCLR in the current application and load a .NET appliaction into the runtime
+// and execute its entry point
 DllApi
 VOID
 ExecuteAssembly(
     IN CONST BinaryLoaderArgs *args
 );
 
+// Host the CoreCLR in the current application and load a .NET assembly into the runtime
+// which can be executed immediately using its entry point
 DllApi
 DWORD
 StartCLRAndLoadAssembly(
