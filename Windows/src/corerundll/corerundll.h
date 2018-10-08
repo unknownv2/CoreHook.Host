@@ -15,7 +15,7 @@
 #define FunctionNameSize               256
 
 // The max length of arguments to be parsed and passed to a .NET function
-#define AssemblyFunCallArgsSize        512
+#define AssemblyFunCallArgsSize        12
 
 // Arguments for hosting the .NET Core runtime and loading an assembly into the
 struct BinaryLoaderArgs

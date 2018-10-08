@@ -607,7 +607,7 @@ ExecuteAssemblyClassFunction (
             EntryInfo.Args.UserData = remoteArgs->UserData;
             EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-            auto paramString = ConvertToHexString((LONGLONG)&EntryInfo, 16);
+            auto paramString = ConvertToHexString(reinterpret_cast<LONGLONG>(&EntryInfo), 16);
 
             pfnDelegate(paramString.c_str());
         }
