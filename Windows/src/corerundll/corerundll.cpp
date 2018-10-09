@@ -917,6 +917,8 @@ LoadStartHost(
         }
     }
 
+    SetDomainId(domainId);
+
     if (executeAssembly) {
 
         hr = host->ExecuteAssembly(
@@ -933,9 +935,6 @@ LoadStartHost(
         }
 
         log << W("App exit value = ") << exitCode << Logger::endl;
-    }
-    else {
-        SetDomainId(domainId);
     }
 
     return true;
