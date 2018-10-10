@@ -51,7 +51,7 @@ struct RemoteEntryInfo
     RemoteFunctionArgs Args;
 };
 
-// DLL exports used for starting, executing in, and stopping the CoreCLR
+// DLL exports used for starting, executing in, and stopping the .NET Core runtime
 
 // Stop the .NET Core host in the current application
 DllApi
@@ -74,7 +74,7 @@ LoadAssembly(
     IN CONST BinaryLoaderArgs *args
 );
 
-// Host the CoreCLR in the current application and load a .NET appliaction into the runtime
+// Host the .NET Core runtime in the current application and load a .NET appliaction into the runtime
 // and execute its entry point
 DllApi
 VOID
@@ -82,7 +82,7 @@ ExecuteAssembly(
     IN CONST BinaryLoaderArgs *args
 );
 
-// Host the CoreCLR in the current application and load a .NET assembly into the runtime
+// Host the .NET Core runtime in the current application and load a .NET assembly into the runtime
 // which can be executed immediately using its entry point
 DllApi
 DWORD

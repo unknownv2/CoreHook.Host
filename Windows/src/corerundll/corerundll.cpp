@@ -14,7 +14,7 @@ static const WCHAR *serverGcVar = W("COMPlus_gcServer");
 // On by default.
 static const WCHAR *concurrentGcVar = W("COMPlus_gcConcurrent");
 
-// The name of the CoreCLR native runtime DLL.
+// The name of the .NET Core runtime native runtime DLL.
 static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 
 // The location where CoreCLR is expected to be installed. If CoreCLR.dll isn't
@@ -549,6 +549,7 @@ ExecuteAssemblyMain (
     return true;
 }
 
+// Convert an integer value to it's hex string representation
 template <typename I>
 std::string
 ConvertToHexString (
@@ -557,11 +558,11 @@ ConvertToHexString (
     )
 {
     static const char* digits = "0123456789ABCDEF";
-    std::string rc(hex_len, '0');
+    std::string hex_string(hex_len, '0');
     for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4) {
-        rc[i] = digits[(input >> j) & 0x0f];
+        hex_string[i] = digits[(input >> j) & 0x0f];
     }
-    return rc;
+    return hex_string;
 }
 
 // Execute a method from a class located inside a .NET Core Library Assembly
@@ -777,7 +778,7 @@ LoadStartHost(
     nativeDllSearchDirs.append(W(";"));
     nativeDllSearchDirs.append(hostEnvironment.m_coreCLRDirectoryPath);
 
-    // Start the CoreCLR
+    // Start the .NET Core runtime
 
     ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
     if (!host) {
