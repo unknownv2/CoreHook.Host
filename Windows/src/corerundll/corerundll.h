@@ -74,16 +74,7 @@ LoadAssembly(
     IN CONST BinaryLoaderArgs *args
 );
 
-// Host the .NET Core runtime in the current application and load a .NET appliaction into the runtime
-// and execute its entry point
-DllApi
-VOID
-ExecuteAssembly(
-    IN CONST BinaryLoaderArgs *args
-);
-
 // Host the .NET Core runtime in the current application and load a .NET assembly into the runtime
-// which can be executed immediately using its entry point
 DllApi
 DWORD
 StartCLRAndLoadAssembly(
@@ -91,6 +82,5 @@ StartCLRAndLoadAssembly(
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
     IN CONST WCHAR   *coreRoot,
-    IN CONST WCHAR   *coreLibraries,
-    IN CONST BOOLEAN executeAssembly
+    IN CONST WCHAR   *coreLibraries
 );

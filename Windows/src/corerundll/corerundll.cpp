@@ -688,8 +688,7 @@ LoadStartHost(
     IN CONST BOOLEAN waitForDebugger,
     _Inout_  DWORD   &exitCode,
     IN CONST WCHAR   *coreRoot,
-    IN CONST WCHAR   *coreLibraries,
-    IN CONST BOOLEAN executeAssembly
+    IN CONST WCHAR   *coreLibraries
     )
 {
     if (GetGlobalHost() != nullptr) {
@@ -920,24 +919,6 @@ LoadStartHost(
 
     SetDomainId(domainId);
 
-    if (executeAssembly) {
-
-        hr = host->ExecuteAssembly(
-            domainId,
-            managedAssemblyFullName.c_str(),
-            argc - 1,
-            (argc - 1) ? &(argv[1]) : NULL,
-            &exitCode);
-
-        if (FAILED(hr)) {
-
-            log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return false;
-        }
-
-        log << W("App exit value = ") << exitCode << Logger::endl;
-    }
-
     return true;
 }
 
@@ -989,7 +970,7 @@ ValidateBinaryLoaderArgs (
     return E_INVALIDARG;
 }
 
-// Load a .NET Core DLL Application or Library into the Host Application and choose to execute its entry point
+// Load a .NET Application or Library Assembly into the Host Application
 DllApi
 DWORD
 StartCLRAndLoadAssembly (
@@ -997,8 +978,7 @@ StartCLRAndLoadAssembly (
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
     IN CONST WCHAR   *coreRoot,
-    IN CONST WCHAR   *coreLibraries,
-    IN CONST BOOLEAN executeAssembly
+    IN CONST WCHAR   *coreLibraries
     )
 {
     // Parse the options from the command line
@@ -1029,29 +1009,11 @@ StartCLRAndLoadAssembly (
               waitForDebugger,
               exitCode, 
               coreRoot,
-              coreLibraries,
-              executeAssembly);
+              coreLibraries);
 
         *log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
     }
     return exitCode;
-}
-
-DllApi
-VOID
-ExecuteAssembly (
-    IN CONST BinaryLoaderArgs *args
-    )
-{
-    if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
-        StartCLRAndLoadAssembly(
-            args->BinaryFilePath,
-            args->Verbose, 
-            args->WaitForDebugger,
-            args->CoreRootPath, 
-            args->CoreLibrariesPath,
-            TRUE);
-    }
 }
 
 DllApi
@@ -1066,8 +1028,7 @@ LoadAssembly (
             args->Verbose,
             args->WaitForDebugger,
             args->CoreRootPath,
-            args->CoreLibrariesPath,
-            args->StartAssembly);
+            args->CoreLibrariesPath);
     }
 }
 
