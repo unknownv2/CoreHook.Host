@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/unknownv2/CoreHook.Host/blob/master/LICENSE)
 
-A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/CoreHook) in an unmanaged application on Linux, macOS, and Windows.
+A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/CoreHook) in an unmanaged application on Windows.
 
 ## Build status
 
@@ -11,22 +11,6 @@ A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/Cor
 | AppVeyor     | Windows     | [![Build status](https://ci.appveyor.com/api/projects/status/7c0lfec5c7tlvo2a/branch/master?svg=true)](https://ci.appveyor.com/project/unknownv2/corehook-host/branch/master) |
 
 ## Building
-
-First checkout the repository to a folder by running:
-```
-git clone https://github.com/unknownv2/CoreHook.Host.git
-cd CoreHook.Host
-```
-## Unix (x64, ARM, ARM64)
-
-### Linux and macOS
-Make sure you have `clang++` installed, then run:
-
-```
-cd Unix
-make
-```
-It will produce a file called `libcorerun.so` (Linux) or `libcorerun.dylib` (macOS), which you will place in the same directory as the output of the build of your program, which is usually a folder called `netcoreapp2.1`.
 
 ## Windows (x86, x64, ARM, ARM64)
 

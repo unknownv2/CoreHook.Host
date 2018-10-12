@@ -14,7 +14,7 @@ static const WCHAR *serverGcVar = W("COMPlus_gcServer");
 // On by default.
 static const WCHAR *concurrentGcVar = W("COMPlus_gcConcurrent");
 
-// The name of the CoreCLR native runtime DLL.
+// The name of the .NET Core runtime native runtime DLL.
 static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 
 // The location where CoreCLR is expected to be installed. If CoreCLR.dll isn't
@@ -22,19 +22,20 @@ static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 static const WCHAR *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
 // Handle to the CoreCLR hosting interface
-ICLRRuntimeHost4* m_Host;
+ICLRRuntimeHost4* g_Host;
 
 // Handle to a logger which writes to the standard output
-std::shared_ptr<Logger> m_Log;
+std::shared_ptr<Logger> g_Log;
 
 // The AppDomain ID in  which .NET assemblies will be executed in
-DWORD m_domainId;
+DWORD g_domainId;
 
 // Encapsulates the environment that CoreCLR will run in, including the TPALIST
 class HostEnvironment
 {
     // The path to this module
     std::wstring m_hostPath;
+
     // The path to the directory containing this module
     std::wstring m_hostDirectoryPath;
 
@@ -108,7 +109,7 @@ public:
     // The path to the directory that CoreCLR is in
     std::wstring m_coreCLRDirectoryPath;
 
-    HostEnvironment(Logger *logger, const WCHAR * coreRootPath)
+    HostEnvironment(Logger *logger, const WCHAR *coreRootPath)
         : m_log(logger), m_CLRRuntimeHost(nullptr) {
 
         // Discover the path to this exe's module. All other files are expected to be in the same directory.
@@ -183,8 +184,8 @@ public:
     }
 
     bool TPAListContainsFile(
-        _In_z_ WCHAR* fileNameWithoutExtension,
-        _In_reads_(countExtensions) const WCHAR** rgTPAExtensions,
+        _In_z_ WCHAR *fileNameWithoutExtension,
+        _In_reads_(countExtensions) const WCHAR **rgTPAExtensions,
         int countExtensions)
     {
         if (m_tpaList.empty()) return false;
@@ -207,7 +208,7 @@ public:
 
     void
     RemoveExtensionAndNi(
-        _In_z_ WCHAR* fileName
+        _In_z_ WCHAR *fileName
         )
     {
         // Remove extension, if it exists
@@ -230,7 +231,7 @@ public:
 
     void AddFilesFromDirectoryToTPAList(
         _In_z_ const std::wstring& targetPath,
-        _In_reads_(countExtensions) const WCHAR** rgTPAExtensions,
+        _In_reads_(countExtensions) const WCHAR **rgTPAExtensions,
         int countExtensions)
     {
         *m_log << W("Adding assemblies from ") << targetPath << W(" to the TPA list") << Logger::endl;
@@ -241,6 +242,7 @@ public:
         {
             assemblyPath.assign(targetPath);
             assemblyPath.append(rgTPAExtensions[iExtension]);
+
             WIN32_FIND_DATA data;
             HANDLE findHandle = FindFirstFileW(assemblyPath.c_str(), &data);
 
@@ -291,7 +293,7 @@ public:
 
     // Returns the semicolon-separated list of paths to runtime dlls that are considered trusted.
     // On first call, scans the coreclr directory for dlls and adds them all to the list.
-    const WCHAR * GetTpaList(const WCHAR * coreLibsPath) {
+    const WCHAR * GetTpaList(const WCHAR *coreLibsPath) {
         const WCHAR *rgTPAExtensions[] = {
             // Probe for .ni.dll first so that it's preferred
             // if ni and il coexist in the same dir
@@ -319,12 +321,12 @@ public:
     }
 
     // Returns the path to the host module
-    const WCHAR * GetHostPath() {
+    const WCHAR* GetHostPath() {
         return m_hostPath.c_str();
     }
 
     // Returns the path to the host module
-    const WCHAR * GetHostExeName() {
+    const WCHAR* GetHostExeName() {
         return m_hostExeName.c_str();
     }
 
@@ -366,10 +368,10 @@ public:
 
 VOID
 SetGlobalHost (
-    ICLRRuntimeHost4* host
+    ICLRRuntimeHost4 *host
     )
 {
-    m_Host = host;
+    g_Host = host;
 }
 
 ICLRRuntimeHost4*
@@ -377,7 +379,7 @@ GetGlobalHost (
     VOID
     )
 {
-    return m_Host;
+    return g_Host;
 }
 
 VOID
@@ -385,7 +387,7 @@ SetDomainId (
     IN CONST DWORD domainId
     )
 {
-    m_domainId = domainId;
+    g_domainId = domainId;
 }
 
 DWORD
@@ -393,7 +395,7 @@ GetDomainId (
     VOID
     )
 {
-    return m_domainId;
+    return g_domainId;
 }
 
 std::shared_ptr<Logger>
@@ -401,10 +403,10 @@ GetLogger (
     VOID
     )
 {
-    if (m_Log == nullptr) {
-        m_Log = std::make_shared<Logger>();
+    if (g_Log == nullptr) {
+        g_Log = std::make_shared<Logger>();
     }
-    return m_Log;
+    return g_Log;
 }
 
 INT32
@@ -492,7 +494,7 @@ CreateStartupFlags (
 BOOLEAN
 ExecuteAssemblyMain (
     IN CONST INT32 argc,
-    IN CONST WCHAR* argv[],
+    IN CONST WCHAR *argv[],
     IN       Logger &log
     )
 {
@@ -547,6 +549,7 @@ ExecuteAssemblyMain (
     return true;
 }
 
+// Convert an integer value to it's hex string representation
 template <typename I>
 std::string
 ConvertToHexString (
@@ -555,21 +558,21 @@ ConvertToHexString (
     )
 {
     static const char* digits = "0123456789ABCDEF";
-    std::string rc(hex_len, '0');
+    std::string hex_string(hex_len, '0');
     for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4) {
-        rc[i] = digits[(input >> j) & 0x0f];
+        hex_string[i] = digits[(input >> j) & 0x0f];
     }
-    return rc;
+    return hex_string;
 }
 
 // Execute a method from a class located inside a .NET Core Library Assembly
 BOOLEAN 
 ExecuteAssemblyClassFunction (
     IN       Logger &log,
-    IN CONST WCHAR* assembly,
-    IN CONST WCHAR* type,
-    IN CONST WCHAR* entry,
-    IN CONST BYTE*  arguments
+    IN CONST WCHAR  *assembly,
+    IN CONST WCHAR  *type,
+    IN CONST WCHAR  *entry,
+    IN CONST BYTE   *arguments
     )
 {
     HRESULT hr;
@@ -589,7 +592,7 @@ ExecuteAssemblyClassFunction (
             assembly, // Target managed assembly
             type, // Target managed type
             entry, // Target entry point (static method)
-            (INT_PTR*)&pfnDelegate);
+            reinterpret_cast<INT_PTR*>(&pfnDelegate));
 
         if (FAILED(hr) || pfnDelegate == NULL)
         {
@@ -597,20 +600,22 @@ ExecuteAssemblyClassFunction (
             return false;
         }
         
-        RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)arguments;
+        auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
         if (remoteArgs != NULL) {
 
-
-            // parse entry arguments
+            // construct a hex string for the address of the EntryInfo parameter
+            // which is passed to the .NET delegate function and execute the delegate
             EntryInfo.Args.UserData = remoteArgs->UserData;
             EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-            std::string paramString = ConvertToHexString((LONGLONG)&EntryInfo, 16);
+            auto paramString = ConvertToHexString(reinterpret_cast<LONGLONG>(&EntryInfo), 16);
 
             pfnDelegate(paramString.c_str());
         }
         else {
-            pfnDelegate(nullptr);
+            // No arguments were supplied to pass to the delegate function so pass an
+            // empty string
+            pfnDelegate(NULL);
         }
     }
     log << W("App exit value = ") << exitCode << Logger::endl;
@@ -676,15 +681,14 @@ UnloadStopHost (
 
 BOOLEAN
 LoadStartHost(
-    IN CONST INT32 argc,
-    IN CONST WCHAR* argv[],
-    IN       Logger &log,
+    IN CONST INT32   argc,
+    IN CONST WCHAR   *argv[],
+    IN       Logger  &log,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    _Inout_  DWORD &exitCode,
-    IN CONST WCHAR* coreRoot,
-    IN CONST WCHAR* coreLibraries,
-    IN CONST BOOLEAN executeAssembly
+    _Inout_  DWORD   &exitCode,
+    IN CONST WCHAR   *coreRoot,
+    IN CONST WCHAR   *coreLibraries
     )
 {
     if (GetGlobalHost() != nullptr) {
@@ -758,7 +762,6 @@ LoadStartHost(
     auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
     managedAssemblyDirectory.resize(lastBackslash + 1);
 
-
     // NATIVE_DLL_SEARCH_DIRECTORIES
     // Native dll search directories are paths that the runtime will probe for native DLLs called via PInvoke
 
@@ -774,7 +777,7 @@ LoadStartHost(
     nativeDllSearchDirs.append(W(";"));
     nativeDllSearchDirs.append(hostEnvironment.m_coreCLRDirectoryPath);
 
-    // Start the CoreCLR
+    // Start the .NET Core runtime
 
     ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
     if (!host) {
@@ -914,33 +917,14 @@ LoadStartHost(
         }
     }
 
-    if (executeAssembly) {
-
-        hr = host->ExecuteAssembly(
-            domainId,
-            managedAssemblyFullName.c_str(),
-            argc - 1,
-            (argc - 1) ? &(argv[1]) : NULL,
-            &exitCode);
-
-        if (FAILED(hr)) {
-
-            log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return false;
-        }
-
-        log << W("App exit value = ") << exitCode << Logger::endl;
-    }
-    else {
-        SetDomainId(domainId);
-    }
+    SetDomainId(domainId);
 
     return true;
 }
 
 DWORD
 ValidateArgument (
-    IN CONST WCHAR* argument,
+    IN CONST WCHAR *argument,
     IN CONST DWORD maxSize
     )
 {
@@ -958,7 +942,7 @@ ValidateArgument (
 
 DWORD
 ValidateAssemblyFunctionCallArgs (
-    IN CONST AssemblyFunctionCall* args
+    IN CONST AssemblyFunctionCall *args
     ) 
 {
     if (args != nullptr) {
@@ -972,7 +956,7 @@ ValidateAssemblyFunctionCallArgs (
 }
 DWORD 
 ValidateBinaryLoaderArgs (
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
     )
 {
     if (args != nullptr) {
@@ -986,19 +970,17 @@ ValidateBinaryLoaderArgs (
     return E_INVALIDARG;
 }
 
-// Load a .NET Core DLL Application or Library into the Host Application and also execute it if desired
+// Load a .NET Application or Library Assembly into the Host Application
 DllApi
 DWORD
 StartCLRAndLoadAssembly (
-    IN CONST WCHAR*  dllPath,
+    IN CONST WCHAR   *dllPath,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    IN CONST WCHAR*  coreRoot,
-    IN CONST WCHAR*  coreLibraries,
-    IN CONST BOOLEAN executeAssembly
+    IN CONST WCHAR   *coreRoot,
+    IN CONST WCHAR   *coreLibraries
     )
 {
-
     // Parse the options from the command line
     DWORD exitCode = -1;
     if (SUCCEEDED(ValidateArgument(dllPath, MAX_PATH))
@@ -1027,8 +1009,7 @@ StartCLRAndLoadAssembly (
               waitForDebugger,
               exitCode, 
               coreRoot,
-              coreLibraries,
-              executeAssembly);
+              coreLibraries);
 
         *log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
     }
@@ -1037,25 +1018,8 @@ StartCLRAndLoadAssembly (
 
 DllApi
 VOID
-ExecuteAssembly (
-    IN CONST BinaryLoaderArgs* args
-    )
-{
-    if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
-        StartCLRAndLoadAssembly(
-            args->BinaryFilePath,
-            args->Verbose, 
-            args->WaitForDebugger,
-            args->CoreRootPath, 
-            args->CoreLibrariesPath,
-            TRUE);
-    }
-}
-
-DllApi
-VOID
 LoadAssembly (
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
     )
 {
     if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
@@ -1064,15 +1028,14 @@ LoadAssembly (
             args->Verbose,
             args->WaitForDebugger,
             args->CoreRootPath,
-            args->CoreLibrariesPath,
-            args->StartAssembly);
+            args->CoreLibrariesPath);
     }
 }
 
 DllApi
 VOID
 ExecuteAssemblyFunction (
-    IN CONST AssemblyFunctionCall* args
+    IN CONST AssemblyFunctionCall *args
     )
 {
     if (SUCCEEDED(ValidateAssemblyFunctionCallArgs(args))) {
@@ -1094,7 +1057,7 @@ UnloadRunTime(
     UnloadStopHost(*GetLogger());
 }
 
-BOOLEAN 
+BOOLEAN
 WINAPI
 DllMain(
     IN HINSTANCE hDllHandle,

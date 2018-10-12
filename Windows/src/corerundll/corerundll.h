@@ -15,8 +15,9 @@
 #define FunctionNameSize               256
 
 // The max length of arguments to be parsed and passed to a .NET function
-#define AssemblyFunCallArgsSize        512
+#define AssemblyFunCallArgsSize        12
 
+// Arguments for hosting the .NET Core runtime and loading an assembly into the
 struct BinaryLoaderArgs
 {
     BOOLEAN    Verbose;
@@ -28,6 +29,8 @@ struct BinaryLoaderArgs
     WCHAR      CoreLibrariesPath[MAX_PATH];
 };
 
+// Arguments for executing a function located in a .NET assembly,
+// with optional arguments passed to the function call
 struct AssemblyFunctionCall
 {
     WCHAR   Assembly[FunctionNameSize];
@@ -48,38 +51,36 @@ struct RemoteEntryInfo
     RemoteFunctionArgs Args;
 };
 
-// DLL exports used for starting, executing in, and stopping the CoreCLR
+// DLL exports used for starting, executing in, and stopping the .NET Core runtime
+
+// Stop the .NET Core host in the current application
 DllApi
 VOID
 UnloadRunTime(
     VOID
 );
 
+// Execute a function in a .NET assembly that has been loaded in the .NET Core runtime
 DllApi
 VOID
 ExecuteAssemblyFunction(
-    IN CONST AssemblyFunctionCall* args
+    IN CONST AssemblyFunctionCall *args
 );
 
+// Load a .NET assembly into the .NET Core runtime
 DllApi
 VOID
 LoadAssembly(
-    IN CONST BinaryLoaderArgs* args
+    IN CONST BinaryLoaderArgs *args
 );
 
-DllApi
-VOID
-ExecuteAssembly(
-    IN CONST BinaryLoaderArgs* args
-);
-
+// Host the .NET Core runtime in the current application and load a .NET assembly into the runtime
 DllApi
 DWORD
 StartCLRAndLoadAssembly(
-    IN CONST WCHAR*  dllPath,
+    IN CONST WCHAR   *dllPath,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    IN CONST WCHAR*  coreRoot,
-    IN CONST WCHAR*  coreLibraries,
-    IN CONST BOOLEAN executeAssembly
+    IN CONST WCHAR   *coreRoot,
+    IN CONST WCHAR   *coreLibraries
 );
