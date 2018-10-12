@@ -105,6 +105,18 @@ void * CreateRemoteThread(void * args)
     return NULL;
 }
 #endif
+
+
+extern "C"
+EXPORT int LoadManagedAssembly(
+            const char* currentExeAbsolutePath,
+            const char* clrFilesAbsolutePath,
+            const char* managedAssemblyAbsolutePath,
+            int managedAssemblyArgc,
+            const char** managedAssemblyArgv);
+            
+extern "C" EXPORT int UnloadRuntime();
+
 extern "C"
 bool GetEntrypointExecutableAbsolutePath(std::string& entrypointExecutable)
 {
@@ -649,6 +661,7 @@ EXPORT int ExecuteManagedAssemblyClassFunction(AssemblyFunctionCall * args)
         {
             fprintf(stderr, "coreclr_execute_assembly failed - status: 0x%08x\n", st);
             exitCode = -1;
+            UnloadRuntime();
         }
         else {
             RemoteFunctionArgs * remoteArgs = (RemoteFunctionArgs*)args->Arguments;
@@ -684,13 +697,6 @@ EXPORT int ExecuteManagedAssemblyClassFunction(AssemblyFunctionCall * args)
     return exitCode;
 }
 
-extern "C"
-EXPORT int LoadManagedAssembly(
-            const char* currentExeAbsolutePath,
-            const char* clrFilesAbsolutePath,
-            const char* managedAssemblyAbsolutePath,
-            int managedAssemblyArgc,
-            const char** managedAssemblyArgv);
 
 extern "C" EXPORT void *LoadAssemblyBinaryArgs(BinaryLoaderArgs * args)
 {
@@ -817,6 +823,27 @@ extern "C" EXPORT void* ExecuteDotnetAssembly(BinaryLoaderArgs * args)
         printf("ExecuteManagedAssembly returned %d\n", exitCode);
 
         return NULL;
+}
+
+extern "C" EXPORT int UnloadRuntime()
+{
+    // Indicates failure
+    int exitCode = -1;
+    int st = -1;
+
+    int latchedExitCode = 0;
+    st = shutdownCoreCLR(m_HostHandle, m_DomainId, &latchedExitCode);
+    if (!SUCCEEDED(st))
+    {
+        fprintf(stderr, "coreclr_shutdown failed - status: 0x%08x\n", st);
+        exitCode = -1;
+    }
+
+    if (exitCode != -1)
+    {
+        exitCode = latchedExitCode;
+    }
+    return exitCode;
 }
 
 __attribute__((destructor))
