@@ -16,15 +16,15 @@ A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/Cor
 
 ### Requirements
 
-* Visual Studio 2017
+* Visual Studio
 
 ### Visual Studio
 
-Building the DLL requires Visual Studio and there are two options: You can build the DLL by using the `Visual Studio IDE` or using `msbuild` within the `Developer Command Prompt` (it has been tested with `Visual Studio 2017` only).
+Building the DLL requires Visual Studio and there are two options: You can build the DLL by using the `Visual Studio IDE` or using `msbuild` within the `Developer Command Prompt` (the solution file is for `Visual Studio 2017`, for other versions see the [CMake section](##cmake)).
 
 You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM|ARM64**) and build. 
 
-An example for building the X64 `corerundll64.dll` in the Release configuration:
+An example for building the X64 `corerundll64.dll` in the `Release` configuration:
 
 ```
 msbuild Windows/corerundll.sln /p:Configuration=Release /p:Platform=x64
@@ -34,24 +34,7 @@ The build output DLL will be inside the `Windows` folder.
 
 ### CMake
 
-You can also build the library using CMake. For example, to build for the `X86` and `X64` architectures:
-
-```
-cd Windows
-mkdir build32
-mkdir build64
-cd build32
-cmake -G "Visual Studio 15 2017" ../
-cd ../
-cd build64
-cmake -G "Visual Studio 15 2017 Win64" ../
-cd ../
-cmake --build build32 --config Debug
-cmake --build build32 --config Release
-cmake --build build64 --config Debug
-cmake --build build64 --config Release
-```
-
+You can also build the library using CMake. You can run the `win-vs-2017.bat` file to build for the `x86` and `x64` architectures. This also gives you the option to generate and build with an older version of `Visual Studio` such as `VS 2015` or `VS 2013`.
 
 ### Binary Releases 
  You can also download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases).
