@@ -416,13 +416,13 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalOptions>%(AdditionalOptions) /machine:x86 /GUARD:CF /PDBCOMPRESS /DEFAULTLIB:ucrt.lib</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x86 /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -463,13 +463,13 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
-      <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS /DEFAULTLIB:ucrt.lib</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
@@ -512,10 +512,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
-      <AdditionalOptions>%(AdditionalOptions) /machine:x64 /GUARD:CF /PDBCOMPRESS /DEFAULTLIB:ucrt.lib</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <ImageHasSafeExceptionHandlers>
@@ -560,14 +560,14 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
       <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS /DEFAULTLIB:ucrt.lib</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
