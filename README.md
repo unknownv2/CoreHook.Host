@@ -18,7 +18,8 @@ A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/Cor
 
 * Visual Studio 2017
 
-### Instructions
+### Visual Studio
+
 Building the DLL requires Visual Studio and there are two options: You can build the DLL by using the `Visual Studio IDE` or using `msbuild` within the `Developer Command Prompt` (it has been tested with `Visual Studio 2017` only).
 
 You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM|ARM64**) and build. 
@@ -31,7 +32,28 @@ msbuild Windows/corerundll.sln /p:Configuration=Release /p:Platform=x64
 
 The build output DLL will be inside the `Windows` folder.
 
-## Releases 
+### CMake
+
+You can also build the library using CMake. For example, to build for the `X86` and `X64` architectures:
+
+```
+cd Windows
+mkdir build32
+mkdir build64
+cd build32
+cmake -G "Visual Studio 15 2017" ../
+cd ../
+cd build64
+cmake -G "Visual Studio 15 2017 Win64" ../
+cd ../
+cmake --build build32 --config Debug
+cmake --build build32 --config Release
+cmake --build build64 --config Debug
+cmake --build build64 --config Release
+```
+
+
+### Binary Releases 
  You can also download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases).
  
  For `x86, x64`, extract the zip corresponding to your target architecture, then place the `corerundll32.dll` or `corerundll64.dll` in the build output directory of your program.

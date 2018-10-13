@@ -2,6 +2,7 @@
 #include "logger.h"
 #include "mscoree.h"
 #include <psapi.h>
+#include <memory>
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
@@ -161,13 +162,9 @@ public:
 
         if (m_coreCLRModule) {
 
-            // Save the directory that CoreCLR was found in
-            DWORD modulePathLength = GetModuleFileNameWrapper(m_coreCLRModule, m_coreCLRDirectoryPath);
-
             // Search for the last backslash and terminate it there to keep just the directory path with trailing slash
             std::size_t lastBackslash = m_coreCLRDirectoryPath.find_last_of(W('\\'));
             m_coreCLRDirectoryPath.resize(lastBackslash);
-
         }
         else {
             *m_log << W("Unable to load ") << coreCLRDll << Logger::endl;
@@ -499,7 +496,7 @@ ExecuteAssemblyMain (
     )
 {
     HRESULT hr;
-    DWORD exitCode = -1;
+    DWORD exitCode = (DWORD)-1;
 
     const WCHAR* exeName = argc > 0 ? argv[0] : nullptr;
     if (exeName == nullptr)
@@ -546,7 +543,8 @@ ExecuteAssemblyMain (
     }
 
     log << W("App exit value = ") << exitCode << Logger::endl;
-    return true;
+
+    return TRUE;
 }
 
 // Convert an integer value to it's hex string representation
@@ -576,7 +574,6 @@ ExecuteAssemblyClassFunction (
     )
 {
     HRESULT hr;
-    DWORD exitCode = -1, dwWaitResult = -1;
     RemoteEntryInfo EntryInfo;
     typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
     MainMethodFp *pfnDelegate = NULL;
@@ -618,7 +615,6 @@ ExecuteAssemblyClassFunction (
             pfnDelegate(NULL);
         }
     }
-    log << W("App exit value = ") << exitCode << Logger::endl;
 
     return true;
 }
@@ -629,7 +625,7 @@ UnloadStopHost (
     )
 {
     HRESULT hr;
-    DWORD exitCode = -1;
+    int exitCode = -1;
 
     //-------------------------------------------------------------
 
@@ -674,7 +670,7 @@ UnloadStopHost (
     }
     SetGlobalHost(nullptr);
 
-    SetDomainId(-1);
+    SetDomainId((DWORD)-1);
 
     return true;
 }
@@ -684,9 +680,8 @@ LoadStartHost(
     IN CONST INT32   argc,
     IN CONST WCHAR   *argv[],
     IN       Logger  &log,
-    IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
-    _Inout_  DWORD   &exitCode,
+    _Inout_  LONG   &exitCode,
     IN CONST WCHAR   *coreRoot,
     IN CONST WCHAR   *coreLibraries
     )
@@ -919,10 +914,10 @@ LoadStartHost(
 
     SetDomainId(domainId);
 
-    return true;
+    return TRUE;
 }
 
-DWORD
+HRESULT
 ValidateArgument (
     IN CONST WCHAR *argument,
     IN CONST DWORD maxSize
@@ -940,7 +935,7 @@ ValidateArgument (
     return S_OK;
 }
 
-DWORD
+HRESULT
 ValidateAssemblyFunctionCallArgs (
     IN CONST AssemblyFunctionCall *args
     ) 
@@ -954,7 +949,7 @@ ValidateAssemblyFunctionCallArgs (
     }
     return E_INVALIDARG;
 }
-DWORD 
+HRESULT 
 ValidateBinaryLoaderArgs (
     IN CONST BinaryLoaderArgs *args
     )
@@ -982,7 +977,7 @@ StartCLRAndLoadAssembly (
     )
 {
     // Parse the options from the command line
-    DWORD exitCode = -1;
+    LONG exitCode = -1;
     if (SUCCEEDED(ValidateArgument(dllPath, MAX_PATH))
         && SUCCEEDED(ValidateArgument(coreRoot, MAX_PATH))
         && SUCCEEDED(ValidateArgument(coreLibraries, MAX_PATH))) {
@@ -1000,12 +995,11 @@ StartCLRAndLoadAssembly (
         };
         const DWORD paramCount = 1;
 
-        const bool success =
+        const BOOLEAN success =
             LoadStartHost(
               paramCount,
               params,
               *log,
-              verbose,
               waitForDebugger,
               exitCode, 
               coreRoot,
@@ -1060,23 +1054,8 @@ UnloadRunTime(
 BOOLEAN
 WINAPI
 DllMain(
-    IN HINSTANCE hDllHandle,
-    IN DWORD     nReason,
-    IN LPVOID    Reserved
+    VOID
     )
 {
-    BOOLEAN bSuccess = TRUE;
-    switch (nReason)
-    {
-        case DLL_PROCESS_ATTACH:
-        {
-        }
-        break;
-        case DLL_PROCESS_DETACH:
-        {
-        }
-        break;
-    }
-
-    return bSuccess;
+    return TRUE;
 }
