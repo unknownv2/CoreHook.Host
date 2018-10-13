@@ -39,6 +39,7 @@ You can also build the library using CMake. For example, to build for the `X86` 
 ```
 cd Windows
 mkdir build32
+mkdir build64
 cd build32
 cmake -G "Visual Studio 15 2017" ../
 cd ../
