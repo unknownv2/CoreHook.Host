@@ -205,7 +205,7 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions) /machine:x86 /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -257,10 +257,10 @@
       <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
@@ -311,13 +311,13 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64 /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <StackReserveSize>1572864</StackReserveSize>
-      <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -366,13 +366,13 @@
       <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;libvcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
       <StackReserveSize>1572864</StackReserveSize>
-      <IgnoreSpecificDefaultLibraries>libucrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -417,7 +417,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
@@ -470,7 +470,7 @@
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
       <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -511,7 +511,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Console</SubSystem>
       <StackReserveSize>1572864</StackReserveSize>
@@ -566,7 +566,7 @@
       <StackReserveSize>1572864</StackReserveSize>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;libvcruntime.lib;kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;oleaut32.lib;uuid.lib;user32.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions) /GUARD:CF /PDBCOMPRESS</AdditionalOptions>
     </Link>
     <ProjectReference>
