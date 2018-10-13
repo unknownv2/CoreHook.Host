@@ -2,6 +2,7 @@
 #include "logger.h"
 #include "mscoree.h"
 #include <psapi.h>
+#include <memory>
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
