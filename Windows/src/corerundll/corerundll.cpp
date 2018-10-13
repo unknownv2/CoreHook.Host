@@ -162,7 +162,11 @@ public:
 
         if (m_coreCLRModule) {
 
+            // Save the directory that CoreCLR was found in
+            GetModuleFileNameWrapper(m_coreCLRModule, m_coreCLRDirectoryPath);
+
             // Search for the last backslash and terminate it there to keep just the directory path with trailing slash
+
             std::size_t lastBackslash = m_coreCLRDirectoryPath.find_last_of(W('\\'));
             m_coreCLRDirectoryPath.resize(lastBackslash);
         }
@@ -676,12 +680,12 @@ UnloadStopHost (
 }
 
 BOOLEAN
-LoadStartHost(
+StartHost(
     IN CONST INT32   argc,
     IN CONST WCHAR   *argv[],
     IN       Logger  &log,
     IN CONST BOOLEAN waitForDebugger,
-    _Inout_  LONG   &exitCode,
+    _Inout_  LONG    &exitCode,
     IN CONST WCHAR   *coreRoot,
     IN CONST WCHAR   *coreLibraries
     )
@@ -965,10 +969,9 @@ ValidateBinaryLoaderArgs (
     return E_INVALIDARG;
 }
 
-// Load a .NET Application or Library Assembly into the Host Application
-DllApi
+// Start the .NET Core runtime with an application path
 DWORD
-StartCLRAndLoadAssembly (
+StartCoreCLRInternal (
     IN CONST WCHAR   *dllPath,
     IN CONST BOOLEAN verbose,
     IN CONST BOOLEAN waitForDebugger,
@@ -996,7 +999,7 @@ StartCLRAndLoadAssembly (
         const DWORD paramCount = 1;
 
         const BOOLEAN success =
-            LoadStartHost(
+            StartHost(
               paramCount,
               params,
               *log,
@@ -1012,12 +1015,12 @@ StartCLRAndLoadAssembly (
 
 DllApi
 VOID
-LoadAssembly (
+StartCoreCLR(
     IN CONST BinaryLoaderArgs *args
     )
 {
     if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
-        StartCLRAndLoadAssembly(
+        StartCoreCLRInternal(
             args->BinaryFilePath,
             args->Verbose,
             args->WaitForDebugger,
@@ -1042,6 +1045,7 @@ ExecuteAssemblyFunction (
     }
 }
 
+// Shutdown the .NET Core runtime
 DllApi
 VOID
 UnloadRunTime(
