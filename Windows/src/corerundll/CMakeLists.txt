@@ -150,23 +150,23 @@ endif()
 if(MSVC)
     if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Win32")
         target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W3;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
-            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W3;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W4;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W4;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
         )
     elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM")
         target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W3;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
-            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W3;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W4;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W4;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
         )
     elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM64")
         target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W3;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
-            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W3;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W4;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W4;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
         )
     elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
         target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W3;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
-            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W3;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Debug>:/GL;/Od;/Oi;/GF;/MTd;/Gy;/W4;/WX;/Zi;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/homeparams;/EHa;/Zc:wchar_t->
+            $<$<CONFIG:Release>:/GL;/O1;/Oi;/GF;/MT;/Gy;/W4;/WX;/TP;/GR-;/wd4960;/wd4961;/wd4603;/wd4627;/wd4838;/wd4456;/wd4457;/wd4458;/wd4459;/wd4091;/d2Zi+;/Zm200;/ZH:SHA_256;/source-charset:utf-8;/EHa;/Zc:wchar_t->
         )
     endif()
     if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM")
