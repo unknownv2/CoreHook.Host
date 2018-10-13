@@ -1054,14 +1054,8 @@ UnloadRunTime(
 BOOLEAN
 WINAPI
 DllMain(
-    IN HINSTANCE hDllHandle,
-    IN DWORD     nReason,
-    IN LPVOID    Reserved
+    VOID
     )
 {
-    (VOID)hDllHandle;
-    (VOID)nReason;
-    (VOID)Reserved;
-
     return TRUE;
 }
