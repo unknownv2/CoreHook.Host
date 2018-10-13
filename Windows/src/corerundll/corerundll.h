@@ -52,34 +52,24 @@ struct RemoteEntryInfo
 
 // DLL exports used for starting, executing in, and stopping the .NET Core runtime
 
-// Stop the .NET Core host in the current application
+
+// Host the .NET Core runtime in the current application
 DllApi
 VOID
-UnloadRunTime(
-    VOID
+StartCoreCLR(
+    IN CONST BinaryLoaderArgs *args
 );
 
-// Execute a function in a .NET assembly that has been loaded in the .NET Core runtime
+// Execute a function located in a .NET assembly
 DllApi
 VOID
 ExecuteAssemblyFunction(
     IN CONST AssemblyFunctionCall *args
 );
 
-// Load a .NET assembly into the .NET Core runtime
+// Stop the .NET Core host in the current application
 DllApi
 VOID
-LoadAssembly(
-    IN CONST BinaryLoaderArgs *args
-);
-
-// Host the .NET Core runtime in the current application and load a .NET assembly into the runtime
-DllApi
-DWORD
-StartCLRAndLoadAssembly(
-    IN CONST WCHAR   *dllPath,
-    IN CONST BOOLEAN verbose,
-    IN CONST BOOLEAN waitForDebugger,
-    IN CONST WCHAR   *coreRoot,
-    IN CONST WCHAR   *coreLibraries
+UnloadRunTime(
+    VOID
 );
