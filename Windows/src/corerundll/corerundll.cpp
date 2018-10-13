@@ -1000,7 +1000,7 @@ StartCLRAndLoadAssembly (
         };
         const DWORD paramCount = 1;
 
-        const bool success =
+        const BOOLEAN success =
             LoadStartHost(
               paramCount,
               params,
