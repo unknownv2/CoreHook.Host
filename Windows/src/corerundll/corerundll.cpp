@@ -23,7 +23,7 @@ static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 static const WCHAR *coreCLRInstallDirectory = W("%windir%\\system32\\");
 
 // Handle to the CoreCLR hosting interface
-ICLRRuntimeHost4* g_Host;
+ICLRRuntimeHost4 *g_Host;
 
 // Handle to a logger which writes to the standard output
 std::shared_ptr<Logger> g_Log;
@@ -46,7 +46,7 @@ class HostEnvironment
     // The list of paths to the assemblies that will be trusted by CoreCLR
     std::wstring m_tpaList;
 
-    ICLRRuntimeHost4* m_CLRRuntimeHost;
+    ICLRRuntimeHost4 *m_CLRRuntimeHost;
 
     HMODULE m_coreCLRModule;
 

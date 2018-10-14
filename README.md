@@ -20,7 +20,7 @@ A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/Cor
 
 ### Visual Studio
 
-Building the DLL requires Visual Studio and there are two options: You can build the DLL by using the `Visual Studio IDE` or using `msbuild` within the `Developer Command Prompt` (the solution file is for `Visual Studio 2017`, for other versions see the [CMake section](##cmake)).
+Building the DLL requires Visual Studio and there are two options: You can build the DLL by using the `Visual Studio IDE` or using `msbuild` within the `Developer Command Prompt` (the solution file is for `Visual Studio 2017`, for other versions see the [CMake section](#cmake)).
 
 You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM|ARM64**) and build. 
 
