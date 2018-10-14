@@ -12,6 +12,9 @@ configuration:
   - Debug
   - Release
 
+before_build:
+  - nuget restore Windows\corerundll.sln
+
 build:
   project: Windows\corerundll.sln
   verbosity: detailed
