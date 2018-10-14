@@ -141,9 +141,7 @@ public:
         }
         else
         {
-            *m_log << W("CORE_ROOT not set; skipping") << Logger::endl;
-            *m_log << W("You can set the environment variable CORE_ROOT to point to the path") << Logger::endl;
-            *m_log << W("where CoreCLR.dll lives to help CoreRun.exe find it.") << Logger::endl;
+            *m_log << W("CORE_ROOT path was not set; skipping") << Logger::endl;
         }
 
         // Try to load CoreCLR from the directory that coreRun is in
