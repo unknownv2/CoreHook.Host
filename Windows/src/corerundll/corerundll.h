@@ -55,9 +55,19 @@ struct RemoteEntryInfo
 
 // Host the .NET Core runtime in the current application
 DllApi
-VOID
+HRESULT
 StartCoreCLR(
     IN CONST BinaryLoaderArgs *args
+);
+
+// Create a native function delegate for a function inside a .NET assembly
+DllApi
+HRESULT
+CreateAssemblyDelegate(
+    IN CONST WCHAR  *assembly,
+    IN CONST WCHAR  *type,
+    IN CONST WCHAR  *entry,
+    _Inout_  PVOID  *pfnDelegate
 );
 
 // Execute a function located in a .NET assembly

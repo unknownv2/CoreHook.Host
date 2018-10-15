@@ -565,8 +565,39 @@ ConvertToHexString (
     return hex_string;
 }
 
+// Create a native function delegate for a function inside a .NET assembly
+HRESULT
+CreateAssemblyDelegate(
+    IN CONST WCHAR  *assembly,
+    IN CONST WCHAR  *type,
+    IN CONST WCHAR  *entry,
+    _Inout_  PVOID  *pfnDelegate
+)
+{
+    HRESULT hr = E_HANDLE;
+
+    auto host = GetGlobalHost();
+
+    if (host != nullptr) {
+
+        hr = host->CreateDelegate(
+            GetDomainId(),
+            assembly, // Target managed assembly
+            type, // Target managed type
+            entry, // Target entry point (static method)
+            reinterpret_cast<INT_PTR*>(pfnDelegate));
+
+        if (FAILED(hr) || *pfnDelegate == NULL)
+        {
+            *GetLogger() << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+        }
+    }
+
+    return hr;
+}
+
 // Execute a method from a class located inside a .NET Core Library Assembly
-BOOLEAN 
+HRESULT 
 ExecuteAssemblyClassFunction (
     IN       Logger &log,
     IN CONST WCHAR  *assembly,
@@ -575,7 +606,7 @@ ExecuteAssemblyClassFunction (
     IN CONST BYTE   *arguments
     )
 {
-    HRESULT hr;
+    HRESULT hr = E_HANDLE;
     RemoteEntryInfo EntryInfo;
     typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
     MainMethodFp *pfnDelegate = NULL;
@@ -596,7 +627,7 @@ ExecuteAssemblyClassFunction (
         if (FAILED(hr) || pfnDelegate == NULL)
         {
             log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return false;
+            return hr;
         }
         
         auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
@@ -618,7 +649,7 @@ ExecuteAssemblyClassFunction (
         }
     }
 
-    return true;
+    return hr;
 }
 
 BOOLEAN
@@ -679,11 +710,10 @@ UnloadStopHost (
 
 BOOLEAN
 StartHost(
-    IN CONST INT32   argc,
-    IN CONST WCHAR   *argv[],
+    IN CONST WCHAR   *dllPath,
     IN       Logger  &log,
     IN CONST BOOLEAN waitForDebugger,
-    _Inout_  LONG    &exitCode,
+    _Inout_  HRESULT &exitCode,
     IN CONST WCHAR   *coreRoot,
     IN CONST WCHAR   *coreLibraries
     )
@@ -694,28 +724,27 @@ StartHost(
     }
 
     // Assume failure
-    exitCode = -1;
+    exitCode = E_FAIL;
 
     HostEnvironment hostEnvironment(&log, coreRoot);
 
     //-------------------------------------------------------------
 
-    // Find the specified exe. This is done using LoadLibrary so that
+    // Find the specified dll. This is done using LoadLibrary so that
     // the OS library search semantics are used to find it.
 
-    const WCHAR* exeName = argc > 0 ? argv[0] : nullptr;
-    if (exeName == nullptr)
+    const WCHAR* dotnetAppName = dllPath;
+    if (dotnetAppName == nullptr)
     {
-        log << W("No exename specified.") << Logger::endl;
+        log << W("No assembly name specified.") << Logger::endl;
+        exitCode = E_INVALIDARG;
         return false;
     }
 
-    // The managed application to run should be the first command-line parameter.
-    // Subsequent command line parameters will be passed to the managed app later in this host.
     WCHAR targetApp[MAX_PATH];
-    GetFullPathNameW(argv[0], MAX_PATH, targetApp, NULL);
+    GetFullPathNameW(dllPath, MAX_PATH, targetApp, NULL);
 
-    // Also note the directory the target app is in, as it will be referenced later.
+    // Also note the directory the target library is in, as it will be referenced later.
     // The directory is determined by simply truncating the target app's full path
     // at the last path delimiter (\)
     WCHAR targetAppPath[MAX_PATH];
@@ -779,6 +808,7 @@ StartHost(
     ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
     if (!host) {
         log << W("Unable to get ICLRRuntimeHost4 handle") << Logger::endl;
+        exitCode = E_HANDLE;
         return false;
     }
 
@@ -795,6 +825,7 @@ StartHost(
     hr = host->SetStartupFlags(flags);
     if (FAILED(hr)) {
         log << W("Failed to set startup flags. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+        exitCode = hr;
         return false;
     }
 
@@ -803,6 +834,7 @@ StartHost(
     hr = host->Start();
     if (FAILED(hr)) {
         log << W("Failed to start CoreCLR. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+        exitCode = hr;
         return false;
     }
 
@@ -894,6 +926,7 @@ StartHost(
     if (FAILED(hr)) {
 
         log << W("Failed call to CreateAppDomainWithManager. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
+        exitCode = hr;
         return false;
     }
 
@@ -913,7 +946,7 @@ StartHost(
             }
         }
     }
-
+    exitCode = NOERROR;
     SetDomainId(domainId);
 
     return TRUE;
@@ -968,7 +1001,7 @@ ValidateBinaryLoaderArgs (
 }
 
 // Start the .NET Core runtime with an application path
-DWORD
+HRESULT
 StartCoreCLRInternal (
     IN CONST WCHAR   *dllPath,
     IN CONST BOOLEAN verbose,
@@ -978,7 +1011,7 @@ StartCoreCLRInternal (
     )
 {
     // Parse the options from the command line
-    LONG exitCode = -1;
+    HRESULT exitCode = -1;
     if (SUCCEEDED(ValidateArgument(dllPath, MAX_PATH))
         && SUCCEEDED(ValidateArgument(coreRoot, MAX_PATH))
         && SUCCEEDED(ValidateArgument(coreLibraries, MAX_PATH))) {
@@ -991,15 +1024,9 @@ StartCoreCLRInternal (
             log->Disable();
         }
 
-        const WCHAR * params[] = {
-            dllPath
-        };
-        const DWORD paramCount = 1;
-
         const BOOLEAN success =
             StartHost(
-              paramCount,
-              params,
+              dllPath,
               *log,
               waitForDebugger,
               exitCode, 
@@ -1012,19 +1039,20 @@ StartCoreCLRInternal (
 }
 
 DllApi
-VOID
+HRESULT
 StartCoreCLR(
     IN CONST BinaryLoaderArgs *args
     )
 {
     if (SUCCEEDED(ValidateBinaryLoaderArgs(args))) {
-        StartCoreCLRInternal(
+        return StartCoreCLRInternal(
             args->BinaryFilePath,
             args->Verbose,
             args->WaitForDebugger,
             args->CoreRootPath,
             args->CoreLibrariesPath);
     }
+    return E_INVALIDARG;
 }
 
 DllApi
