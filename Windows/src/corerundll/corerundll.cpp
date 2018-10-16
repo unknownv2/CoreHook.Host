@@ -592,12 +592,12 @@ ExecuteAssemblyClassFunction (
     return hr;
 }
 
-BOOLEAN
+HRESULT
 UnloadStopHost (
     IN Logger &log
     )
 {
-    HRESULT hr;
+    HRESULT hr = E_HANDLE;
     int exitCode = -1;
 
     //-------------------------------------------------------------
@@ -616,7 +616,7 @@ UnloadStopHost (
 
         if (FAILED(hr)) {
             log << W("Failed to unload the AppDomain. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return false;
+            return hr;
         }
 
         log << W("App domain unloaded exit value = ") << exitCode << Logger::endl;
@@ -630,7 +630,7 @@ UnloadStopHost (
 
         if (FAILED(hr)) {
             log << W("Failed to stop the host. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return false;
+            return hr;
         }
 
         //-------------------------------------------------------------
@@ -645,7 +645,7 @@ UnloadStopHost (
 
     SetDomainId((DWORD)-1);
 
-    return true;
+    return hr;
 }
 
 BOOLEAN
@@ -1013,12 +1013,12 @@ ExecuteAssemblyFunction (
 
 // Shutdown the .NET Core runtime
 DllApi
-VOID
+HRESULT
 UnloadRunTime(
     VOID
     ) 
 {
-    UnloadStopHost(*GetLogger());
+    return UnloadStopHost(*GetLogger());
 }
 
 BOOLEAN
