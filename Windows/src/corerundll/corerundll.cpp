@@ -548,46 +548,36 @@ ExecuteAssemblyClassFunction (
     )
 {
     HRESULT hr = E_HANDLE;
-    RemoteEntryInfo EntryInfo;
-    typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
+    typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);   
     MainMethodFp *pfnDelegate = NULL;
 
-    auto host = GetGlobalHost();
+    if (SUCCEEDED((hr = CreateAssemblyDelegate(assembly, type, entry, (PVOID*)&pfnDelegate)))) {
+        RemoteEntryInfo entryInfo;
+        entryInfo.HostPID = GetCurrentProcessId();
 
-    if (host != nullptr) {
-
-        EntryInfo.HostPID = GetCurrentProcessId();
-
-        hr = host->CreateDelegate(
-            GetDomainId(),
-            assembly, // Target managed assembly
-            type, // Target managed type
-            entry, // Target entry point (static method)
-            reinterpret_cast<INT_PTR*>(&pfnDelegate));
-
-        if (FAILED(hr) || pfnDelegate == NULL)
-        {
-            log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return hr;
-        }
-        
         auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
         if (remoteArgs != NULL) {
-
-            // construct a hex string for the address of the EntryInfo parameter
+            // construct a hex string for the address of the entryInfo parameter
             // which is passed to the .NET delegate function and execute the delegate
-            EntryInfo.Args.UserData = remoteArgs->UserData;
-            EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
+            entryInfo.Args.UserData = remoteArgs->UserData;
+            entryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-            auto paramString = ConvertToHexString(reinterpret_cast<LONGLONG>(&EntryInfo), 16);
+            auto paramString = ConvertToHexString(reinterpret_cast<LONGLONG>(&entryInfo), 16);
+            log << W("Calling delegate function at ") << pfnDelegate << W(" with a parameter") << Logger::endl;
 
             pfnDelegate(paramString.c_str());
         }
         else {
             // No arguments were supplied to pass to the delegate function so pass an
             // empty string
+            log << W("WARNING: Calling delegate function at ") << pfnDelegate << W(" with NULL parameter") << Logger::endl;
             pfnDelegate(NULL);
         }
+        log << W("Delegate function call completed") << Logger::endl;
+
+    }
+    else {
+        log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
     }
     return hr;
 }
