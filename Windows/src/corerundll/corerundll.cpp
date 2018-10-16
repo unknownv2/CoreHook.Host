@@ -473,7 +473,7 @@ CreateStartupFlags (
         size_t outsize;
         if (_wgetenv_s(&outsize, result, 25, var) == 0 && outsize > 0) {
             // set the flag if the var is present and set to 1,
-            // clear the flag if the var isp resent and set to 0.
+            // clear the flag if the var is present and set to 0.
             // Otherwise, ignore it.
             if (_wcsicmp(result, W("1")) == 0) {
                 initialFlags = static_cast<STARTUP_FLAGS>(initialFlags | flag);
@@ -488,65 +488,6 @@ CreateStartupFlags (
     checkVariable(STARTUP_FLAGS::STARTUP_CONCURRENT_GC, concurrentGcVar);
 
     return initialFlags;
-}
-
-BOOLEAN
-ExecuteAssemblyMain (
-    IN CONST INT32 argc,
-    IN CONST WCHAR *argv[],
-    IN       Logger &log
-    )
-{
-    HRESULT hr;
-    DWORD exitCode = (DWORD)-1;
-
-    const WCHAR* exeName = argc > 0 ? argv[0] : nullptr;
-    if (exeName == nullptr)
-    {
-        log << W("No exename specified.") << Logger::endl;
-        return false;
-    }
-
-    std::wstring appPath;
-    std::wstring managedAssemblyFullName;
-
-    WCHAR* filePart = NULL;
-
-    DWORD size = MAX_PATH;
-    WCHAR appPathPtr[MAX_PATH];
-    DWORD length = GetFullPathNameW(exeName, size, appPathPtr, &filePart);
-    if (length >= size)
-    {
-        size = length;
-        length = GetFullPathNameW(exeName, size, appPathPtr, &filePart);
-    }
-    if (length == 0 || length >= size || filePart == NULL) {
-        log << W("Failed to get full path: ") << exeName << Logger::endl;
-        log << W("Error code: ") << GetLastError() << Logger::endl;
-        return false;
-    }
-
-    managedAssemblyFullName.assign(appPathPtr);
-
-    auto host = GetGlobalHost();
-    if (host != nullptr) {
-
-        hr = host->ExecuteAssembly(
-            GetDomainId(),
-            managedAssemblyFullName.c_str(),
-            argc - 1,
-            (argc - 1) ? &(argv[1]) : NULL,
-            &exitCode);
-
-        if (FAILED(hr)) {
-            log << W("Failed call to ExecuteAssembly. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return false;
-        }
-    }
-
-    log << W("App exit value = ") << exitCode << Logger::endl;
-
-    return TRUE;
 }
 
 // Convert an integer value to it's hex string representation
@@ -648,7 +589,6 @@ ExecuteAssemblyClassFunction (
             pfnDelegate(NULL);
         }
     }
-
     return hr;
 }
 
@@ -723,6 +663,23 @@ StartHost(
         return false;
     }
 
+    if (waitForDebugger)
+    {
+        if (!IsDebuggerPresent())
+        {
+            log << W("Waiting for the debugger to attach. Press any key to continue ...") << Logger::endl;
+            getchar();
+            if (IsDebuggerPresent())
+            {
+                log << "Debugger is attached." << Logger::endl;
+            }
+            else
+            {
+                log << "Debugger failed to attach." << Logger::endl;
+            }
+        }
+    }
+
     // Assume failure
     exitCode = E_FAIL;
 
@@ -741,26 +698,26 @@ StartHost(
         return false;
     }
 
-    WCHAR targetApp[MAX_PATH];
-    GetFullPathNameW(dllPath, MAX_PATH, targetApp, NULL);
+    WCHAR targetAssembly[MAX_PATH];
+    GetFullPathNameW(dllPath, MAX_PATH, targetAssembly, NULL);
 
     // Also note the directory the target library is in, as it will be referenced later.
     // The directory is determined by simply truncating the target app's full path
     // at the last path delimiter (\)
-    WCHAR targetAppPath[MAX_PATH];
-    wcscpy_s(targetAppPath, targetApp);
-    size_t i = wcslen(targetAppPath) - 1;
-    while (i >= 0 && targetAppPath[i] != L'\\') {
+    WCHAR targetAssemblyPath[MAX_PATH];
+    wcscpy_s(targetAssemblyPath, targetAssembly);
+    size_t i = wcslen(targetAssemblyPath) - 1;
+    while (i >= 0 && targetAssemblyPath[i] != L'\\') {
         i--;
     }
-    targetAppPath[i] = L'\0';
+    targetAssemblyPath[i] = L'\0';
 
-    std::wstring appPath = targetAppPath;
+    std::wstring appPath = targetAssemblyPath;
     std::wstring appNiPath;
     std::wstring managedAssemblyFullName;
     std::wstring appLocalWinmetadata;
 
-    managedAssemblyFullName.assign(targetApp);
+    managedAssemblyFullName.assign(targetAssembly);
 
     log << W("Loading: ") << managedAssemblyFullName << Logger::endl;
 
@@ -778,8 +735,8 @@ StartHost(
     // locations known to contain application assets.
     WCHAR appPaths[MAX_PATH * 50];
 
-    // Just use the targetApp provided by the user and remove the file name
-    wcscpy_s(appPaths, targetAppPath);
+    // Just use the targetAssembly provided by the user and remove the file name
+    wcscpy_s(appPaths, targetAssemblyPath);
 
     std::wstring managedAssemblyDirectory = managedAssemblyFullName;
 
@@ -805,7 +762,8 @@ StartHost(
 
     // Start the .NET Core runtime
 
-    ICLRRuntimeHost4 *host = hostEnvironment.GetCLRRuntimeHost();
+    ICLRRuntimeHost4 *host = GetGlobalHost() == nullptr ? 
+        hostEnvironment.GetCLRRuntimeHost() : GetGlobalHost();
     if (!host) {
         log << W("Unable to get ICLRRuntimeHost4 handle") << Logger::endl;
         exitCode = E_HANDLE;
@@ -822,13 +780,13 @@ StartHost(
     log << W("Concurrent GC enabled: ") << HAS_FLAG(flags, STARTUP_FLAGS::STARTUP_CONCURRENT_GC) << Logger::endl;
 
     // Default startup flags
+ 
     hr = host->SetStartupFlags(flags);
     if (FAILED(hr)) {
         log << W("Failed to set startup flags. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
         exitCode = hr;
         return false;
     }
-
     log << W("Starting ICLRRuntimeHost4") << Logger::endl;
 
     hr = host->Start();
@@ -836,13 +794,13 @@ StartHost(
         log << W("Failed to start CoreCLR. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
         exitCode = hr;
         return false;
-    }
+    }    
 
     std::wstring tpaList;
     if (!managedAssemblyFullName.empty())
     {
-        // Target assembly should be added to the tpa list. Otherwise corerun.exe
-        // may find wrong assembly to execute.
+        // Target assembly should be added to the tpa list. 
+        // Otherwise the wrong assembly could be executed.
         // Details can be found at https://github.com/dotnet/coreclr/issues/5631
         tpaList = managedAssemblyFullName;
         tpaList.append(W(";"));
@@ -858,7 +816,7 @@ StartHost(
 
     // Allowed property names:
     // APPBASE
-    // - The base path of the application from which the exe and other assemblies will be loaded
+    // - The base path of the application from which the application and other assemblies will be loaded
     //
     // TRUSTED_PLATFORM_ASSEMBLIES
     // - The list of complete paths to each of the fully trusted assemblies
@@ -930,22 +888,6 @@ StartHost(
         return false;
     }
 
-    if (waitForDebugger)
-    {
-        if (!IsDebuggerPresent())
-        {
-            log << W("Waiting for the debugger to attach. Press any key to continue ...") << Logger::endl;
-            getchar();
-            if (IsDebuggerPresent())
-            {
-                log << "Debugger is attached." << Logger::endl;
-            }
-            else
-            {
-                log << "Debugger failed to attach." << Logger::endl;
-            }
-        }
-    }
     exitCode = NOERROR;
     SetDomainId(domainId);
 
@@ -984,6 +926,7 @@ ValidateAssemblyFunctionCallArgs (
     }
     return E_INVALIDARG;
 }
+
 HRESULT 
 ValidateBinaryLoaderArgs (
     IN CONST BinaryLoaderArgs *args
@@ -1012,32 +955,29 @@ StartCoreCLRInternal (
 {
     // Parse the options from the command line
     HRESULT exitCode = -1;
-    if (SUCCEEDED(ValidateArgument(dllPath, MAX_PATH))
-        && SUCCEEDED(ValidateArgument(coreRoot, MAX_PATH))
-        && SUCCEEDED(ValidateArgument(coreLibraries, MAX_PATH))) {
 
-        auto log = GetLogger();
-        if (verbose) {
-            log->Enable();
-        }
-        else {
-            log->Disable();
-        }
-
-        const BOOLEAN success =
-            StartHost(
-              dllPath,
-              *log,
-              waitForDebugger,
-              exitCode, 
-              coreRoot,
-              coreLibraries);
-
-        *log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
+    auto log = GetLogger();
+    if (verbose) {
+        log->Enable();
     }
+    else {
+        log->Disable();
+    }
+
+    const BOOLEAN success =
+        StartHost(
+            dllPath,
+            *log,
+            waitForDebugger,
+            exitCode, 
+            coreRoot,
+            coreLibraries);
+
+    *log << W("Execution ") << (success ? W("succeeded") : W("failed")) << Logger::endl;
+    
     return exitCode;
 }
-
+// Host the .NET Core runtime in the current application
 DllApi
 HRESULT
 StartCoreCLR(
