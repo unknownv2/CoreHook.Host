@@ -62,9 +62,9 @@ CreateAssemblyDelegate(
     _Inout_  PVOID  *pfnDelegate
 );
 
-// Execute a function located in a .NET assembly
+// Execute a function located in a .NET assembly by creating a native delegate
 DllApi
-VOID
+HRESULT
 ExecuteAssemblyFunction(
     IN CONST AssemblyFunctionCall *args
 );

@@ -144,7 +144,7 @@ public:
             *m_log << W("CORE_ROOT path was not set; skipping") << Logger::endl;
         }
 
-        // Try to load CoreCLR from the directory that coreRun is in
+        // Try to load CoreCLR from the host directory
         if (!m_coreCLRModule) {
             m_coreCLRModule = TryLoadCoreCLR(m_hostDirectoryPath);
         }
@@ -943,7 +943,7 @@ ValidateBinaryLoaderArgs (
     return E_INVALIDARG;
 }
 
-// Start the .NET Core runtime with an application path
+// Start the .NET Core runtime in the current application
 HRESULT
 StartCoreCLRInternal (
     IN CONST WCHAR   *dllPath,
@@ -953,7 +953,6 @@ StartCoreCLRInternal (
     IN CONST WCHAR   *coreLibraries
     )
 {
-    // Parse the options from the command line
     HRESULT exitCode = -1;
 
     auto log = GetLogger();
@@ -995,20 +994,22 @@ StartCoreCLR(
     return E_INVALIDARG;
 }
 
+// Execute a function located in a .NET assembly by creating a native delegate
 DllApi
-VOID
+HRESULT
 ExecuteAssemblyFunction (
     IN CONST AssemblyFunctionCall *args
     )
 {
     if (SUCCEEDED(ValidateAssemblyFunctionCallArgs(args))) {
 
-        ExecuteAssemblyClassFunction(*GetLogger(),
+        return ExecuteAssemblyClassFunction(*GetLogger(),
             args->Assembly,
             args->Class,
             args->Function,
             args->Arguments);
     }
+    return E_INVALIDARG;
 }
 
 // Shutdown the .NET Core runtime
