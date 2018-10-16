@@ -552,7 +552,7 @@ ExecuteAssemblyClassFunction (
     MainMethodFp *pfnDelegate = NULL;
 
     if (SUCCEEDED((hr = CreateAssemblyDelegate(assembly, type, entry, (PVOID*)&pfnDelegate)))) {
-        RemoteEntryInfo entryInfo;
+        RemoteEntryInfo entryInfo = { 0 };
         entryInfo.HostPID = GetCurrentProcessId();
 
         auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
