@@ -15,6 +15,7 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     PCWSTR assemblyEntrySubtract =  L"Subtract";
     PCWSTR assemblyEntryMultiply =  L"Multiply";
     PCWSTR assemblyEntryDivide =    L"Divide";
+    PCWSTR assemblyEntryPoint =     L"Load";
 
     PCWSTR coreCLRInstallDirectory
         = L"%programfiles%\\dotnet\\shared\\Microsoft.NETCore.App\\2.1.5";
@@ -33,7 +34,7 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     EXPECT_EQ(NOERROR, StartCoreCLR(&binaryLoaderArgs));
 
     typedef int (STDMETHODCALLTYPE AddMethodFp)(const int a, const int b);
-    AddMethodFp *pfnMethodDelegate = NULL;
+    AddMethodFp *pfnMethodDelegate = nullptr;
 
     // Test the 'int Add(int a, int b) => a + b;' method
     EXPECT_EQ(NOERROR,
@@ -51,7 +52,7 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     EXPECT_EQ(integerAddResult, pfnMethodDelegate(integerA, integerB));
 
     // Test the 'int Subtract(int a, int b) => b - a;' method
-    pfnMethodDelegate = NULL;
+    pfnMethodDelegate = nullptr;
 
     EXPECT_EQ(NOERROR,
         CreateAssemblyDelegate(
@@ -64,7 +65,7 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     EXPECT_EQ(integerSubResult, pfnMethodDelegate(integerA, integerB));
 
     // Test the 'int Multiply(int a, int b) => a * b;' method
-    pfnMethodDelegate = NULL;
+    pfnMethodDelegate = nullptr;
 
     EXPECT_EQ(NOERROR,
         CreateAssemblyDelegate(
@@ -77,7 +78,7 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     EXPECT_EQ(integerMulResult, pfnMethodDelegate(integerA, integerB));
 
     // Test the 'int Divide(int a, int b) => a / b;' method
-    pfnMethodDelegate = NULL;
+    pfnMethodDelegate = nullptr;
 
     EXPECT_EQ(NOERROR,
         CreateAssemblyDelegate(
@@ -89,5 +90,22 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     const int integerDivResult = integerA / integerB;
     EXPECT_EQ(integerDivResult, pfnMethodDelegate(integerA, integerB));
 
+    typedef void (STDMETHODCALLTYPE MethodVoidDelegate)(const VOID* args);
+    MethodVoidDelegate *pfnMethodVoidDelegate = nullptr;
+    EXPECT_EQ(NOERROR,
+        CreateAssemblyDelegate(
+            assemblyName,
+            assemblyType,
+            assemblyEntryPoint,
+            reinterpret_cast<PVOID*>(&pfnMethodVoidDelegate)));
+
+    // Call the 'void Run(string paramPtr)' method
+    wcscpy_s(assemblyFunctionCall.Assembly, FunctionNameSize, assemblyName);
+    wcscpy_s(assemblyFunctionCall.Class, FunctionNameSize, assemblyType);
+    wcscpy_s(assemblyFunctionCall.Function, FunctionNameSize, assemblyEntryPoint);
+
+    ExecuteAssemblyFunction(&assemblyFunctionCall);
+
+    // Unload the AppDomain and stop the host
     EXPECT_EQ(NOERROR, UnloadRunTime());
 }
