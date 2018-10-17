@@ -2,7 +2,7 @@
 // Logger for the CoreCLR host.
 // Relies on the SYSCRT and therefore cannot use C++ libraries.
 //
-
+#pragma once
 #include <string>
 
 #define W(str)  L##str

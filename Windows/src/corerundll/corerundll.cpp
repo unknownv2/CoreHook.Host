@@ -128,7 +128,7 @@ public:
         *m_log << W("Host directory: ") << m_hostDirectoryPath << Logger::endl;
         *m_log << W("Host Exe: ") << m_hostExeName << Logger::endl;
 
-        // Check for %CORE_ROOT% and try to load CoreCLR.dll from it if it is set
+        // Check for the core root path and try to load CoreCLR.dll from it if it is set
         std::wstring coreRoot;
 
         m_coreCLRModule = nullptr; // Initialize this here since we don't call TryLoadCoreCLR if CORE_ROOT is unset.
@@ -155,7 +155,6 @@ public:
             WCHAR coreCLRInstallPath[MAX_PATH];
             ::ExpandEnvironmentStringsW(coreCLRInstallDirectory, coreCLRInstallPath, MAX_PATH);
             m_coreCLRModule = TryLoadCoreCLR(coreCLRInstallPath);
-
         }
 
         if (m_coreCLRModule) {
@@ -164,7 +163,6 @@ public:
             GetModuleFileNameWrapper(m_coreCLRModule, m_coreCLRDirectoryPath);
 
             // Search for the last backslash and terminate it there to keep just the directory path with trailing slash
-
             lastBackslash = m_coreCLRDirectoryPath.find_last_of(W('\\'));
             m_coreCLRDirectoryPath.resize(lastBackslash);
         }
@@ -243,7 +241,7 @@ public:
             assemblyPath.append(rgTPAExtensions[iExtension]);
 
             WIN32_FIND_DATA data;
-            const HANDLE findHandle = FindFirstFileW(assemblyPath.c_str(), &data);
+            HANDLE findHandle = FindFirstFileW(assemblyPath.c_str(), &data);
 
             if (findHandle != INVALID_HANDLE_VALUE) {
                 do {
@@ -350,7 +348,7 @@ public:
 
             *m_log << W("Calling GetCLRRuntimeHost(...)") << Logger::endl;
 
-            HRESULT hr = pfnGetCLRRuntimeHost(IID_ICLRRuntimeHost4, (IUnknown**)&m_CLRRuntimeHost);
+            HRESULT hr = pfnGetCLRRuntimeHost(IID_ICLRRuntimeHost4, reinterpret_cast<IUnknown**>(&m_CLRRuntimeHost));
             if (FAILED(hr)) {
                 *m_log 
                     << W("Failed to get ICLRRuntimeHost4 interface. ERRORCODE: ")
@@ -419,10 +417,10 @@ PrintModules (
     const DWORD processID = GetCurrentProcessId();
 
     // Print the process identifier.
-    printf("\nProcess ID: %u\n", processID);
+    printf("\nProcess ID: %lu\n", processID);
 
     // Get a handle to the process.
-    const HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
                                   PROCESS_VM_READ,
                                   FALSE, processID);
 
@@ -864,7 +862,7 @@ StartHost(
         APPDOMAIN_ENABLE_PINVOKE_AND_CLASSIC_COMINTEROP |
         APPDOMAIN_DISABLE_TRANSPARENCY_ENFORCEMENT,
         nullptr,                // Name of the assembly that contains the AppDomainManager implementation
-        nullptr,                    // The AppDomainManager implementation type name
+        nullptr,                // The AppDomainManager implementation type name
         sizeof(property_keys) / sizeof(WCHAR*),  // The number of properties
         property_keys,
         property_values,
