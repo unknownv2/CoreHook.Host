@@ -1,9 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-
-
 #include <stdio.h>
 #include <windows.h>
 #include "logger.h"
@@ -224,6 +218,15 @@ Logger& Logger::operator<< (unsigned long val) {
     return *this;
 }
 #endif
+
+Logger& Logger::operator<< (PVOID val) {
+    if (m_isEnabled) {
+        EnsurePrefixIsPrinted();
+
+        ::wprintf(W("%p"), val);
+    }
+    return *this;
+}
 
 Logger& Logger::operator<< (const wchar_t *val) {
     if (m_isEnabled) {
