@@ -52,14 +52,14 @@ class HostEnvironment
 
     Logger *m_log;
 
-    DWORD GetModuleFileNameWrapper(
+    static DWORD GetModuleFileNameWrapper(
         IN HMODULE hModule,
         std::wstring& buffer
        )
     {
         WCHAR buf[MAX_PATH];
-        DWORD size = MAX_PATH;
-        DWORD ret = GetModuleFileNameW(
+        const DWORD size = MAX_PATH;
+        const DWORD ret = GetModuleFileNameW(
             hModule,
             buf,
             size
@@ -76,7 +76,7 @@ class HostEnvironment
     // Attempts to load CoreCLR.dll from the given directory.
     // On success pins the dll, sets m_coreCLRDirectoryPath and returns the HMODULE.
     // On failure returns nullptr.
-    HMODULE TryLoadCoreCLR(const std::wstring& directoryPath) {
+    HMODULE TryLoadCoreCLR(const std::wstring& directoryPath) const {
 
         std::wstring coreCLRPath(directoryPath);
 
@@ -84,7 +84,7 @@ class HostEnvironment
 
         *m_log << W("Attempting to load: ") << coreCLRPath << Logger::endl;
 
-        HMODULE result = LoadLibraryExW(coreCLRPath.c_str(), NULL, 0);
+        const HMODULE result = LoadLibraryExW(coreCLRPath.c_str(), nullptr, 0);
         if (!result) {
             *m_log << W("Failed to load: ") << coreCLRPath << Logger::endl;
             *m_log << W("Error code: ") << GetLastError() << Logger::endl;
@@ -128,10 +128,10 @@ public:
         *m_log << W("Host directory: ") << m_hostDirectoryPath << Logger::endl;
         *m_log << W("Host Exe: ") << m_hostExeName << Logger::endl;
 
-        // Check for %CORE_ROOT% and try to load CoreCLR.dll from it if it is set
+        // Check for the core root path and try to load CoreCLR.dll from it if it is set
         std::wstring coreRoot;
 
-        m_coreCLRModule = NULL; // Initialize this here since we don't call TryLoadCoreCLR if CORE_ROOT is unset.
+        m_coreCLRModule = nullptr; // Initialize this here since we don't call TryLoadCoreCLR if CORE_ROOT is unset.
 
         if (coreRootPath)
         {
@@ -155,7 +155,6 @@ public:
             WCHAR coreCLRInstallPath[MAX_PATH];
             ::ExpandEnvironmentStringsW(coreCLRInstallDirectory, coreCLRInstallPath, MAX_PATH);
             m_coreCLRModule = TryLoadCoreCLR(coreCLRInstallPath);
-
         }
 
         if (m_coreCLRModule) {
@@ -164,8 +163,7 @@ public:
             GetModuleFileNameWrapper(m_coreCLRModule, m_coreCLRDirectoryPath);
 
             // Search for the last backslash and terminate it there to keep just the directory path with trailing slash
-
-            std::size_t lastBackslash = m_coreCLRDirectoryPath.find_last_of(W('\\'));
+            lastBackslash = m_coreCLRDirectoryPath.find_last_of(W('\\'));
             m_coreCLRDirectoryPath.resize(lastBackslash);
         }
         else {
@@ -185,7 +183,7 @@ public:
     bool TPAListContainsFile(
         _In_z_ WCHAR *fileNameWithoutExtension,
         _In_reads_(countExtensions) const WCHAR **rgTPAExtensions,
-        int countExtensions)
+        int countExtensions) const
     {
         if (m_tpaList.empty()) return false;
 
@@ -208,11 +206,11 @@ public:
     void
     RemoveExtensionAndNi(
         _In_z_ WCHAR *fileName
-        )
+        ) const
     {
         // Remove extension, if it exists
         WCHAR* extension = wcsrchr(fileName, W('.'));
-        if (extension != NULL)
+        if (extension != nullptr)
         {
             extension[0] = W('\0');
 
@@ -311,7 +309,7 @@ public:
         // Add files from from coreLibsPath if it is a different path than our initial current root 
         std::wstring coreLibraries;
         coreLibraries.append(coreLibsPath);
-        if (coreLibraries.compare(m_coreCLRDirectoryPath) != 0) {
+        if (coreLibraries != m_coreCLRDirectoryPath) {
             coreLibraries.append(W("\\"));
             AddFilesFromDirectoryToTPAList(coreLibraries, rgTPAExtensions, _countof(rgTPAExtensions));
         }
@@ -320,12 +318,12 @@ public:
     }
 
     // Returns the path to the host module
-    const WCHAR* GetHostPath() {
+    const WCHAR* GetHostPath() const {
         return m_hostPath.c_str();
     }
 
     // Returns the path to the host module
-    const WCHAR* GetHostExeName() {
+    const WCHAR* GetHostExeName() const {
         return m_hostExeName.c_str();
     }
 
@@ -340,8 +338,8 @@ public:
 
             *m_log << W("Finding GetCLRRuntimeHost(...)") << Logger::endl;
 
-            FnGetCLRRuntimeHost pfnGetCLRRuntimeHost =
-                (FnGetCLRRuntimeHost)::GetProcAddress(m_coreCLRModule, "GetCLRRuntimeHost");
+            const auto pfnGetCLRRuntimeHost =
+                reinterpret_cast<FnGetCLRRuntimeHost>(::GetProcAddress(m_coreCLRModule, "GetCLRRuntimeHost"));
 
             if (!pfnGetCLRRuntimeHost) {
                 *m_log << W("Failed to find function GetCLRRuntimeHost in ") << coreCLRDll << Logger::endl;
@@ -350,7 +348,7 @@ public:
 
             *m_log << W("Calling GetCLRRuntimeHost(...)") << Logger::endl;
 
-            HRESULT hr = pfnGetCLRRuntimeHost(IID_ICLRRuntimeHost4, (IUnknown**)&m_CLRRuntimeHost);
+            HRESULT hr = pfnGetCLRRuntimeHost(IID_ICLRRuntimeHost4, reinterpret_cast<IUnknown**>(&m_CLRRuntimeHost));
             if (FAILED(hr)) {
                 *m_log 
                     << W("Failed to get ICLRRuntimeHost4 interface. ERRORCODE: ")
@@ -414,34 +412,35 @@ PrintModules (
     ) 
 {
     HMODULE hMods[1024];
-    HANDLE hProcess;
     DWORD cbNeeded;
     unsigned int i;
-    DWORD processID = GetCurrentProcessId();
+    const DWORD processID = GetCurrentProcessId();
 
     // Print the process identifier.
-    printf("\nProcess ID: %u\n", processID);
+    printf("\nProcess ID: %lu\n", processID);
 
     // Get a handle to the process.
-    hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
-        PROCESS_VM_READ,
-        FALSE, processID);
-    if (NULL == hProcess)
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
+                                  PROCESS_VM_READ,
+                                  FALSE, processID);
+
+    if (hProcess == nullptr) {
         return 1;
+    }
 
     // Get a list of all the modules in this process.
     if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
     {
         for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
         {
-            TCHAR szModName[MAX_PATH];
+            WCHAR szModName[MAX_PATH];
 
             // Get the full path to the module's file.
             if (GetModuleFileNameEx(hProcess, hMods[i], szModName,
                 sizeof(szModName) / sizeof(TCHAR)))
             {
                 // Print the module name and handle value.
-                wprintf(TEXT("\t%s (0x%llX)\n"), szModName, (UINT64)hMods[i]);
+                wprintf(TEXT("\t%s (0x%llX)\n"), szModName, reinterpret_cast<UINT64>(hMods[i]));
             }
         }
     }
@@ -468,7 +467,7 @@ CreateStartupFlags (
             STARTUP_FLAGS::STARTUP_CONCURRENT_GC);
 
     // server GC is off by default, concurrent GC is on by default.
-    auto checkVariable = [&](STARTUP_FLAGS flag, const WCHAR *var) {
+    const auto checkVariable = [&](STARTUP_FLAGS flag, const WCHAR *var) {
         WCHAR result[25];
         size_t outsize;
         if (_wgetenv_s(&outsize, result, 25, var) == 0 && outsize > 0) {
@@ -498,7 +497,7 @@ ConvertToHexString (
     size_t hex_len = sizeof(I) << 1
     )
 {
-    static const char* digits = "0123456789ABCDEF";
+    static const auto digits = "0123456789ABCDEF";
     std::string hex_string(hex_len, '0');
     for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4) {
         hex_string[i] = digits[(input >> j) & 0x0f];
@@ -528,7 +527,7 @@ CreateAssemblyDelegate(
             entry, // Target entry point (static method)
             reinterpret_cast<INT_PTR*>(pfnDelegate));
 
-        if (FAILED(hr) || *pfnDelegate == NULL)
+        if (FAILED(hr) || *pfnDelegate == nullptr)
         {
             *GetLogger() << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
         }
@@ -548,46 +547,36 @@ ExecuteAssemblyClassFunction (
     )
 {
     HRESULT hr = E_HANDLE;
-    RemoteEntryInfo EntryInfo;
     typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
-    MainMethodFp *pfnDelegate = NULL;
+    MainMethodFp *pfnDelegate = nullptr;
 
-    auto host = GetGlobalHost();
+    if (SUCCEEDED((hr = CreateAssemblyDelegate(assembly, type, entry, reinterpret_cast<PVOID*>(&pfnDelegate))))) {
+        RemoteEntryInfo entryInfo = { 0 };
+        entryInfo.HostPID = GetCurrentProcessId();
 
-    if (host != nullptr) {
-
-        EntryInfo.HostPID = GetCurrentProcessId();
-
-        hr = host->CreateDelegate(
-            GetDomainId(),
-            assembly, // Target managed assembly
-            type, // Target managed type
-            entry, // Target entry point (static method)
-            reinterpret_cast<INT_PTR*>(&pfnDelegate));
-
-        if (FAILED(hr) || pfnDelegate == NULL)
-        {
-            log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
-            return hr;
-        }
-        
-        auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
-        if (remoteArgs != NULL) {
-
-            // construct a hex string for the address of the EntryInfo parameter
+        const auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
+        if (remoteArgs != nullptr) {
+            // construct a hex string for the address of the entryInfo parameter
             // which is passed to the .NET delegate function and execute the delegate
-            EntryInfo.Args.UserData = remoteArgs->UserData;
-            EntryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
+            entryInfo.Args.UserData = remoteArgs->UserData;
+            entryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-            auto paramString = ConvertToHexString(reinterpret_cast<LONGLONG>(&EntryInfo), 16);
+            auto paramString = ConvertToHexString(reinterpret_cast<LONGLONG>(&entryInfo), 16);
+
+            log << W("Calling delegate function at ") << static_cast<PVOID>(pfnDelegate) << W(" with a parameter") << Logger::endl;
 
             pfnDelegate(paramString.c_str());
         }
         else {
             // No arguments were supplied to pass to the delegate function so pass an
             // empty string
-            pfnDelegate(NULL);
+            log << W("WARNING: Calling delegate function at ") << static_cast<PVOID>(pfnDelegate) << W(" with nullptr parameter") << Logger::endl;
+            pfnDelegate(nullptr);
         }
+        log << W("Delegate function call completed") << Logger::endl;
+    }
+    else {
+        log << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
     }
     return hr;
 }
@@ -612,7 +601,7 @@ UnloadStopHost (
         hr = host->UnloadAppDomain2(
             GetDomainId(),
             true,
-            (int *)&exitCode);                          // Wait until done
+            static_cast<int *>(&exitCode));                          // Wait until done
 
         if (FAILED(hr)) {
             log << W("Failed to unload the AppDomain. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
@@ -643,7 +632,7 @@ UnloadStopHost (
     }
     SetGlobalHost(nullptr);
 
-    SetDomainId((DWORD)-1);
+    SetDomainId(static_cast<DWORD>(-1));
 
     return hr;
 }
@@ -699,7 +688,7 @@ StartHost(
     }
 
     WCHAR targetAssembly[MAX_PATH];
-    GetFullPathNameW(dllPath, MAX_PATH, targetAssembly, NULL);
+    GetFullPathNameW(dllPath, MAX_PATH, targetAssembly, nullptr);
 
     // Also note the directory the target library is in, as it will be referenced later.
     // The directory is determined by simply truncating the target app's full path
@@ -742,7 +731,7 @@ StartHost(
 
     // Search for the last backslash and terminate it there to keep just the directory path with trailing slash
 
-    auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
+    const auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
     managedAssemblyDirectory.resize(lastBackslash + 1);
 
     // NATIVE_DLL_SEARCH_DIRECTORIES
@@ -772,16 +761,14 @@ StartHost(
 
     SetGlobalHost(host);
 
-    HRESULT hr;
-
-    STARTUP_FLAGS flags = CreateStartupFlags();
+    const STARTUP_FLAGS flags = CreateStartupFlags();
     log << W("Setting ICLRRuntimeHost4 startup flags") << Logger::endl;
     log << W("Server GC enabled: ") << HAS_FLAG(flags, STARTUP_FLAGS::STARTUP_SERVER_GC) << Logger::endl;
     log << W("Concurrent GC enabled: ") << HAS_FLAG(flags, STARTUP_FLAGS::STARTUP_CONCURRENT_GC) << Logger::endl;
 
     // Default startup flags
  
-    hr = host->SetStartupFlags(flags);
+    HRESULT hr = host->SetStartupFlags(flags);
     if (FAILED(hr)) {
         log << W("Failed to set startup flags. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
         exitCode = hr;
@@ -874,8 +861,8 @@ StartHost(
         APPDOMAIN_ENABLE_PLATFORM_SPECIFIC_APPS |
         APPDOMAIN_ENABLE_PINVOKE_AND_CLASSIC_COMINTEROP |
         APPDOMAIN_DISABLE_TRANSPARENCY_ENFORCEMENT,
-        NULL,                // Name of the assembly that contains the AppDomainManager implementation
-        NULL,                    // The AppDomainManager implementation type name
+        nullptr,                // Name of the assembly that contains the AppDomainManager implementation
+        nullptr,                // The AppDomainManager implementation type name
         sizeof(property_keys) / sizeof(WCHAR*),  // The number of properties
         property_keys,
         property_values,

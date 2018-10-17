@@ -1,13 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-
 //
-// Logger for the CoreCLR host ccrun.
+// Logger for the CoreCLR host.
 // Relies on the SYSCRT and therefore cannot use C++ libraries.
 //
-
+#pragma once
 #include <string>
 
 #define W(str)  L##str
@@ -39,7 +34,9 @@ public:
 #ifdef _MSC_VER
     Logger& operator<< (long val);
     Logger& operator<< (unsigned long val);
+
 #endif
+    Logger& operator<< (PVOID val);
     Logger& operator<< (float val);
     Logger& operator<< (double val);
     Logger& operator<< (long double val);

@@ -1,13 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-
-
-#include <stdio.h>
+#include <cstdio>
 #include <windows.h>
 #include "logger.h"
-//#include "palclr.h"
 
 void Logger::Enable() {
     m_isEnabled = true;
@@ -25,7 +18,7 @@ void print(const wchar_t *val) {
 
     wchar_t chunk[chunkSize];
 
-    auto valLength = ::wcslen(val);
+    const auto valLength = ::wcslen(val);
 
     for (size_t i = 0 ; i < valLength ; i += chunkSize) {
 
@@ -224,6 +217,15 @@ Logger& Logger::operator<< (unsigned long val) {
     return *this;
 }
 #endif
+
+Logger& Logger::operator<< (PVOID val) {
+    if (m_isEnabled) {
+        EnsurePrefixIsPrinted();
+
+        ::wprintf(W("%p"), val);
+    }
+    return *this;
+}
 
 Logger& Logger::operator<< (const wchar_t *val) {
     if (m_isEnabled) {
