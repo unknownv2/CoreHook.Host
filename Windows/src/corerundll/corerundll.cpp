@@ -52,7 +52,7 @@ class HostEnvironment
 
     Logger *m_log;
 
-    DWORD GetModuleFileNameWrapper(
+    static DWORD GetModuleFileNameWrapper(
         IN HMODULE hModule,
         std::wstring& buffer
        )
@@ -84,7 +84,7 @@ class HostEnvironment
 
         *m_log << W("Attempting to load: ") << coreCLRPath << Logger::endl;
 
-        HMODULE result = LoadLibraryExW(coreCLRPath.c_str(), NULL, 0);
+        HMODULE result = LoadLibraryExW(coreCLRPath.c_str(), nullptr, 0);
         if (!result) {
             *m_log << W("Failed to load: ") << coreCLRPath << Logger::endl;
             *m_log << W("Error code: ") << GetLastError() << Logger::endl;
@@ -131,7 +131,7 @@ public:
         // Check for %CORE_ROOT% and try to load CoreCLR.dll from it if it is set
         std::wstring coreRoot;
 
-        m_coreCLRModule = NULL; // Initialize this here since we don't call TryLoadCoreCLR if CORE_ROOT is unset.
+        m_coreCLRModule = nullptr; // Initialize this here since we don't call TryLoadCoreCLR if CORE_ROOT is unset.
 
         if (coreRootPath)
         {
@@ -212,7 +212,7 @@ public:
     {
         // Remove extension, if it exists
         WCHAR* extension = wcsrchr(fileName, W('.'));
-        if (extension != NULL)
+        if (extension != nullptr)
         {
             extension[0] = W('\0');
 
@@ -426,22 +426,24 @@ PrintModules (
     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
         PROCESS_VM_READ,
         FALSE, processID);
-    if (NULL == hProcess)
+
+    if (hProcess == nullptr) {
         return 1;
+    }
 
     // Get a list of all the modules in this process.
     if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
     {
         for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
         {
-            TCHAR szModName[MAX_PATH];
+            WCHAR szModName[MAX_PATH];
 
             // Get the full path to the module's file.
             if (GetModuleFileNameEx(hProcess, hMods[i], szModName,
                 sizeof(szModName) / sizeof(TCHAR)))
             {
                 // Print the module name and handle value.
-                wprintf(TEXT("\t%s (0x%llX)\n"), szModName, (UINT64)hMods[i]);
+                wprintf(TEXT("\t%s (0x%llX)\n"), szModName, reinterpret_cast<UINT64>(hMods[i]));
             }
         }
     }
@@ -528,7 +530,7 @@ CreateAssemblyDelegate(
             entry, // Target entry point (static method)
             reinterpret_cast<INT_PTR*>(pfnDelegate));
 
-        if (FAILED(hr) || *pfnDelegate == NULL)
+        if (FAILED(hr) || *pfnDelegate == nullptr)
         {
             *GetLogger() << W("Failed call to CreateDelegate. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
         }
@@ -549,14 +551,14 @@ ExecuteAssemblyClassFunction (
 {
     HRESULT hr = E_HANDLE;
     typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);   
-    MainMethodFp *pfnDelegate = NULL;
+    MainMethodFp *pfnDelegate = nullptr;
 
     if (SUCCEEDED((hr = CreateAssemblyDelegate(assembly, type, entry, (PVOID*)&pfnDelegate)))) {
         RemoteEntryInfo entryInfo = { 0 };
         entryInfo.HostPID = GetCurrentProcessId();
 
-        auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
-        if (remoteArgs != NULL) {
+        const auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
+        if (remoteArgs != nullptr) {
             // construct a hex string for the address of the entryInfo parameter
             // which is passed to the .NET delegate function and execute the delegate
             entryInfo.Args.UserData = remoteArgs->UserData;
@@ -570,8 +572,8 @@ ExecuteAssemblyClassFunction (
         else {
             // No arguments were supplied to pass to the delegate function so pass an
             // empty string
-            log << W("WARNING: Calling delegate function at ") << pfnDelegate << W(" with NULL parameter") << Logger::endl;
-            pfnDelegate(NULL);
+            log << W("WARNING: Calling delegate function at ") << static_cast<PVOID>(pfnDelegate) << W(" with nullptr parameter") << Logger::endl;
+            pfnDelegate(nullptr);
         }
         log << W("Delegate function call completed") << Logger::endl;
 
@@ -602,7 +604,7 @@ UnloadStopHost (
         hr = host->UnloadAppDomain2(
             GetDomainId(),
             true,
-            (int *)&exitCode);                          // Wait until done
+            static_cast<int *>(&exitCode));                          // Wait until done
 
         if (FAILED(hr)) {
             log << W("Failed to unload the AppDomain. ERRORCODE: ") << Logger::hresult << hr << Logger::endl;
@@ -689,7 +691,7 @@ StartHost(
     }
 
     WCHAR targetAssembly[MAX_PATH];
-    GetFullPathNameW(dllPath, MAX_PATH, targetAssembly, NULL);
+    GetFullPathNameW(dllPath, MAX_PATH, targetAssembly, nullptr);
 
     // Also note the directory the target library is in, as it will be referenced later.
     // The directory is determined by simply truncating the target app's full path
@@ -732,7 +734,7 @@ StartHost(
 
     // Search for the last backslash and terminate it there to keep just the directory path with trailing slash
 
-    auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
+    const auto lastBackslash = managedAssemblyDirectory.find_last_of(W("\\"));
     managedAssemblyDirectory.resize(lastBackslash + 1);
 
     // NATIVE_DLL_SEARCH_DIRECTORIES
@@ -764,7 +766,7 @@ StartHost(
 
     HRESULT hr;
 
-    STARTUP_FLAGS flags = CreateStartupFlags();
+    const STARTUP_FLAGS flags = CreateStartupFlags();
     log << W("Setting ICLRRuntimeHost4 startup flags") << Logger::endl;
     log << W("Server GC enabled: ") << HAS_FLAG(flags, STARTUP_FLAGS::STARTUP_SERVER_GC) << Logger::endl;
     log << W("Concurrent GC enabled: ") << HAS_FLAG(flags, STARTUP_FLAGS::STARTUP_CONCURRENT_GC) << Logger::endl;
@@ -864,8 +866,8 @@ StartHost(
         APPDOMAIN_ENABLE_PLATFORM_SPECIFIC_APPS |
         APPDOMAIN_ENABLE_PINVOKE_AND_CLASSIC_COMINTEROP |
         APPDOMAIN_DISABLE_TRANSPARENCY_ENFORCEMENT,
-        NULL,                // Name of the assembly that contains the AppDomainManager implementation
-        NULL,                    // The AppDomainManager implementation type name
+        nullptr,                // Name of the assembly that contains the AppDomainManager implementation
+        nullptr,                    // The AppDomainManager implementation type name
         sizeof(property_keys) / sizeof(WCHAR*),  // The number of properties
         property_keys,
         property_values,
