@@ -1,7 +1,6 @@
-#include <stdio.h>
+#include <cstdio>
 #include <windows.h>
 #include "logger.h"
-//#include "palclr.h"
 
 void Logger::Enable() {
     m_isEnabled = true;
@@ -19,7 +18,7 @@ void print(const wchar_t *val) {
 
     wchar_t chunk[chunkSize];
 
-    auto valLength = ::wcslen(val);
+    const auto valLength = ::wcslen(val);
 
     for (size_t i = 0 ; i < valLength ; i += chunkSize) {
 
