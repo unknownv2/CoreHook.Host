@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../../src/corerundll/corerundll.h"
+#include "../windows/src/corerundll/corerundll.h"
 
 TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
 
