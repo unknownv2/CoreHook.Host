@@ -64,26 +64,26 @@ set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${TARGET_NAME})
 ################################################################################
 if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Win32")
     string(CONCAT OUT_DIR
-        $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/bin.${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
-        $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/bin.${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
+        $<$<CONFIG:Debug>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
+        $<$<CONFIG:Release>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
         $<$<NOT:$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>>:${CMAKE_SOURCE_DIR}/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>>
     )
 elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM")
     string(CONCAT OUT_DIR
-        $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/bin.${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
-        $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/bin.${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
+        $<$<CONFIG:Debug>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
+        $<$<CONFIG:Release>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
         $<$<NOT:$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>>:${CMAKE_SOURCE_DIR}/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>>
     )
 elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM64")
     string(CONCAT OUT_DIR
-        $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/bin.${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
-        $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/bin.${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
+        $<$<CONFIG:Debug>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
+        $<$<CONFIG:Release>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
         $<$<NOT:$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>>:${CMAKE_SOURCE_DIR}/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>>
     )
 elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
     string(CONCAT OUT_DIR
-        $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/bin.X64/$<CONFIG>/>
-        $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/bin.X64/$<CONFIG>/>
+        $<$<CONFIG:Debug>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
+        $<$<CONFIG:Release>:${CMAKE_BINARY_DIR}/bin/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>/>
         $<$<NOT:$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>>:${CMAKE_SOURCE_DIR}/${CMAKE_VS_PLATFORM_NAME}/$<CONFIG>>
     )
 endif()

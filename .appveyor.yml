@@ -13,18 +13,19 @@ configuration:
   - Release
 
 before_build:
-  - nuget restore Windows\corerundll.sln
+  - nuget restore build\msvc\corerundll.sln
 
 build:
-  project: Windows\corerundll.sln
+  project: build\msvc\corerundll.sln
   verbosity: detailed
 
 skip_commits:
   files:
     - '**/*.md'
+    - '**/*.txt'
   
 after_build:
-  7z a corerundll-%CONFIGURATION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\Windows\*\%CONFIGURATION%\corerundll*.dll
+  7z a corerundll-%CONFIGURATION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\bin\%PLATFORM%\%CONFIGURATION%\corerundll*.dll
 
 artifacts:
 - path: corerundll-%CONFIGURATION%-%PLATFORM%.zip

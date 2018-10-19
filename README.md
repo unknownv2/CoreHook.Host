@@ -27,14 +27,27 @@ You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM
 An example for building the X64 `corerundll64.dll` in the `Release` configuration:
 
 ```
-msbuild Windows/corerundll.sln /p:Configuration=Release /p:Platform=x64
+msbuild build/msvc/corerundll.vcxproj /p:Configuration=Release /p:Platform=x64
 ```
 
-The build output DLL will be inside the `Windows` folder.
+To build the entire solution (which also builds the testing project), you can run:
+
+```
+nuget restore build/msvc/corerundll.sln
+msbuild build/msvc/corerundll.sln /p:Configuration=Release /p:Platform=x64
+```
+
+The build output DLL will be inside the `bin` folder.
 
 ### CMake
 
-You can also build the library using CMake. You can run the `win-vs-2017.bat` file to build for the `x86` and `x64` architectures. This also gives you the option to generate and build with an older version of `Visual Studio` such as `VS 2015` or `VS 2013`.
+You can also build the library using CMake. You can run the `scripts/win-vs-2017.cmd` file to build for the `x86` and `x64` architectures. This also gives you the option to generate and build with an older version of `Visual Studio` such as `VS 2015` or `VS 2013`.
+
+You can build by running these commands from the root of the repository:
+```
+cd scripts
+win-vs-2017.cmd
+```
 
 ### Binary Releases 
  You can also download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases).

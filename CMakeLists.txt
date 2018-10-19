@@ -58,12 +58,12 @@ endfunction()
 ################################################################################
 # Common utils
 ################################################################################
-include(CMake/Utils.cmake)
+include(scripts/Utils.cmake)
 
 ################################################################################
 # Additional Global Settings(add specific info there)
 ################################################################################
-include(CMake/GlobalSettingsInclude.cmake OPTIONAL)
+include(scripts/GlobalSettingsInclude.cmake OPTIONAL)
 
 ################################################################################
 # Use solution folders feature
@@ -73,5 +73,5 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 ################################################################################
 # Sub-projects
 ################################################################################
-add_subdirectory(src/corerundll)
+add_subdirectory(src)
 
