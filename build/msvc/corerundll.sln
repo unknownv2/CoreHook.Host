@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "corerundll", "src\corerundll\corerundll.vcxproj", "{56ECC22A-A4DB-409B-826E-D3637CC647E6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "corerundll", "corerundll.vcxproj", "{56ECC22A-A4DB-409B-826E-D3637CC647E6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "corerundll-test", "..\tests\msvc\corerundll-test.vcxproj", "{1AB3F109-225A-41CC-A436-81333EFB7470}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "corerundll-test", "corerundll-test.vcxproj", "{1AB3F109-225A-41CC-A436-81333EFB7470}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
