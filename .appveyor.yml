@@ -22,6 +22,7 @@ build:
 skip_commits:
   files:
     - '**/*.md'
+    - '**/*.txt'
   
 after_build:
   7z a corerundll-%CONFIGURATION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\bin\%PLATFORM%\%CONFIGURATION%\corerundll*.dll
