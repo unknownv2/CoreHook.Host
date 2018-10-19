@@ -27,10 +27,17 @@ You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM
 An example for building the X64 `corerundll64.dll` in the `Release` configuration:
 
 ```
+msbuild build/msvc/corerundll.vcxproj /p:Configuration=Release /p:Platform=x64
+```
+
+To build the entire solution (which also builds the testing project), you can run:
+
+```
+nuget restore build/msvc/corerundll.sln
 msbuild build/msvc/corerundll.sln /p:Configuration=Release /p:Platform=x64
 ```
 
-The build output DLL will be inside the `Windows` folder.
+The build output DLL will be inside the `bin` folder.
 
 ### CMake
 
