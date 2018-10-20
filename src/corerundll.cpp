@@ -489,22 +489,6 @@ CreateStartupFlags (
     return initialFlags;
 }
 
-// Convert an integer value to it's hex string representation
-template <typename I>
-std::string
-ConvertToHexString (
-    I input, 
-    size_t hex_len = sizeof(I) << 1
-    )
-{
-    static const auto digits = "0123456789ABCDEF";
-    std::string hex_string(hex_len, '0');
-    for (size_t i = 0, j = (hex_len - 1) * 4; i < hex_len; ++i, j -= 4) {
-        hex_string[i] = digits[(input >> j) & 0x0f];
-    }
-    return hex_string;
-}
-
 // Create a native function delegate for a function inside a .NET assembly
 HRESULT
 CreateAssemblyDelegate(
@@ -561,11 +545,9 @@ ExecuteAssemblyClassFunction (
             entryInfo.Args.UserData = remoteArgs->UserData;
             entryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-            auto paramString = ConvertToHexString(reinterpret_cast<LONGLONG>(&entryInfo), 16);
+            log << W("Calling delegate function at ") << static_cast<PVOID>(pfnDelegate) << W(" with a parameter: ") << static_cast<PVOID>(&entryInfo)  << Logger::endl;
 
-            log << W("Calling delegate function at ") << static_cast<PVOID>(pfnDelegate) << W(" with a parameter") << Logger::endl;
-
-            pfnDelegate(paramString.c_str());
+            pfnDelegate(&entryInfo);
         }
         else {
             // No arguments were supplied to pass to the delegate function so pass an
