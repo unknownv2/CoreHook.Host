@@ -1,3 +1,4 @@
+using System;
 
 namespace Calculator
 {
@@ -6,8 +7,8 @@ namespace Calculator
         /// <summary>
         /// Method called by the CoreHook host to initialize the hooking library.
         /// </summary>
-        /// <param name="paramPtr">A pointer passed in as a hex string containing information about the hooking library.</param>
-        public static void Load(string paramPtr) => System.Diagnostics.Debug.WriteLine($"The parameter string was {paramPtr}.");
+        /// <param name="remoteParameters">A pointer containing information about the hooking library.</param>
+        public static void Load(IntPtr remoteParameters) => System.Diagnostics.Debug.WriteLine($"The pointer parameter was {remoteParameters.ToInt64():X16}.");
         /// <summary>
         /// Add <paramref name="a"/> to <paramref name="b"/>.
         /// </summary>
