@@ -99,12 +99,12 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
             assemblyEntryPoint,
             reinterpret_cast<PVOID*>(&pfnMethodVoidDelegate)));
 
-    // Call the 'void Run(string paramPtr)' method
+    // Call the 'int Load(IntPtr remoteParameters)' method
     wcscpy_s(assemblyFunctionCall.Assembly, FunctionNameSize, assemblyName);
     wcscpy_s(assemblyFunctionCall.Class, FunctionNameSize, assemblyType);
     wcscpy_s(assemblyFunctionCall.Function, FunctionNameSize, assemblyEntryPoint);
 
-    ExecuteAssemblyFunction(&assemblyFunctionCall);
+    EXPECT_EQ(NOERROR, ExecuteAssemblyFunction(&assemblyFunctionCall));
 
     // Unload the AppDomain and stop the host
     EXPECT_EQ(NOERROR, UnloadRunTime());
