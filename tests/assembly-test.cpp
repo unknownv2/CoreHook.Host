@@ -23,7 +23,6 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     BinaryLoaderArgs binaryLoaderArgs = { 0 };
     AssemblyFunctionCall assemblyFunctionCall = { 0 };
     binaryLoaderArgs.Verbose = true;
-    binaryLoaderArgs.WaitForDebugger = false;
     wcscpy_s(binaryLoaderArgs.BinaryFilePath, MAX_PATH, dotnetAssemblyName);
 
     WCHAR coreCLRInstallPath[MAX_PATH];
