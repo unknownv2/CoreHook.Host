@@ -446,7 +446,6 @@ PrintModules (
     }
 
     // Release the handle to the process.
-
     CloseHandle(hProcess);
 
     return 0;
@@ -623,7 +622,6 @@ BOOLEAN
 StartHost(
     IN CONST WCHAR   *dllPath,
     IN       Logger  &log,
-    IN CONST BOOLEAN waitForDebugger,
     _Inout_  HRESULT &exitCode,
     IN CONST WCHAR   *coreRoot,
     IN CONST WCHAR   *coreLibraries
@@ -632,23 +630,6 @@ StartHost(
     if (GetGlobalHost() != nullptr) {
         log << W(".NET Core runtime has already been started.") << Logger::endl;
         return false;
-    }
-
-    if (waitForDebugger)
-    {
-        if (!IsDebuggerPresent())
-        {
-            log << W("Waiting for the debugger to attach. Press any key to continue ...") << Logger::endl;
-            getchar();
-            if (IsDebuggerPresent())
-            {
-                log << "Debugger is attached." << Logger::endl;
-            }
-            else
-            {
-                log << "Debugger failed to attach." << Logger::endl;
-            }
-        }
     }
 
     // Assume failure
@@ -917,7 +898,6 @@ HRESULT
 StartCoreCLRInternal (
     IN CONST WCHAR   *dllPath,
     IN CONST BOOLEAN verbose,
-    IN CONST BOOLEAN waitForDebugger,
     IN CONST WCHAR   *coreRoot,
     IN CONST WCHAR   *coreLibraries
     )
@@ -936,7 +916,6 @@ StartCoreCLRInternal (
         StartHost(
             dllPath,
             *log,
-            waitForDebugger,
             exitCode, 
             coreRoot,
             coreLibraries);
@@ -956,7 +935,6 @@ StartCoreCLR(
         return StartCoreCLRInternal(
             args->BinaryFilePath,
             args->Verbose,
-            args->WaitForDebugger,
             args->CoreRootPath,
             args->CoreLibrariesPath);
     }

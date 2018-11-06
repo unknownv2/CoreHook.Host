@@ -21,8 +21,7 @@
 struct BinaryLoaderArgs
 {
     BOOLEAN    Verbose;
-    BOOLEAN    WaitForDebugger;
-    BOOLEAN    Reserved[6];
+    BOOLEAN    Reserved[7];
     WCHAR      BinaryFilePath[MAX_PATH];
     WCHAR      CoreRootPath[MAX_PATH];
     WCHAR      CoreLibrariesPath[MAX_PATH];
