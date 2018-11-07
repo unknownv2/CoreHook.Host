@@ -49,6 +49,14 @@ cd scripts
 win-vs-2017.cmd
 ```
 
+### Tests
+
+You can compile the .NET class [`Calculator.cs`](tests/dotnet/Calculator.cs), which is required for the tests, with the command:
+
+```
+csc -target:library Calculator.cs
+```
+
 ### Binary Releases 
  You can also download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases).
  
