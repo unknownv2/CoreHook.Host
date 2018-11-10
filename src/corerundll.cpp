@@ -2,7 +2,6 @@
 #include "logger.h"
 #include "mscoree.h"
 #include <psapi.h>
-#include <memory>
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
@@ -22,7 +21,7 @@ static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 ICLRRuntimeHost4 *g_Host;
 
 // Handle to a logger which writes to the standard output
-std::shared_ptr<Logger> g_Log;
+Logger *g_Log;
 
 // The AppDomain ID in  which .NET assemblies will be executed in
 DWORD g_domainId;
@@ -278,7 +277,7 @@ public:
 
     // Returns the semicolon-separated list of paths to runtime dlls that are considered trusted.
     // On first call, scans the coreclr directory for dlls and adds them all to the list.
-    const WCHAR * GetTpaList(const WCHAR *coreLibsPath) {
+    const WCHAR* GetTpaList(const WCHAR *coreLibsPath) {
         const WCHAR *rgTPAExtensions[] = {
             // Probe for .ni.dll first so that it's preferred
             // if ni and il coexist in the same dir
@@ -383,13 +382,13 @@ GetDomainId (
     return g_domainId;
 }
 
-std::shared_ptr<Logger>
+Logger*
 GetLogger (
     VOID
     )
 {
     if (g_Log == nullptr) {
-        g_Log = std::make_shared<Logger>();
+        g_Log = new Logger();
     }
     return g_Log;
 }
@@ -960,8 +959,16 @@ UnloadRunTime(
 BOOLEAN
 WINAPI
 DllMain(
-    VOID
+    HINSTANCE hinst, DWORD dwReason, LPVOID reserved
     )
 {
+    (void)hinst;
+    (void)reserved;
+
+    if (dwReason == DLL_PROCESS_DETACH) {
+        if (g_Log != nullptr) {
+            delete g_Log;
+        }
+    }
     return TRUE;
 }
