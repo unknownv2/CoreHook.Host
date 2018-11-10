@@ -22,7 +22,7 @@ static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 ICLRRuntimeHost4 *g_Host;
 
 // Handle to a logger which writes to the standard output
-std::shared_ptr<Logger> g_Log;
+Logger* g_Log;
 
 // The AppDomain ID in  which .NET assemblies will be executed in
 DWORD g_domainId;
@@ -383,13 +383,13 @@ GetDomainId (
     return g_domainId;
 }
 
-std::shared_ptr<Logger>
+Logger *
 GetLogger (
     VOID
     )
 {
     if (g_Log == nullptr) {
-        g_Log = std::make_shared<Logger>();
+        g_Log = new Logger();
     }
     return g_Log;
 }
