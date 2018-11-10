@@ -2,7 +2,6 @@
 #include "logger.h"
 #include "mscoree.h"
 #include <psapi.h>
-#include <memory>
 
 // Utility macro for testing whether or not a flag is set.
 #define HAS_FLAG(value, flag) (((value) & (flag)) == (flag))
@@ -960,8 +959,16 @@ UnloadRunTime(
 BOOLEAN
 WINAPI
 DllMain(
-    VOID
+    HINSTANCE hinst, DWORD dwReason, LPVOID reserved
     )
 {
+    (void)hinst;
+    (void)reserved;
+
+    if (dwReason == DLL_PROCESS_DETACH) {
+        if (g_Log != nullptr) {
+            delete g_Log;
+        }
+    }
     return TRUE;
 }
