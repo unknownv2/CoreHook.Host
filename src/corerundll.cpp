@@ -18,10 +18,6 @@ static const WCHAR *concurrentGcVar = W("COMPlus_gcConcurrent");
 // The name of the .NET Core runtime native runtime DLL.
 static const WCHAR *coreCLRDll = W("CoreCLR.dll");
 
-// The location where CoreCLR is expected to be installed. If CoreCLR.dll isn't
-//  found in the same directory as the host, it will be looked for here.
-static const WCHAR *coreCLRInstallDirectory = W("%windir%\\system32\\");
-
 // Handle to the CoreCLR hosting interface
 ICLRRuntimeHost4 *g_Host;
 
@@ -147,14 +143,6 @@ public:
         // Try to load CoreCLR from the host directory
         if (!m_coreCLRModule) {
             m_coreCLRModule = TryLoadCoreCLR(m_hostDirectoryPath);
-        }
-
-        if (!m_coreCLRModule) {
-
-            // Failed to load. Try to load from the well-known location.
-            WCHAR coreCLRInstallPath[MAX_PATH];
-            ::ExpandEnvironmentStringsW(coreCLRInstallDirectory, coreCLRInstallPath, MAX_PATH);
-            m_coreCLRModule = TryLoadCoreCLR(coreCLRInstallPath);
         }
 
         if (m_coreCLRModule) {
