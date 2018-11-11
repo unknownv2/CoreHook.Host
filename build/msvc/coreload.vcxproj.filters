@@ -16,6 +16,9 @@
     <Filter Include="Source Files\logging">
       <UniqueIdentifier>{36cafe21-635e-4fad-8337-0c7c67081f4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{261810cf-7bc6-4f2a-90aa-c52cef659a9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\coreload\logging\logging.cc">
@@ -24,12 +27,18 @@
     <ClCompile Include="..\..\src\coreload\coreload.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\coreload\common\pal.cc">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\coreload\logging\logging.h">
       <Filter>Source Files\logging</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\coreload\targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\coreload\common\pal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

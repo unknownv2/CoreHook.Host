@@ -1,0 +1,6 @@
+
+namespace coreload {
+    namespace pal {
+
+    }
+}
