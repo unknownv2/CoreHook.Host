@@ -35,6 +35,7 @@
     <ClCompile Include="..\..\src\coreload\libhost.cc" />
     <ClCompile Include="..\..\src\coreload\logging\logging.cc" />
     <ClCompile Include="..\..\src\coreload\runtime_config.cc" />
+    <ClCompile Include="..\..\src\coreload\version.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\coreload\arguments.h" />
@@ -45,6 +46,7 @@
     <ClInclude Include="..\..\src\coreload\deps_entry.h" />
     <ClInclude Include="..\..\src\coreload\deps_format.h" />
     <ClInclude Include="..\..\src\coreload\deps_resolver.h" />
+    <ClInclude Include="..\..\src\coreload\status_code.h" />
     <ClInclude Include="..\..\src\coreload\fx_muxer.h" />
     <ClInclude Include="..\..\src\coreload\fx_ver.h" />
     <ClInclude Include="..\..\src\coreload\hostpolicy.h" />
@@ -52,6 +54,7 @@
     <ClInclude Include="..\..\src\coreload\logging\logging.h" />
     <ClInclude Include="..\..\src\coreload\runtime_config.h" />
     <ClInclude Include="..\..\src\coreload\targetver.h" />
+    <ClInclude Include="..\..\src\coreload\version.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

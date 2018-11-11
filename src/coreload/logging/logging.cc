@@ -20,6 +20,9 @@ namespace coreload {
 
         }
 
+        bool is_enabled() {
+            return true;
+        }
 
         void logger::log(
             const pal::char_t* severity,

@@ -21,6 +21,7 @@ namespace coreload {
         static bool IsDevice(const pal::string_t& path);
         static bool IsExtended(const pal::string_t& path);
         static bool IsUNCExtended(const pal::string_t& path);
+        static bool ContainsDirectorySeparator(const pal::string_t & path);
     };
 }
 

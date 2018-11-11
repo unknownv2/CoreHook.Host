@@ -12,12 +12,17 @@ namespace coreload {
         void info(const pal::char_t* format, ...);
         void verbose(const pal::char_t* format, ...);
         void error(const pal::char_t* format, ...);
-
+        bool is_enabled();
         class logger {
         public:
             static logger& instance() {
                 static logger inst;
                 return inst;
+            }
+
+            template <typename... Args>
+            void verbose(const pal::char_t* format, Args... args) {
+                log(_X("VERBOSE"), format, args...);
             }
 
             template <typename... Args>

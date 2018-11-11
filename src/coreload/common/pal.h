@@ -2,7 +2,9 @@
 #define PAL_H
 
 #include <string>
-
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 #if defined(_WIN32)
 
@@ -30,6 +32,7 @@ namespace coreload {
 #if defined(_WIN32)
         typedef wchar_t char_t;
         typedef std::wstring string_t;
+        typedef std::wstringstream stringstream_t;
 
         pal::string_t to_string(int value);
         pal::string_t to_lower(const pal::string_t& in);
@@ -49,6 +52,8 @@ namespace coreload {
         bool load_library(const string_t* path, dll_t* dll);
         bool realpath(string_t* path, bool skip_error_logging = false);
         void unload_library(dll_t library);
+        bool file_exists(const string_t& path);
+        bool is_path_rooted(const string_t& path);
     }
 }
 

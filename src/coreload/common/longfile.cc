@@ -38,4 +38,9 @@ namespace coreload {
     bool LongFile::IsUNCExtended(const pal::string_t& path) {
         return path.compare(0, UNCExtendedPathPrefix.length(), UNCExtendedPathPrefix) == 0;
     }
+
+    bool LongFile::ContainsDirectorySeparator(const pal::string_t & path) {
+        return path.find(DirectorySeparatorChar) != pal::string_t::npos ||
+            path.find(AltDirectorySeparatorChar) != pal::string_t::npos;
+    }
 }
