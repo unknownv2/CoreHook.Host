@@ -74,25 +74,25 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>coreload32</TargetName>
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\coreloaddll</IntDir>
+    <IntDir>$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>coreload64</TargetName>
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\coreloaddll</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>coreload32</TargetName>
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\coreloaddll</IntDir>
+    <IntDir>$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>coreload64</TargetName>
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\coreloaddll</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,15 +155,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\coreload\coreload.vcxproj">
-      <Project>{0aaa1420-b5ea-49e2-8661-77a41fd249ca}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\src\coreload\dll\coreload_dll.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\coreload\dll\targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="coreload.vcxproj">
+      <Project>{0aaa1420-b5ea-49e2-8661-77a41fd249ca}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

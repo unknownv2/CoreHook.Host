@@ -34,19 +34,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\coreloadtest</IntDir>
+    <IntDir>$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\coreloadtest</IntDir>
+    <IntDir>$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\coreloadtest</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\coreloadtest</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\tests\coreload_test.cc" />
