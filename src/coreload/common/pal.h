@@ -36,6 +36,11 @@ namespace coreload {
         typedef HMODULE dll_t;
         typedef HRESULT hresult_t;
         typedef FARPROC proc_t;
+
+        inline void err_vprintf(const char_t* format, va_list vl) { 
+            ::vfwprintf(stderr, format, vl); ::fputwc(_X('\n'), stderr);
+        }
+
 #else
         
 #endif
@@ -43,6 +48,7 @@ namespace coreload {
         proc_t get_symbol(dll_t library, const char* name);
         bool load_library(const string_t* path, dll_t* dll);
         bool realpath(string_t* path, bool skip_error_logging = false);
+        void unload_library(dll_t library);
     }
 }
 

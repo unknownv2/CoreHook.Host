@@ -19,20 +19,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\coreload\arguments.cc" />
     <ClCompile Include="..\..\src\coreload\common\longfile.cc" />
     <ClCompile Include="..\..\src\coreload\common\pal.cc" />
     <ClCompile Include="..\..\src\coreload\common\pal.windows.cc" />
     <ClCompile Include="..\..\src\coreload\common\path_utils.cc" />
     <ClCompile Include="..\..\src\coreload\coreclr.cc" />
     <ClCompile Include="..\..\src\coreload\coreload.cc" />
+    <ClCompile Include="..\..\src\coreload\deps_entry.cc" />
+    <ClCompile Include="..\..\src\coreload\deps_format.cc" />
+    <ClCompile Include="..\..\src\coreload\deps_resolver.cc" />
+    <ClCompile Include="..\..\src\coreload\fx_muxer.cc" />
+    <ClCompile Include="..\..\src\coreload\fx_ver.cc" />
+    <ClCompile Include="..\..\src\coreload\hostpolicy.cc" />
+    <ClCompile Include="..\..\src\coreload\libhost.cc" />
     <ClCompile Include="..\..\src\coreload\logging\logging.cc" />
+    <ClCompile Include="..\..\src\coreload\runtime_config.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\coreload\arguments.h" />
     <ClInclude Include="..\..\src\coreload\common\longfile.h" />
     <ClInclude Include="..\..\src\coreload\common\pal.h" />
     <ClInclude Include="..\..\src\coreload\common\path_utils.h" />
     <ClInclude Include="..\..\src\coreload\coreclr.h" />
+    <ClInclude Include="..\..\src\coreload\deps_entry.h" />
+    <ClInclude Include="..\..\src\coreload\deps_format.h" />
+    <ClInclude Include="..\..\src\coreload\deps_resolver.h" />
+    <ClInclude Include="..\..\src\coreload\fx_muxer.h" />
+    <ClInclude Include="..\..\src\coreload\fx_ver.h" />
+    <ClInclude Include="..\..\src\coreload\hostpolicy.h" />
+    <ClInclude Include="..\..\src\coreload\libhost.h" />
     <ClInclude Include="..\..\src\coreload\logging\logging.h" />
+    <ClInclude Include="..\..\src\coreload\runtime_config.h" />
     <ClInclude Include="..\..\src\coreload\targetver.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

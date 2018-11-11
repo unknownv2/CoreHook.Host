@@ -9,13 +9,13 @@ namespace coreload {
     pal::proc_t pal::get_symbol(dll_t library, const char* name) {
         auto result = ::GetProcAddress(library, name);
         if (result == nullptr) {
-            logging::info(_X("Probed for and did not resolve library symbol %s"), name);
+            coreload::logging::logger::instance().error(
+                _X("Probed for and did not resolve library symbol %s"), name);
         }
         return result;
     }
 
     bool pal::load_library(const string_t* in_path, dll_t* dll) {
-
         string_t path = *in_path;
 
         if (LongFile::IsPathNotFullyQualified(path)) {
@@ -26,6 +26,10 @@ namespace coreload {
         
 
         return true;
+    }
+
+    void pal::unload_library(dll_t library) {
+        // No-op. On windows, we pin the library, so it can't be unloaded.
     }
 
     bool pal::realpath(pal::string_t* path, bool skip_error_logging) {
@@ -83,6 +87,4 @@ namespace coreload {
 
         return false;
     }
-
-
 }

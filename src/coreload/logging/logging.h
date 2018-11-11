@@ -2,6 +2,7 @@
 #define LOGGING_H
 
 #include "pal.h"
+#include <mutex>
 
 namespace coreload {
 
@@ -18,6 +19,24 @@ namespace coreload {
                 static logger inst;
                 return inst;
             }
+
+            template <typename... Args>
+            void trace(const pal::char_t* format, Args... args) {
+                log(_X("TRACE"), format, args...);
+            }
+            template <typename... Args>
+            void error(const pal::char_t* format, Args... args) {
+                log(_X("ERROR"), format, args...);
+            }
+
+        private:
+            void log(
+                const pal::char_t* severity,
+                const pal::char_t* format,
+                ...); 
+
+            std::mutex mutex_log_;
+
         };
     }
 }
