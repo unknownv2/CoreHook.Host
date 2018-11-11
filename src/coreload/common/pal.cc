@@ -4,12 +4,12 @@ namespace coreload {
 
     namespace pal {
 
-        pal::string to_lower(const coreload::pal::string& in)
+        pal::string_t to_lower(const coreload::pal::string_t& in)
         {
             return nullptr;
         }
 
-        pal::string to_string(int value)
+        pal::string_t to_string(int value)
         {
             return std::to_wstring(value);
         }

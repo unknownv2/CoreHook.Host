@@ -19,12 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\coreload\common\longfile.cc" />
     <ClCompile Include="..\..\src\coreload\common\pal.cc" />
+    <ClCompile Include="..\..\src\coreload\common\pal.windows.cc" />
+    <ClCompile Include="..\..\src\coreload\common\path_utils.cc" />
+    <ClCompile Include="..\..\src\coreload\coreclr.cc" />
     <ClCompile Include="..\..\src\coreload\coreload.cc" />
     <ClCompile Include="..\..\src\coreload\logging\logging.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\coreload\common\longfile.h" />
     <ClInclude Include="..\..\src\coreload\common\pal.h" />
+    <ClInclude Include="..\..\src\coreload\common\path_utils.h" />
+    <ClInclude Include="..\..\src\coreload\coreclr.h" />
     <ClInclude Include="..\..\src\coreload\logging\logging.h" />
     <ClInclude Include="..\..\src\coreload\targetver.h" />
   </ItemGroup>
@@ -107,6 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,6 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,6 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,6 +162,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
