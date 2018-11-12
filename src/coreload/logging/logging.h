@@ -19,6 +19,15 @@ namespace coreload {
                 static logger inst;
                 return inst;
             }
+            template <typename... Args>
+            void info(const pal::char_t* format, Args... args) {
+                log(_X("INFO"), format, args...);
+            }
+
+            template <typename... Args>
+            void warning(const pal::char_t* format, Args... args) {
+                log(_X("WARNING"), format, args...);
+            }
 
             template <typename... Args>
             void verbose(const pal::char_t* format, Args... args) {

@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cassert>
+#include <vector>
 
 #if defined(_WIN32)
 
@@ -25,6 +27,9 @@
 #define LIBCORECLR_FILENAME (LIB_PREFIX _X("coreclr"))
 #define LIBCORECLR_NAME MAKE_LIBNAME("coreclr")
 
+#define LIBHOSTPOLICY_FILENAME (LIB_PREFIX _X("hostpolicy"))
+#define LIBHOSTPOLICY_NAME MAKE_LIBNAME("hostpolicy")
+
 namespace coreload {
 
     namespace pal {
@@ -43,11 +48,18 @@ namespace coreload {
         inline void err_vprintf(const char_t* format, va_list vl) { 
             ::vfwprintf(stderr, format, vl); ::fputwc(_X('\n'), stderr);
         }
-
-#else
+        bool get_own_executable_path(string_t* recv);
+        inline string_t exe_suffix() { return _X(".exe"); }
+        inline int cstrcasecmp(const char* str1, const char* str2) { return ::_stricmp(str1, str2); }
+        inline int strcmp(const char_t* str1, const char_t* str2) { return ::wcscmp(str1, str2); }
+        inline int strcasecmp(const char_t* str1, const char_t* str2) { return ::_wcsicmp(str1, str2); }
+        inline int strncmp(const char_t* str1, const char_t* str2, int len) { return ::wcsncmp(str1, str2, len); }
+        inline int strncasecmp(const char_t* str1, const char_t* str2, int len) { return ::_wcsnicmp(str1, str2, len); }
+#else   
         
 #endif
-
+        bool pal_utf8string(const pal::string_t& str, std::vector<char>* out);
+        bool pal_clrstring(const pal::string_t& str, std::vector<char>* out);
         proc_t get_symbol(dll_t library, const char* name);
         bool load_library(const string_t* path, dll_t* dll);
         bool realpath(string_t* path, bool skip_error_logging = false);

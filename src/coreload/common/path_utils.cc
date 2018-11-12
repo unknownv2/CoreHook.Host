@@ -87,4 +87,37 @@ namespace coreload {
         *num = (unsigned)std::stoul(str);
         return true;
     }
+
+    bool ends_with(const pal::string_t& value, const pal::string_t& suffix, bool match_case) {
+        auto cmp = match_case ? pal::strcmp : pal::strcasecmp;
+        return (value.size() >= suffix.size()) &&
+            cmp(value.c_str() + value.size() - suffix.size(), suffix.c_str()) == 0;
+    }
+
+    pal::string_t strip_executable_ext(const pal::string_t& filename) {
+        pal::string_t exe_suffix = pal::exe_suffix();
+        if (exe_suffix.empty()) {
+            return filename;
+        }
+
+        if (ends_with(filename, exe_suffix, false)) {
+            // We need to strip off the old extension
+            pal::string_t result(filename);
+            result.erase(result.size() - exe_suffix.size());
+            return result;
+        }
+
+        return filename;
+    }
+    pal::string_t strip_file_ext(const pal::string_t& path) {
+        if (path.empty()) {
+            return path;
+        }
+        size_t sep_pos = path.rfind(_X("/\\"));
+        size_t dot_pos = path.rfind(_X('.'));
+        if (sep_pos != pal::string_t::npos && sep_pos > dot_pos) {
+            return path;
+        }
+        return path.substr(0, dot_pos);
+    }
 }

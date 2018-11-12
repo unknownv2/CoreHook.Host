@@ -29,9 +29,11 @@
     <ClCompile Include="..\..\src\coreload\deps_entry.cc" />
     <ClCompile Include="..\..\src\coreload\deps_format.cc" />
     <ClCompile Include="..\..\src\coreload\deps_resolver.cc" />
+    <ClCompile Include="..\..\src\coreload\fx_definition.cc" />
     <ClCompile Include="..\..\src\coreload\fx_muxer.cc" />
     <ClCompile Include="..\..\src\coreload\fx_ver.cc" />
     <ClCompile Include="..\..\src\coreload\hostpolicy.cc" />
+    <ClCompile Include="..\..\src\coreload\host_startup_info.cc" />
     <ClCompile Include="..\..\src\coreload\libhost.cc" />
     <ClCompile Include="..\..\src\coreload\logging\logging.cc" />
     <ClCompile Include="..\..\src\coreload\runtime_config.cc" />
@@ -43,9 +45,12 @@
     <ClInclude Include="..\..\src\coreload\common\pal.h" />
     <ClInclude Include="..\..\src\coreload\common\path_utils.h" />
     <ClInclude Include="..\..\src\coreload\coreclr.h" />
+    <ClInclude Include="..\..\src\coreload\coreload.h" />
     <ClInclude Include="..\..\src\coreload\deps_entry.h" />
     <ClInclude Include="..\..\src\coreload\deps_format.h" />
     <ClInclude Include="..\..\src\coreload\deps_resolver.h" />
+    <ClInclude Include="..\..\src\coreload\fx_definition.h" />
+    <ClInclude Include="..\..\src\coreload\host_startup_info.h" />
     <ClInclude Include="..\..\src\coreload\status_code.h" />
     <ClInclude Include="..\..\src\coreload\fx_muxer.h" />
     <ClInclude Include="..\..\src\coreload\fx_ver.h" />

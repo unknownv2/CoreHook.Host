@@ -2,6 +2,7 @@
 #include "logging.h"
 #include "longfile.h"
 #include "path_utils.h"
+
 #include <cassert>
 
 namespace coreload {
@@ -66,8 +67,6 @@ namespace coreload {
             GetModuleFileNameWrapper(*dll, &buf);
             logging::info(_X("Loaded library from %s"), buf.c_str());
         }
-
-        return true;
 
         return true;
     }
@@ -144,5 +143,24 @@ namespace coreload {
 
     bool pal::is_path_rooted(const string_t& path) {
         return path.length() >= 2 && path[1] == L':';
+    }
+    bool pal::get_own_executable_path(string_t* recv) {
+        return GetModuleFileNameWrapper(NULL, recv);
+    }
+    bool pal::pal_clrstring(const pal::string_t& str, std::vector<char>* out) {
+        return pal_utf8string(str, out);
+    }
+    bool pal::pal_utf8string(const pal::string_t& str, std::vector<char>* out)
+    {
+        out->clear();
+
+        // Pass -1 as we want explicit null termination in the char buffer.
+        size_t size = ::WideCharToMultiByte(CP_UTF8, 0, str.c_str(), -1, nullptr, 0, nullptr, nullptr);
+        if (size == 0)
+        {
+            return false;
+        }
+        out->resize(size, '\0');
+        return ::WideCharToMultiByte(CP_UTF8, 0, str.c_str(), -1, out->data(), out->size(), nullptr, nullptr) != 0;
     }
 }
