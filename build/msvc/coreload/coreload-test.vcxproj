@@ -50,7 +50,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\tests\coreload_test.cc" />
-    <ClCompile Include="..\..\..\tests\logging_test.cpp" />
+    <ClCompile Include="..\..\..\tests\logging_test.cc" />
     <ClCompile Include="..\..\..\tests\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
