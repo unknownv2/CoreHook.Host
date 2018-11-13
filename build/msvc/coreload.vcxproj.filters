@@ -200,13 +200,13 @@
     <ClInclude Include="..\..\src\coreload\json\casablanca\include\cpprest\details\SafeInt3.hpp">
       <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\coreload\framework_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\coreload\common\trace.h">
-      <Filter>Source Files\common</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\coreload\common\utils.h">
-      <Filter>Source Files\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\framework_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
