@@ -1,9 +1,9 @@
 #include "deps_entry.h"
-#include "path_utils.h"
+#include "utils.h"
 #include "logging.h"
 
 namespace coreload {
-    bool DepsEntry::to_path(const pal::string_t& base, bool look_in_base, pal::string_t* str) const {
+    bool deps_entry_t::to_path(const pal::string_t& base, bool look_in_base, pal::string_t* str) const {
         pal::string_t& candidate = *str;
 
         candidate.clear();
@@ -15,7 +15,7 @@ namespace coreload {
 
         // Entry relative path contains '/' separator, sanitize it to use
         // platform separator. Perf: avoid extra copy if it matters.
-        pal::string_t pal_relative_path = asset_.relative_path_;
+        pal::string_t pal_relative_path = asset.relative_path;
         if (_X('/') != DIR_SEPARATOR) {
             replace_char(&pal_relative_path, _X('/'), DIR_SEPARATOR);
         }
@@ -51,9 +51,9 @@ namespace coreload {
     // Returns:
     //    If the file exists in the path relative to the "base" directory.
     //
-    bool DepsEntry::to_dir_path(const pal::string_t& base, pal::string_t* str) const {
-        if (asset_type_ == AssetTypes::RESOURCES) {
-            pal::string_t pal_relative_path = asset_.relative_path_;
+    bool deps_entry_t::to_dir_path(const pal::string_t& base, pal::string_t* str) const {
+        if (asset_type == asset_types::resources) {
+            pal::string_t pal_relative_path = asset.relative_path;
             if (_X('/') != DIR_SEPARATOR) {
                 replace_char(&pal_relative_path, _X('/'), DIR_SEPARATOR);
             }
@@ -71,7 +71,7 @@ namespace coreload {
 
             pal::string_t base_ietf_dir = base;
             append_path(&base_ietf_dir, ietf.c_str());
-            logging::logger::instance().verbose(_X("Detected a resource asset, will query dir/ietf-tag/resource base: %s asset: %s"), base_ietf_dir.c_str(), asset_.name.c_str());
+            logging::logger::instance().verbose(_X("Detected a resource asset, will query dir/ietf-tag/resource base: %s asset: %s"), base_ietf_dir.c_str(), asset.name.c_str());
             return to_path(base_ietf_dir, true, str);
         }
         return to_path(base, true, str);
@@ -89,7 +89,7 @@ namespace coreload {
     // Returns:
     //    If the file exists in the path relative to the "base" directory.
     //
-    bool DepsEntry::to_rel_path(const pal::string_t& base, pal::string_t* str) const {
+    bool deps_entry_t::to_rel_path(const pal::string_t& base, pal::string_t* str) const {
         return to_path(base, false, str);
     }
 
@@ -105,7 +105,7 @@ namespace coreload {
     // Returns:
     //    If the file exists in the path relative to the "base" directory.
     //
-    bool DepsEntry::to_full_path(const pal::string_t& base, pal::string_t* str) const {
+    bool deps_entry_t::to_full_path(const pal::string_t& base, pal::string_t* str) const {
         str->clear();
 
         // Base directory must be present to obtain full path
@@ -115,12 +115,12 @@ namespace coreload {
 
         pal::string_t new_base = base;
 
-        if (library_path_.empty()) {
-            append_path(&new_base, library_name_.c_str());
-            append_path(&new_base, library_version_.c_str());
+        if (library_path.empty()) {
+            append_path(&new_base, library_name.c_str());
+            append_path(&new_base, library_version.c_str());
         }
         else {
-            append_path(&new_base, library_path_.c_str());
+            append_path(&new_base, library_path.c_str());
         }
 
         return to_rel_path(new_base, str);

@@ -34,6 +34,14 @@ namespace coreload {
             const char** argv,
             const char* managed_assembly_path,
             unsigned int* exit_code);
+
+        pal::hresult_t create_delegate(
+            host_handle_t host_handle,
+            domain_id_t domain_id,
+            const char* assembly_name,
+            const char* type_name,
+            const char* method_name,
+            void** delegate);
     }
 
 }

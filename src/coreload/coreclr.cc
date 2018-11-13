@@ -1,7 +1,7 @@
 
 #include <cassert>
 #include "coreclr.h"
-#include "path_utils.h"
+#include "utils.h"
 
 namespace coreload {
     static pal::dll_t g_coreclr = nullptr;
@@ -30,11 +30,18 @@ namespace coreload {
         const char** argv,
         const char* managedAssemblyPath,
         unsigned int* exitCode);
-
+    // Prototype of the coreclr_create_delegate function from coreclr.dll
+    typedef pal::hresult_t(STDMETHODCALLTYPE *coreclr_create_delegate_fn)(
+        coreclr::host_handle_t hostHandle,
+        unsigned int domainId,
+        const char* assemblyName,
+        const char* typeName,
+        const char* methodName,
+        void** delegate);
     static coreclr_shutdown_fn coreclr_shutdown = nullptr;
     static coreclr_initialize_fn coreclr_initialize = nullptr;
     static coreclr_execute_assembly_fn coreclr_execute_assembly = nullptr;
-
+    static coreclr_create_delegate_fn coreclr_create_delegate = nullptr;
     bool coreclr::bind(const pal::string_t& libcoreclr_path) {
         assert(g_coreclr == nullptr);
         pal::string_t coreclr_dll_path(libcoreclr_path);
@@ -47,6 +54,7 @@ namespace coreload {
         coreclr_initialize = (coreclr_initialize_fn)pal::get_symbol(g_coreclr, "coreclr_initialize");
         coreclr_shutdown = (coreclr_shutdown_fn)pal::get_symbol(g_coreclr, "coreclr_shutdown_2");
         coreclr_execute_assembly = (coreclr_execute_assembly_fn)pal::get_symbol(g_coreclr, "coreclr_execute_assembly");
+        coreclr_create_delegate = (coreclr_create_delegate_fn)pal::get_symbol(g_coreclr, "coreclr_create_delegate");
 
         return true;
     }
@@ -102,5 +110,18 @@ namespace coreload {
             argv,
             managed_assembly_path,
             exit_code);
+    }
+
+    pal::hresult_t coreclr::create_delegate(
+        host_handle_t host_handle,
+        domain_id_t domain_id,
+        const char* assembly_name,
+        const char* type_name,
+        const char* method_name,
+        void** delegate)
+    {
+        assert(g_coreclr != nullptr && coreclr_create_delegate != nullptr);
+
+        return coreclr_create_delegate(host_handle, domain_id, assembly_name, type_name, method_name, delegate);
     }
 }

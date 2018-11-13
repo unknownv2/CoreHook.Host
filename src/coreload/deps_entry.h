@@ -14,39 +14,39 @@ namespace coreload {
 
         deps_asset_t(const pal::string_t& name, const pal::string_t& relative_path_, const version_t& assembly_version, const version_t& file_version)
             : name(name)
-            , relative_path_(get_replaced_char(relative_path_, _X('\\'), _X('/'))) // Deps file does not follow spec. It uses '\\', should use '/'
-            , assembly_version_(assembly_version)
-            , file_version_(file_version) { }
+            , relative_path(get_replaced_char(relative_path_, _X('\\'), _X('/'))) // Deps file does not follow spec. It uses '\\', should use '/'
+            , assembly_version(assembly_version)
+            , file_version(file_version) { }
 
         pal::string_t name;
-        pal::string_t relative_path_;
-        version_t assembly_version_;
-        version_t file_version_;
+        pal::string_t relative_path;
+        version_t assembly_version;
+        version_t file_version;
     };
 
-    class DepsEntry {
+    class deps_entry_t {
     public:
-        enum AssetTypes {
-            RUNTIME = 0,
-            RESOURCES,
-            NATIVE,
-            COUNT
+        enum asset_types {
+            runtime = 0,
+            resources,
+            native,
+            count
         };
 
-        static const std::array<const pal::char_t*, DepsEntry::AssetTypes::COUNT> s_known_asset_types_;
+        static const std::array<const pal::char_t*, deps_entry_t::asset_types::count> s_known_asset_types;
 
-        pal::string_t deps_file_;
-        pal::string_t library_type_;
-        pal::string_t library_name_;
-        pal::string_t library_version_;
-        pal::string_t library_hash_;
-        pal::string_t library_path_;
-        pal::string_t library_hash_path_;
-        pal::string_t runtime_store_manifest_list_;
-        AssetTypes asset_type_;
-        deps_asset_t asset_;
-        bool is_serviceable_;
-        bool is_rid_specific_;
+        pal::string_t deps_file;
+        pal::string_t library_type;
+        pal::string_t library_name;
+        pal::string_t library_version;
+        pal::string_t library_hash;
+        pal::string_t library_path;
+        pal::string_t library_hash_path;
+        pal::string_t runtime_store_manifest_list;
+        asset_types asset_type;
+        deps_asset_t asset;
+        bool is_serviceable;
+        bool is_rid_specific;
 
         // Given a "base" dir, yield the filepath within this directory or relative to this directory based on "look_in_base"
         bool to_path(const pal::string_t& base, bool look_in_base, pal::string_t* str) const;

@@ -4,10 +4,10 @@
 #include "pal.h"
 
 namespace coreload {
-    class HostStartupInfo {
+    class host_startup_info_t {
     public:
-        HostStartupInfo() {}
-        HostStartupInfo(
+        host_startup_info_t() {}
+        host_startup_info_t(
             const pal::char_t* host_path_value,
             const pal::char_t* dotnet_root_value,
             const pal::char_t* app_path_value);

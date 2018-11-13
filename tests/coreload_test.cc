@@ -1,7 +1,7 @@
 #include "pch.h"
-
+#include "coreload.h"
 
 TEST(TestCaseName, TestName) {
-  EXPECT_EQ(1, 1);
-  EXPECT_TRUE(true);
+    int result = Initialize();
+    EXPECT_EQ(0, result);
 }

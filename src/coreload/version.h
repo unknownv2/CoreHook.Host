@@ -2,7 +2,7 @@
 #define VERSION_H
 
 #include "pal.h"
-#include "path_utils.h"
+#include "utils.h"
 
 namespace coreload {
 

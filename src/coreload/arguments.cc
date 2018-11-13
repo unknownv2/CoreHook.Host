@@ -1,10 +1,10 @@
 #include "arguments.h"
-#include "path_utils.h"
+#include "utils.h"
 #include "coreclr.h"
 
 namespace coreload {
 
-    Arguments::Arguments() :
+    arguments_t::arguments_t() :
         managed_application(_X("")),
         host_path(_X("")),
         app_root(_X("")),

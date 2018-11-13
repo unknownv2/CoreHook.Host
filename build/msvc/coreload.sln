@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coreload", "coreload.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coreload-dll", "coreload-dll.vcxproj", "{AFF94999-1DD3-4C11-AE5E-21999065ABF1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coreload-test", "coreload-test.vcxproj", "{5DF925F6-FFC1-4C0A-8074-00CBF81C1F7D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coreload-test", "coreload\coreload-test.vcxproj", "{5DF925F6-FFC1-4C0A-8074-00CBF81C1F7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,7 @@ Global
 		{0AAA1420-B5EA-49E2-8661-77A41FD249CA}.Release|x86.ActiveCfg = Release|Win32
 		{0AAA1420-B5EA-49E2-8661-77A41FD249CA}.Release|x86.Build.0 = Release|Win32
 		{AFF94999-1DD3-4C11-AE5E-21999065ABF1}.Debug|x64.ActiveCfg = Debug|x64
+		{AFF94999-1DD3-4C11-AE5E-21999065ABF1}.Debug|x64.Build.0 = Debug|x64
 		{AFF94999-1DD3-4C11-AE5E-21999065ABF1}.Debug|x86.ActiveCfg = Debug|Win32
 		{AFF94999-1DD3-4C11-AE5E-21999065ABF1}.Debug|x86.Build.0 = Debug|Win32
 		{AFF94999-1DD3-4C11-AE5E-21999065ABF1}.Release|x64.ActiveCfg = Release|x64
@@ -33,6 +34,7 @@ Global
 		{AFF94999-1DD3-4C11-AE5E-21999065ABF1}.Release|x86.ActiveCfg = Release|Win32
 		{AFF94999-1DD3-4C11-AE5E-21999065ABF1}.Release|x86.Build.0 = Release|Win32
 		{5DF925F6-FFC1-4C0A-8074-00CBF81C1F7D}.Debug|x64.ActiveCfg = Debug|x64
+		{5DF925F6-FFC1-4C0A-8074-00CBF81C1F7D}.Debug|x64.Build.0 = Debug|x64
 		{5DF925F6-FFC1-4C0A-8074-00CBF81C1F7D}.Debug|x86.ActiveCfg = Debug|Win32
 		{5DF925F6-FFC1-4C0A-8074-00CBF81C1F7D}.Debug|x86.Build.0 = Debug|Win32
 		{5DF925F6-FFC1-4C0A-8074-00CBF81C1F7D}.Release|x64.ActiveCfg = Release|x64

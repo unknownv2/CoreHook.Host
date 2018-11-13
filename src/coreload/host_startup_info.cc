@@ -2,11 +2,11 @@
 #include "pal.h"
 #include "status_code.h"
 #include "logging.h"
-#include "path_utils.h"
+#include "utils.h"
 
 namespace coreload {
 
-    HostStartupInfo::HostStartupInfo(
+    host_startup_info_t::host_startup_info_t(
         const pal::char_t* host_path_value,
         const pal::char_t* dotnet_root_value,
         const pal::char_t* app_path_value)
@@ -27,7 +27,7 @@ namespace coreload {
         return false;
     }
 
-    int HostStartupInfo::parse(
+    int host_startup_info_t::parse(
         int argc,
         const pal::char_t* argv[]) {
         // Get host_path
@@ -48,19 +48,19 @@ namespace coreload {
         return 0;
     }
 
-    const bool HostStartupInfo::is_valid() const {
+    const bool host_startup_info_t::is_valid() const {
         return (
             !host_path.empty() &&
             !dotnet_root.empty() &&
             !app_path.empty());
     }
 
-    const pal::string_t HostStartupInfo::get_app_name() const {
+    const pal::string_t host_startup_info_t::get_app_name() const {
         return get_filename(strip_file_ext(app_path));
     }
 
     /*static*/
-    int HostStartupInfo::get_host_path(int argc, const pal::char_t* argv[], pal::string_t* host_path) {
+    int host_startup_info_t::get_host_path(int argc, const pal::char_t* argv[], pal::string_t* host_path) {
         // Attempt to get host_path from argv[0] as to allow for hosts located elsewhere
         if (argc >= 1) {
             host_path->assign(argv[0]);
