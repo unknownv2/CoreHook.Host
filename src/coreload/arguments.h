@@ -92,6 +92,9 @@ namespace coreload {
         pal::string_t core_servicing;
         std::vector<pal::string_t> probe_paths;
         pal::string_t managed_application;
+        const char* assembly_name;
+        const char* type_name;
+        const char* method_name;
         std::vector<pal::string_t> global_shared_stores;
         pal::string_t dotnet_shared_store;
         std::vector<pal::string_t> env_shared_store;

@@ -746,19 +746,19 @@ namespace coreload {
         int32_t buffer_size,
         int32_t* required_buffer_size)
     {
-        pal::string_t opts_fx_version = _X("--fx-version");
-        pal::string_t opts_roll_fwd_on_no_candidate_fx = _X("--roll-forward-on-no-candidate-fx");
-        pal::string_t opts_deps_file = _X("--depsfile");
-        pal::string_t opts_probe_path = _X("--additionalprobingpath");
-        pal::string_t opts_additional_deps = _X("--additional-deps");
-        pal::string_t opts_runtime_config = _X("--runtimeconfig");
+       // pal::string_t opts_fx_version = _X("--fx-version");
+       // pal::string_t opts_roll_fwd_on_no_candidate_fx = _X("--roll-forward-on-no-candidate-fx");
+       // pal::string_t opts_deps_file = _X("--depsfile");
+       // pal::string_t opts_probe_path = _X("--additionalprobingpath");
+       // pal::string_t opts_additional_deps = _X("--additional-deps");
+       // pal::string_t opts_runtime_config = _X("--runtimeconfig");
 
         pal::string_t fx_version_specified;
         pal::string_t roll_fwd_on_no_candidate_fx;
-        pal::string_t deps_file = get_last_known_arg(opts, opts_deps_file, _X(""));
+        pal::string_t deps_file = _X("");//get_last_known_arg(opts, opts_deps_file, _X(""));
         pal::string_t additional_deps;
-        pal::string_t runtime_config = get_last_known_arg(opts, opts_runtime_config, _X(""));
-        std::vector<pal::string_t> spec_probe_paths = opts.count(opts_probe_path) ? opts.find(opts_probe_path)->second : std::vector<pal::string_t>();
+        pal::string_t runtime_config = _X("");// get_last_known_arg(opts, opts_runtime_config, _X(""));
+        std::vector<pal::string_t> spec_probe_paths = std::vector<pal::string_t>();// opts.count(opts_probe_path) ? opts.find(opts_probe_path)->second : std::vector<pal::string_t>();
 
         if (!deps_file.empty() && !pal::realpath(&deps_file))
         {
@@ -783,9 +783,9 @@ namespace coreload {
         // These settings are only valid for framework-dependent apps
         if (is_framework_dependent)
         {
-            fx_version_specified = get_last_known_arg(opts, opts_fx_version, _X(""));
-            roll_fwd_on_no_candidate_fx = get_last_known_arg(opts, opts_roll_fwd_on_no_candidate_fx, _X(""));
-            additional_deps = get_last_known_arg(opts, opts_additional_deps, _X(""));
+            fx_version_specified = _X("");// get_last_known_arg(opts, opts_fx_version, _X(""));
+            roll_fwd_on_no_candidate_fx = _X("");// get_last_known_arg(opts, opts_roll_fwd_on_no_candidate_fx, _X(""));
+            additional_deps = _X("");// get_last_known_arg(opts, opts_additional_deps, _X(""));
         }
 
         // 'Roll forward on no candidate fx' is set to 1 (roll_fwd_on_no_candidate_fx_option::minor) by default. It can be changed through:
@@ -884,7 +884,6 @@ namespace coreload {
         {
             return StatusCode::LibHostInitFailure;
         }
-
 
         deps_resolver_t resolver(g_init, arguments);
 
@@ -1129,7 +1128,6 @@ namespace coreload {
             return StatusCode::CoreClrInitFailure;
         }
 
-
         // Initialize clr strings for arguments
         std::vector<std::vector<char>> argv_strs(arguments.app_argc);
         std::vector<const char*> argv(arguments.app_argc);
@@ -1152,22 +1150,24 @@ namespace coreload {
             trace::info(_X("Launch host: %s, app: %s, argc: %d, args: %s"), arguments.host_path.c_str(),
                 arguments.managed_application.c_str(), arguments.app_argc, arg_str.c_str());
         }
-        typedef int (STDMETHODCALLTYPE MainMethodFp)(const void * loaderPtr);
+        typedef int (STDMETHODCALLTYPE MainMethodFp)();
         MainMethodFp *pfnDelegate = NULL;
         hr = coreclr::create_delegate(
             host_handle,
             domain_id,
-            "AssemblyResolver.Core.Library",
-            "AssemblyResolver.Core.Library.Library",
-            "TestRestSharp",
+            arguments.assembly_name,
+            arguments.type_name,
+            arguments.method_name,
             reinterpret_cast<VOID**>(&pfnDelegate));
         if (!SUCCEEDED(hr))
         {
             trace::error(_X("Failed to create delegate for managed library, HRESULT: 0x%X"), hr);
             return StatusCode::CoreClrExeFailure;
         }
-        BYTE* data = new BYTE[0x10];
-        pfnDelegate(data);
+
+        // Execute the .NET native delegate
+        pfnDelegate();
+
         hr = coreclr::shutdown(host_handle, domain_id, (int*)&exit_code);
         if (!SUCCEEDED(hr))
         {
@@ -1177,7 +1177,6 @@ namespace coreload {
         coreclr::unload();
 
         return exit_code;
-        return rc;
     }
 
     /**
