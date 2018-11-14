@@ -709,8 +709,9 @@ namespace coreload {
 
         corehost_init_t init(host_command, host_info, deps_file, additional_deps_serialized, probe_realpaths, mode, fx_definitions);
         auto initf = init.get_host_init_data();
-        hostpolicy_init_t g_init;
-        g_init = hostpolicy_init_t();
+
+        // Re-initialize global state in case of re-entry
+        hostpolicy_init_t g_init = hostpolicy_init_t();
 
         if (!hostpolicy_init_t::init(&initf, &g_init))
         {
@@ -867,11 +868,12 @@ namespace coreload {
             //FX_PRODUCT_VERSION
             clr_library_version.data()
         };
+
         if (!clrjit_path.empty())
         {
             pal::pal_clrstring(clrjit_path, &clrjit_path_cstr);
-            //property_keys.push_back("JIT_PATH");
-           // property_values.push_back(clrjit_path_cstr.data());
+            property_keys.push_back("JIT_PATH");
+            property_values.push_back(clrjit_path_cstr.data());
         }
 
         bool set_app_paths = false;
