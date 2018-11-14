@@ -510,63 +510,6 @@ namespace coreload {
         return 0;
     }
 
-#define HOST_POLICY_PKG_REL_DIR "runtimes/win-x64/native"
-#define HOST_POLICY_PKG_NAME "runtimes.win-x64.Microsoft.NETCore.DotNetHostPolicy"
-#define HOST_POLICY_PKG_VER "3.0.0-preview1-26822-0"
-    /**
-    * Given a directory and a version, find if the package relative
-    *     dir under the given directory contains hostpolicy.dll
-    */
-    bool to_hostpolicy_package_dir(const pal::string_t& dir, const pal::string_t& version, pal::string_t* candidate)
-    {
-        assert(!version.empty());
-
-        candidate->clear();
-
-        // Ensure the relative dir contains platform directory separators.
-        pal::string_t rel_dir = _STRINGIFY(HOST_POLICY_PKG_REL_DIR);
-        if (DIR_SEPARATOR != '/')
-        {
-            replace_char(&rel_dir, '/', DIR_SEPARATOR);
-        }
-
-        // Construct the path to directory containing hostpolicy.
-        pal::string_t path = dir;
-        append_path(&path, _STRINGIFY(HOST_POLICY_PKG_NAME)); // package name
-        append_path(&path, version.c_str());                  // package version
-        append_path(&path, rel_dir.c_str());                  // relative dir containing hostpolicy library
-
-                                                              // Check if "path" contains the required library.
-        if (!library_exists_in_dir(path, LIBHOSTPOLICY_NAME, nullptr))
-        {
-            trace::verbose(_X("Did not find %s in directory %s"), LIBHOSTPOLICY_NAME, path.c_str());
-            return false;
-        }
-
-        // "path" contains the directory containing hostpolicy library.
-        *candidate = path;
-
-        trace::verbose(_X("Found %s in directory %s"), LIBHOSTPOLICY_NAME, path.c_str());
-        return true;
-    }
-
-    /**
-    * Given a nuget version, detect if a serviced hostpolicy is available at
-    *   platform servicing location.
-    */
-    bool hostpolicy_exists_in_svc(const pal::string_t& version, pal::string_t* resolved_dir)
-    {
-        if (version.empty())
-        {
-            return false;
-        }
-
-        pal::string_t svc_dir;
-        pal::get_default_servicing_directory(&svc_dir);
-        append_path(&svc_dir, _X("pkgs"));
-        return to_hostpolicy_package_dir(svc_dir, version, resolved_dir);
-    }
-
     bool fx_muxer_t::resolve_hostpolicy_dir(
         host_mode_t mode,
         const pal::string_t& dotnet_root,
@@ -589,12 +532,6 @@ namespace coreload {
         {
             trace::warning(_X("Dependency manifest %s does not contain an entry for %s"),
                 resolved_deps.c_str(), _X("placeholder"));
-        }
-
-        // Check if the given version of the hostpolicy exists in servicing.
-        if (hostpolicy_exists_in_svc(version, impl_dir))
-        {
-            return true;
         }
 
         // Get the expected directory that would contain hostpolicy.
@@ -795,13 +732,6 @@ namespace coreload {
         bool breadcrumbs_enabled = false;
         if (breadcrumbs_enabled)
         {
-            pal::string_t policy_name = _STRINGIFY(HOST_POLICY_PKG_NAME);
-            pal::string_t policy_version = _STRINGIFY(HOST_POLICY_PKG_VER);
-
-            // Always insert the hostpolicy that the code is running on.
-            breadcrumbs.insert(policy_name);
-            breadcrumbs.insert(policy_name + _X(",") + policy_version);
-
             if (!resolver.resolve_probe_paths(&probe_paths, &breadcrumbs))
             {
                 return StatusCode::ResolverResolveFailure;
