@@ -562,7 +562,6 @@ namespace coreload {
             return true;
         }
 
-
         return false;
     }
 
@@ -579,19 +578,12 @@ namespace coreload {
         int32_t buffer_size,
         int32_t* required_buffer_size)
     {
-       // pal::string_t opts_fx_version = _X("--fx-version");
-       // pal::string_t opts_roll_fwd_on_no_candidate_fx = _X("--roll-forward-on-no-candidate-fx");
-       // pal::string_t opts_deps_file = _X("--depsfile");
-       // pal::string_t opts_probe_path = _X("--additionalprobingpath");
-       // pal::string_t opts_additional_deps = _X("--additional-deps");
-       // pal::string_t opts_runtime_config = _X("--runtimeconfig");
-
         pal::string_t fx_version_specified;
         pal::string_t roll_fwd_on_no_candidate_fx;
-        pal::string_t deps_file = _X("");//get_last_known_arg(opts, opts_deps_file, _X(""));
         pal::string_t additional_deps;
-        pal::string_t runtime_config = _X("");// get_last_known_arg(opts, opts_runtime_config, _X(""));
-        std::vector<pal::string_t> spec_probe_paths = std::vector<pal::string_t>();// opts.count(opts_probe_path) ? opts.find(opts_probe_path)->second : std::vector<pal::string_t>();
+        pal::string_t deps_file = _X("");
+        pal::string_t runtime_config = _X("");
+        std::vector<pal::string_t> spec_probe_paths = std::vector<pal::string_t>();
 
         if (!deps_file.empty() && !pal::realpath(&deps_file))
         {
@@ -616,9 +608,9 @@ namespace coreload {
         // These settings are only valid for framework-dependent apps
         if (is_framework_dependent)
         {
-            fx_version_specified = _X("");// get_last_known_arg(opts, opts_fx_version, _X(""));
-            roll_fwd_on_no_candidate_fx = _X("");// get_last_known_arg(opts, opts_roll_fwd_on_no_candidate_fx, _X(""));
-            additional_deps = _X("");// get_last_known_arg(opts, opts_additional_deps, _X(""));
+            fx_version_specified = _X("");
+            roll_fwd_on_no_candidate_fx = _X("");
+            additional_deps = _X("");
         }
 
         // 'Roll forward on no candidate fx' is set to 1 (roll_fwd_on_no_candidate_fx_option::minor) by default. It can be changed through:
@@ -729,21 +721,10 @@ namespace coreload {
         // Setup breadcrumbs. Breadcrumbs are not enabled for API calls because they do not execute
         // the app and may be re-entry
         probe_paths_t probe_paths;
-        std::unordered_set<pal::string_t> breadcrumbs;
-        bool breadcrumbs_enabled = false;
-        if (breadcrumbs_enabled)
+    
+        if (!resolver.resolve_probe_paths(&probe_paths, nullptr))
         {
-            if (!resolver.resolve_probe_paths(&probe_paths, &breadcrumbs))
-            {
-                return StatusCode::ResolverResolveFailure;
-            }
-        }
-        else
-        {
-            if (!resolver.resolve_probe_paths(&probe_paths, nullptr))
-            {
-                return StatusCode::ResolverResolveFailure;
-            }
+            return StatusCode::ResolverResolveFailure;
         }
 
         pal::string_t clr_path = probe_paths.coreclr;
@@ -786,9 +767,9 @@ namespace coreload {
 
         // Build CoreCLR properties
         std::vector<const char*> property_keys = {
-            "TRUSTED_PLATFORM_ASSEMBLIES",
-            "NATIVE_DLL_SEARCH_DIRECTORIES",
-            // "PLATFORM_RESOURCE_ROOTS",
+             "TRUSTED_PLATFORM_ASSEMBLIES",
+             "NATIVE_DLL_SEARCH_DIRECTORIES",
+             "PLATFORM_RESOURCE_ROOTS",
              "AppDomainCompatSwitch",
              // Workaround: mscorlib does not resolve symlinks for AppContext.BaseDirectory dotnet/coreclr/issues/2128
              "APP_CONTEXT_BASE_DIRECTORY",
@@ -854,7 +835,7 @@ namespace coreload {
             // NATIVE_DLL_SEARCH_DIRECTORIES
             native_dirs_cstr.data(),
             // PLATFORM_RESOURCE_ROOTS
-           // resources_dirs_cstr.data(),
+            resources_dirs_cstr.data(),
             // AppDomainCompatSwitch
             "UseLatestBehaviorWhenTFMNotSpecified",
             // APP_CONTEXT_BASE_DIRECTORY
@@ -907,9 +888,8 @@ namespace coreload {
             }
             else
             {
-                // assert(out_host_command_result != nullptr);
-                //pal::clr_palstring(property_values[1], out_host_command_result);
-                exit_code = 0; // Success
+                // Success
+                exit_code = 0;
             }
 
             return exit_code;
