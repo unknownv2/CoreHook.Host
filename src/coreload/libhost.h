@@ -420,7 +420,6 @@ namespace coreload {
     void get_runtime_config_paths(const pal::string_t& path, const pal::string_t& name, pal::string_t* config_file, pal::string_t* dev_config_file);
 
     host_mode_t detect_operating_mode(const host_startup_info_t& host_info);
-    bool hostpolicy_exists_in_svc(pal::string_t* resolved_dir);
 
     void try_patch_roll_forward_in_dir(const pal::string_t& cur_dir, const fx_ver_t& start_ver, pal::string_t* max_str);
     void try_prerelease_roll_forward_in_dir(const pal::string_t& cur_dir, const fx_ver_t& start_ver, pal::string_t* max_str);
