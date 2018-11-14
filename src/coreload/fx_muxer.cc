@@ -474,26 +474,6 @@ namespace coreload {
             }
         }
     }
-    std::vector<host_option> fx_muxer_t::get_known_opts(bool exec_mode, host_mode_t mode, bool get_all_options)
-    {
-        std::vector<host_option> known_opts = { { _X("--additionalprobingpath"), _X("<path>"), _X("Path containing probing policy and assemblies to probe for") } };
-        if (get_all_options || exec_mode || mode == host_mode_t::split_fx || mode == host_mode_t::apphost)
-        {
-            known_opts.push_back({ _X("--depsfile"), _X("<path>"), _X("Path to <application>.deps.json file") });
-            known_opts.push_back({ _X("--runtimeconfig"), _X("<path>"), _X("Path to <application>.runtimeconfig.json file") });
-        }
-
-        if (get_all_options || mode == host_mode_t::muxer || mode == host_mode_t::apphost)
-        {
-            // If mode=host_mode_t::apphost, these are only used when the app is framework-dependent.
-            known_opts.push_back({ _X("--fx-version"), _X("<version>"), _X("Version of the installed Shared Framework to use to run the application.") });
-            known_opts.push_back({ _X("--roll-forward-on-no-candidate-fx"), _X(""), _X("Roll forward on no candidate shared framework is enabled") });
-            known_opts.push_back({ _X("--additional-deps"), _X("<path>"), _X("Path to additonal deps.json file") });
-        }
-
-        return known_opts;
-    }
-
 
     int read_config(
         fx_definition_t& app,
@@ -789,7 +769,6 @@ namespace coreload {
             // set default core lib path
             return CoreHostLibMissingFailure;
         }
-
 
         corehost_init_t init(host_command, host_info, deps_file, additional_deps_serialized, probe_realpaths, mode, fx_definitions);
         auto initf = init.get_host_init_data();
@@ -1094,5 +1073,4 @@ namespace coreload {
 
         return exit_code;
     }
-
 }

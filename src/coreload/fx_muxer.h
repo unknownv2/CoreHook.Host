@@ -30,10 +30,6 @@ namespace coreload {
             int32_t* required_buffer_size);
     private:
 
-        static std::vector<host_option> get_known_opts(
-            bool exec_mode,
-            host_mode_t mode,
-            bool get_all_options = false); 
         static bool resolve_hostpolicy_dir(
             host_mode_t mode,
             const pal::string_t& dotnet_root,
