@@ -814,14 +814,6 @@ namespace coreload {
             pal::pal_clrstring(resolver.get_coreclr_library_version(), &clr_library_version);
         }
 
-        std::string app_base_str(app_base_cstr.begin(), app_base_cstr.end());
-        std::string fx_deps_str2(fx_deps.begin(), fx_deps.end());
-        std::string probe_directories_str(probe_directories.begin(), probe_directories.end());
-        std::string deps_str(deps.begin(), deps.end());
-        std::string tpa_paths_str(tpa_paths_cstr.begin(), tpa_paths_cstr.end());
-        std::string native_dirs_str(native_dirs_cstr.begin(), native_dirs_cstr.end());
-        std::string resources_dirs_str(resources_dirs_cstr.begin(), resources_dirs_cstr.end());
-
         std::vector<const char*> property_values = {
             // TRUSTED_PLATFORM_ASSEMBLIES
             tpa_paths_cstr.data(),
@@ -950,6 +942,7 @@ namespace coreload {
             trace::info(_X("Launch host: %s, app: %s, argc: %d, args: %s"), arguments.host_path.c_str(),
                 arguments.managed_application.c_str(), arguments.app_argc, arg_str.c_str());
         }
+
         typedef int (STDMETHODCALLTYPE MainMethodFp)();
         MainMethodFp *pfnDelegate = NULL;
         hr = coreclr::create_delegate(
