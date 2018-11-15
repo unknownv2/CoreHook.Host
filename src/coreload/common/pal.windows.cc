@@ -524,6 +524,4 @@ namespace coreload {
         // On Windows, paths are case-insensitive
         return (strcasecmp(path1.c_str(), path2.c_str()) == 0);
     }
-
-
 }

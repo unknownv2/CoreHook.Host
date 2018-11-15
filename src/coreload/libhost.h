@@ -58,7 +58,6 @@ namespace coreload {
         strarr_t fx_dirs;
         strarr_t fx_requested_versions;
         strarr_t fx_found_versions;
-        const pal::char_t* host_command;
         const pal::char_t* host_info_host_path;
         const pal::char_t* host_info_dotnet_root;
         const pal::char_t* host_info_app_path;
@@ -91,11 +90,10 @@ namespace coreload {
     static_assert(offsetof(host_interface_t, fx_dirs) == 20 * sizeof(size_t), "Struct offset breaks backwards compatibility");
     static_assert(offsetof(host_interface_t, fx_requested_versions) == 22 * sizeof(size_t), "Struct offset breaks backwards compatibility");
     static_assert(offsetof(host_interface_t, fx_found_versions) == 24 * sizeof(size_t), "Struct offset breaks backwards compatibility");
-    static_assert(offsetof(host_interface_t, host_command) == 26 * sizeof(size_t), "Struct offset breaks backwards compatibility");
-    static_assert(offsetof(host_interface_t, host_info_host_path) == 27 * sizeof(size_t), "Struct offset breaks backwards compatibility");
-    static_assert(offsetof(host_interface_t, host_info_dotnet_root) == 28 * sizeof(size_t), "Struct offset breaks backwards compatibility");
-    static_assert(offsetof(host_interface_t, host_info_app_path) == 29 * sizeof(size_t), "Struct offset breaks backwards compatibility");
-    static_assert(sizeof(host_interface_t) == 30 * sizeof(size_t), "Did you add static asserts for the newly added fields?");
+    static_assert(offsetof(host_interface_t, host_info_host_path) == 26 * sizeof(size_t), "Struct offset breaks backwards compatibility");
+    static_assert(offsetof(host_interface_t, host_info_dotnet_root) == 27 * sizeof(size_t), "Struct offset breaks backwards compatibility");
+    static_assert(offsetof(host_interface_t, host_info_app_path) == 28 * sizeof(size_t), "Struct offset breaks backwards compatibility");
+    static_assert(sizeof(host_interface_t) == 29 * sizeof(size_t), "Did you add static asserts for the newly added fields?");
 
 #define HOST_INTERFACE_LAYOUT_VERSION_HI 0x16041101 // YYMMDD:nn always increases when layout breaks compat.
 #define HOST_INTERFACE_LAYOUT_VERSION_LO sizeof(host_interface_t)
@@ -125,21 +123,18 @@ namespace coreload {
         std::vector<const pal::char_t*> m_fx_requested_versions_cstr;
         std::vector<pal::string_t> m_fx_found_versions;
         std::vector<const pal::char_t*> m_fx_found_versions_cstr;
-        const pal::string_t m_host_command;
         const pal::string_t m_host_info_host_path;
         const pal::string_t m_host_info_dotnet_root;
         const pal::string_t m_host_info_app_path;
     public:
         corehost_init_t(
-            const pal::string_t& host_command,
             const host_startup_info_t& host_info,
             const pal::string_t& deps_file,
             const pal::string_t& additional_deps_serialized,
             const std::vector<pal::string_t>& probe_paths,
             const host_mode_t mode,
             const fx_definition_vector_t& fx_definitions)
-            : m_host_command(host_command)
-            , m_host_info_host_path(host_info.host_path)
+            : m_host_info_host_path(host_info.host_path)
             , m_host_info_dotnet_root(host_info.dotnet_root)
             , m_host_info_app_path(host_info.app_path)
             , m_deps_file(deps_file)
@@ -239,8 +234,6 @@ namespace coreload {
 
             hi.fx_found_versions.len = m_fx_found_versions_cstr.size();
             hi.fx_found_versions.arr = m_fx_found_versions_cstr.data();
-
-            hi.host_command = m_host_command.c_str();
 
             hi.host_info_host_path = m_host_info_host_path.c_str();
             hi.host_info_dotnet_root = m_host_info_dotnet_root.c_str();
@@ -377,11 +370,6 @@ namespace coreload {
                     fx = new fx_definition_t(fx_name, fx_dir, fx_requested_ver, fx_found_ver);
                     init->fx_definitions.push_back(std::unique_ptr<fx_definition_t>(fx));
                 }
-            }
-
-            if (input->version_lo >= offsetof(host_interface_t, host_command) + sizeof(input->host_command))
-            {
-                init->host_command = input->host_command;
             }
 
             if (input->version_lo >= offsetof(host_interface_t, host_info_host_path) + sizeof(input->host_info_host_path))

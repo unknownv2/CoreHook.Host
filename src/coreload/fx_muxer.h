@@ -18,16 +18,9 @@ namespace coreload {
     public:
         static int read_config_and_execute(
             const arguments_t& arguments,
-            const pal::string_t& host_command,
             const host_startup_info_t& host_info,
             const pal::string_t& app_candidate,
-            const opt_map_t& opts,
-            int new_argc,
-            const pal::char_t** new_argv,
-            host_mode_t mode,
-            pal::char_t out_buffer[],
-            int32_t buffer_size,
-            int32_t* required_buffer_size);
+            host_mode_t mode);
     private:
 
         static bool resolve_hostpolicy_dir(

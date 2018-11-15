@@ -567,16 +567,9 @@ namespace coreload {
 
     int fx_muxer_t::read_config_and_execute(
         const arguments_t& arguments,
-        const pal::string_t& host_command,
         const host_startup_info_t& host_info,
         const pal::string_t& app_candidate,
-        const opt_map_t& opts,
-        int new_argc,
-        const pal::char_t** new_argv,
-        host_mode_t mode,
-        pal::char_t out_buffer[],
-        int32_t buffer_size,
-        int32_t* required_buffer_size)
+        host_mode_t mode)
     {
         pal::string_t fx_version_specified;
         pal::string_t roll_fwd_on_no_candidate_fx;
@@ -699,7 +692,7 @@ namespace coreload {
             return CoreHostLibMissingFailure;
         }
 
-        corehost_init_t init(host_command, host_info, deps_file, additional_deps_serialized, probe_realpaths, mode, fx_definitions);
+        corehost_init_t init(host_info, deps_file, additional_deps_serialized, probe_realpaths, mode, fx_definitions);
         auto initf = init.get_host_init_data();
 
         // Re-initialize global state in case of re-entry
