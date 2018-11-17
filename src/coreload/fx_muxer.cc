@@ -20,6 +20,7 @@ namespace coreload {
 
     coreclr::domain_id_t  fx_muxer_t::m_domain_id = 0;
     coreclr::host_handle_t fx_muxer_t::m_handle = nullptr;
+
     /**
     * When the framework is not found, display detailed error message
     *   about available frameworks and installation of new framework.
@@ -705,6 +706,11 @@ namespace coreload {
         }
 
         arguments.probe_paths = app_config.get_probe_paths();
+        // If the deps.json path is empty, set it using the application name
+        if (arguments.deps_path.empty()) {
+            arguments.deps_path = get_deps_from_app_binary(arguments.managed_application);
+        }
+
         deps_resolver_t resolver(g_init, arguments);
 
         pal::string_t resolver_errors;
