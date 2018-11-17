@@ -99,7 +99,7 @@ namespace coreload {
                 const auto& arr = probe_paths->second.as_array();
                 for (auto iter = arr.rbegin(); iter != arr.rend(); iter++)
                 {
-                    m_probe_paths.push_front(iter->as_string());
+                    m_probe_paths.insert(m_probe_paths.begin(), iter->as_string());
                 }
             }
         }
@@ -386,7 +386,7 @@ namespace coreload {
         return m_is_framework_dependent;
     }
 
-    const std::list<pal::string_t>& runtime_config_t::get_probe_paths() const
+    const std::vector<pal::string_t>& runtime_config_t::get_probe_paths() const
     {
         return m_probe_paths;
     }

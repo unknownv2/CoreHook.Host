@@ -86,7 +86,7 @@ namespace coreload {
         const pal::string_t& get_fx_version() const;
         const pal::string_t& get_fx_name() const;
         const pal::string_t& get_tfm() const;
-        const std::list<pal::string_t>& get_probe_paths() const;
+        const std::vector<pal::string_t>& get_probe_paths() const;
         bool get_patch_roll_fwd() const;
         roll_fwd_on_no_candidate_fx_option get_roll_fwd_on_no_candidate_fx() const;
         void force_roll_fwd_on_no_candidate_fx(roll_fwd_on_no_candidate_fx_option value);
@@ -105,7 +105,7 @@ namespace coreload {
         runtime_config_framework_t m_fx_readonly;   // the settings that can't be changed by lower layers (Step #4)
         std::vector<std::string> m_prop_keys;
         std::vector<std::string> m_prop_values;
-        std::list<pal::string_t> m_probe_paths;
+        std::vector<pal::string_t> m_probe_paths;
 
         pal::string_t m_tfm;
         pal::string_t m_fx_name;

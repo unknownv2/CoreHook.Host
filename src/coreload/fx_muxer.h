@@ -17,9 +17,8 @@ namespace coreload {
     {
     public:
         static int read_config_and_execute(
-            const arguments_t& arguments,
+            arguments_t& arguments,
             const host_startup_info_t& host_info,
-            const pal::string_t& app_candidate,
             host_mode_t mode);
     private:
 

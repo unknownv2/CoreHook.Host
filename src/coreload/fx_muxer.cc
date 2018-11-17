@@ -566,9 +566,8 @@ namespace coreload {
     }
 
     int fx_muxer_t::read_config_and_execute(
-        const arguments_t& arguments,
+        arguments_t& arguments,
         const host_startup_info_t& host_info,
-        const pal::string_t& app_candidate,
         host_mode_t mode)
     {
         pal::string_t fx_version_specified;
@@ -589,7 +588,7 @@ namespace coreload {
         auto app = new fx_definition_t();
         fx_definitions.push_back(std::unique_ptr<fx_definition_t>(app));
 
-        int rc = read_config(*app, app_candidate, runtime_config);
+        int rc = read_config(*app, arguments.managed_application, runtime_config);
         if (rc)
         {
             return rc;
@@ -686,7 +685,7 @@ namespace coreload {
             (is_framework_dependent ? _X("framework-dependent") : _X("self-contained")), config.get_path().c_str());
 
         pal::string_t impl_dir;
-        if (!resolve_hostpolicy_dir(mode, host_info.dotnet_root, fx_definitions, app_candidate, deps_file, fx_version_specified, probe_realpaths, &impl_dir))
+        if (!resolve_hostpolicy_dir(mode, host_info.dotnet_root, fx_definitions, arguments.managed_application, deps_file, fx_version_specified, probe_realpaths, &impl_dir))
         {
             // set default core lib path
             return CoreHostLibMissingFailure;
@@ -703,6 +702,7 @@ namespace coreload {
             return StatusCode::LibHostInitFailure;
         }
 
+        arguments.probe_paths = app_config.get_probe_paths();
         deps_resolver_t resolver(g_init, arguments);
 
         pal::string_t resolver_errors;
@@ -918,29 +918,6 @@ namespace coreload {
         {
             trace::error(_X("Failed to initialize CoreCLR, HRESULT: 0x%X"), hr);
             return StatusCode::CoreClrInitFailure;
-        }
-
-        // Initialize clr strings for arguments
-        std::vector<std::vector<char>> argv_strs(arguments.app_argc);
-        std::vector<const char*> argv(arguments.app_argc);
-        for (int i = 0; i < arguments.app_argc; i++)
-        {
-            pal::pal_clrstring(arguments.app_argv[i], &argv_strs[i]);
-            argv[i] = argv_strs[i].data();
-        }
-
-        if (trace::is_enabled())
-        {
-            pal::string_t arg_str;
-            for (int i = 0; i < argv.size(); i++)
-            {
-                pal::string_t cur;
-                pal::clr_palstring(argv[i], &cur);
-                arg_str.append(cur);
-                arg_str.append(_X(","));
-            }
-            trace::info(_X("Launch host: %s, app: %s, argc: %d, args: %s"), arguments.host_path.c_str(),
-                arguments.managed_application.c_str(), arguments.app_argc, arg_str.c_str());
         }
 
         typedef int (STDMETHODCALLTYPE MainMethodFp)();
