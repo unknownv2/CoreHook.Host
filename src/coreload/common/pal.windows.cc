@@ -148,7 +148,7 @@ namespace coreload {
         bool get_wow_mode_program_files(pal::string_t* recv)
     {
 #if defined(_TARGET_AMD64_)
-        pal::char_t* env_key = _X("ProgramFiles(x86)");
+        const pal::char_t* env_key = _X("ProgramFiles(x86)");
 #else
         const pal::char_t* env_key = _X("ProgramFiles");
 #endif

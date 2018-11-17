@@ -196,8 +196,7 @@ namespace coreload {
 #elif _TARGET_ARM64_
         return _X("arm64");
 #else
-        return _X("Unknown");
-//#error "Unknown target"
+#error "Unknown target"
 #endif
     }
 
