@@ -27,8 +27,7 @@ StartCoreCLRInternal(
 // Host the .NET Core runtime in the current application
 DllApi
 int
-StartCoreCLR(
-    const CoreLoadArgs *args) {
+StartCoreCLR(const CoreLoadArgs *args) {
     return StartCoreCLRInternal(args->BinaryFilePath, args->Verbose, args->CoreRootPath, args->CoreLibrariesPath);
 }
 
@@ -87,8 +86,7 @@ ExecuteAssemblyClassFunction(
 // Execute a function located in a .NET assembly by creating a native delegate
 DllApi
 int
-ExecuteAssemblyFunction(
-    const AssemblyFunctionCall *args) {
+ExecuteAssemblyFunction(const AssemblyFunctionCall *args) {
     return ExecuteAssemblyClassFunction(args->Assembly, args->Class, args->Function, args->Arguments);
 }
 
