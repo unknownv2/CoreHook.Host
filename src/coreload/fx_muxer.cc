@@ -18,6 +18,8 @@
 
 namespace coreload {
 
+    coreclr::domain_id_t  fx_muxer_t::m_domain_id = 0;
+    coreclr::host_handle_t fx_muxer_t::m_handle = nullptr;
     /**
     * When the framework is not found, display detailed error message
     *   about available frameworks and installation of new framework.
@@ -920,32 +922,61 @@ namespace coreload {
             return StatusCode::CoreClrInitFailure;
         }
 
+        fx_muxer_t::m_handle = host_handle;
+        fx_muxer_t::m_domain_id = domain_id;
+
         typedef int (STDMETHODCALLTYPE MainMethodFp)();
         MainMethodFp *pfnDelegate = NULL;
-        hr = coreclr::create_delegate(
+        create_delegate(arguments.assembly_name,
+            arguments.type_name,
+            arguments.method_name, reinterpret_cast<void**>(&pfnDelegate));
+
+        // Execute the .NET native delegate
+        pfnDelegate();
+
+        exit_code = unload_runtime();
+
+        return exit_code;
+    }
+
+    int fx_muxer_t::create_delegate(
+        const char* assembly_name,
+        const char* type_name,
+        const char* method_name,
+        void** pfnDelegate)
+    {
+        int exit_code = 0;
+        auto host_handle = fx_muxer_t::m_handle;
+        auto domain_id = fx_muxer_t::m_domain_id;
+
+        auto hr = coreclr::create_delegate(
             host_handle,
             domain_id,
-            arguments.assembly_name,
-            arguments.type_name,
-            arguments.method_name,
-            reinterpret_cast<VOID**>(&pfnDelegate));
+            assembly_name,
+            type_name,
+            method_name,
+            reinterpret_cast<VOID**>(pfnDelegate));
         if (!SUCCEEDED(hr))
         {
             trace::error(_X("Failed to create delegate for managed library, HRESULT: 0x%X"), hr);
             return StatusCode::CoreClrExeFailure;
         }
 
-        // Execute the .NET native delegate
-        pfnDelegate();
+        return exit_code;
+    }
+    int fx_muxer_t::unload_runtime() {
 
-        hr = coreclr::shutdown(host_handle, domain_id, (int*)&exit_code);
+        int exit_code = 0;
+        auto host_handle = fx_muxer_t::m_handle;
+        auto domain_id = fx_muxer_t::m_domain_id;
+
+        auto hr = coreclr::shutdown(host_handle, domain_id, (int*)&exit_code);
         if (!SUCCEEDED(hr))
         {
             trace::warning(_X("Failed to shut down CoreCLR, HRESULT: 0x%X"), hr);
         }
 
         coreclr::unload();
-
         return exit_code;
     }
 }
