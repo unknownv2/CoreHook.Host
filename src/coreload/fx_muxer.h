@@ -18,7 +18,10 @@ namespace coreload {
     class fx_muxer_t
     {
     public:
-        static int read_config_and_execute(
+        static coreclr::host_handle_t m_handle;
+        static coreclr::domain_id_t m_domain_id;
+
+        static int initialize_clr(
             arguments_t& arguments,
             const host_startup_info_t& host_info,
             host_mode_t mode);
@@ -30,12 +33,7 @@ namespace coreload {
             void** pfnDelegate);
 
         static int unload_runtime();
-        static coreclr::host_handle_t m_handle;
-        static coreclr::domain_id_t m_domain_id;
     private:
-
-
-
         static bool resolve_hostpolicy_dir(
             host_mode_t mode,
             const pal::string_t& dotnet_root,

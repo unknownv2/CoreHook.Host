@@ -567,7 +567,7 @@ namespace coreload {
         return false;
     }
 
-    int fx_muxer_t::read_config_and_execute(
+    int fx_muxer_t::initialize_clr(
         arguments_t& arguments,
         const host_startup_info_t& host_info,
         host_mode_t mode)
@@ -924,19 +924,8 @@ namespace coreload {
 
         fx_muxer_t::m_handle = host_handle;
         fx_muxer_t::m_domain_id = domain_id;
-
-        typedef int (STDMETHODCALLTYPE MainMethodFp)();
-        MainMethodFp *pfnDelegate = NULL;
-        create_delegate(arguments.assembly_name,
-            arguments.type_name,
-            arguments.method_name, reinterpret_cast<void**>(&pfnDelegate));
-
-        // Execute the .NET native delegate
-        pfnDelegate();
-
-        exit_code = unload_runtime();
-
-        return exit_code;
+  
+        return StatusCode::Success;
     }
 
     int fx_muxer_t::create_delegate(
@@ -945,7 +934,6 @@ namespace coreload {
         const char* method_name,
         void** pfnDelegate)
     {
-        int exit_code = 0;
         auto host_handle = fx_muxer_t::m_handle;
         auto domain_id = fx_muxer_t::m_domain_id;
 
@@ -962,8 +950,9 @@ namespace coreload {
             return StatusCode::CoreClrExeFailure;
         }
 
-        return exit_code;
+        return StatusCode::Success;
     }
+
     int fx_muxer_t::unload_runtime() {
 
         int exit_code = 0;
