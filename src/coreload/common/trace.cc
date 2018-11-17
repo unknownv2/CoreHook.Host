@@ -11,7 +11,7 @@ namespace coreload {
     //
     void trace::setup()
     {
-        /*
+        
         // Read trace environment variable
         pal::string_t trace_str;
         if (!pal::getenv(_X("COREHOST_TRACE"), &trace_str))
@@ -24,7 +24,7 @@ namespace coreload {
         {
             trace::enable();
             trace::info(_X("Tracing enabled"));
-        }*/
+        }
     }
 
     void trace::enable()
