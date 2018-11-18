@@ -48,9 +48,6 @@
     <ClCompile Include="..\..\src\coreload\logging\logging.cc">
       <Filter>Source Files\logging</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\coreload\common\pal.cc">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\coreload\coreclr.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
