@@ -8,7 +8,7 @@ namespace coreload {
     class runtime_config_t;
     class fx_definition_t;
     struct fx_ver_t;
-    struct host_startup_info_t;
+    class host_startup_info_t;
 
     int read_config(
         fx_definition_t& app,
