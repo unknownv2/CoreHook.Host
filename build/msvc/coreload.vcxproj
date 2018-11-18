@@ -26,6 +26,7 @@
     <ClCompile Include="..\..\src\coreload\common\trace.cc" />
     <ClCompile Include="..\..\src\coreload\common\utils.cc" />
     <ClCompile Include="..\..\src\coreload\coreclr.cc" />
+    <ClCompile Include="..\..\src\coreload\corehost.cc" />
     <ClCompile Include="..\..\src\coreload\deps_entry.cc" />
     <ClCompile Include="..\..\src\coreload\deps_format.cc" />
     <ClCompile Include="..\..\src\coreload\deps_resolver.cc" />
@@ -50,6 +51,7 @@
     <ClInclude Include="..\..\src\coreload\common\trace.h" />
     <ClInclude Include="..\..\src\coreload\common\utils.h" />
     <ClInclude Include="..\..\src\coreload\coreclr.h" />
+    <ClInclude Include="..\..\src\coreload\corehost.h" />
     <ClInclude Include="..\..\src\coreload\coreload.h" />
     <ClInclude Include="..\..\src\coreload\deps_entry.h" />
     <ClInclude Include="..\..\src\coreload\deps_format.h" />

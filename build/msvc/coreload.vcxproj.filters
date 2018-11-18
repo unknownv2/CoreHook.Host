@@ -114,6 +114,9 @@
     <ClCompile Include="..\..\src\coreload\framework_info.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\coreload\corehost.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\coreload\logging\logging.h">
@@ -198,6 +201,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\coreload\common\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\coreload\corehost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

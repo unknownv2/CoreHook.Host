@@ -13,5 +13,6 @@
 #include "status_code.h"
 #include "arguments.h"
 #include "libhost.h"
+#include "corehost.h"
 
 #endif // CORELOAD_H
