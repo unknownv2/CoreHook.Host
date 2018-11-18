@@ -571,7 +571,10 @@ namespace coreload {
     int fx_muxer_t::initialize_clr(
         arguments_t& arguments,
         const host_startup_info_t& host_info,
-        host_mode_t mode)
+        host_mode_t mode,
+        coreclr::domain_id_t& domain_id,
+        coreclr::host_handle_t& host_handle
+        )
     {
         pal::string_t fx_version_specified;
         pal::string_t roll_fwd_on_no_candidate_fx;
@@ -911,9 +914,7 @@ namespace coreload {
         std::vector<char> managed_application_path;
         pal::pal_clrstring(arguments.host_path, &managed_application_path);
 
-        // Initialize CoreCLR
-        coreclr::host_handle_t host_handle;
-        coreclr::domain_id_t domain_id;
+        // Initialize CoreCLR  
         auto hr = coreclr::initialize(
             managed_application_path.data(),
             "clrhost",
@@ -926,52 +927,7 @@ namespace coreload {
         {
             trace::error(_X("Failed to initialize CoreCLR, HRESULT: 0x%X"), hr);
             return StatusCode::CoreClrInitFailure;
-        }
-
-        fx_muxer_t::m_handle = host_handle;
-        fx_muxer_t::m_domain_id = domain_id;
-  
+        }  
         return StatusCode::Success;
-    }
-
-    int fx_muxer_t::create_delegate(
-        const char* assembly_name,
-        const char* type_name,
-        const char* method_name,
-        void** pfnDelegate)
-    {
-        auto host_handle = fx_muxer_t::m_handle;
-        auto domain_id = fx_muxer_t::m_domain_id;
-
-        auto hr = coreclr::create_delegate(
-            host_handle,
-            domain_id,
-            assembly_name,
-            type_name,
-            method_name,
-            reinterpret_cast<VOID**>(pfnDelegate));
-        if (!SUCCEEDED(hr))
-        {
-            trace::error(_X("Failed to create delegate for managed library, HRESULT: 0x%X"), hr);
-            return StatusCode::CoreClrExeFailure;
-        }
-
-        return StatusCode::Success;
-    }
-
-    int fx_muxer_t::unload_runtime() {
-
-        int exit_code = 0;
-        auto host_handle = fx_muxer_t::m_handle;
-        auto domain_id = fx_muxer_t::m_domain_id;
-
-        auto hr = coreclr::shutdown(host_handle, domain_id, (int*)&exit_code);
-        if (!SUCCEEDED(hr))
-        {
-            trace::warning(_X("Failed to shut down CoreCLR, HRESULT: 0x%X"), hr);
-        }
-
-        coreclr::unload();
-        return exit_code;
     }
 }

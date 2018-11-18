@@ -18,7 +18,7 @@ StartCoreCLRInternal(
     arguments.managed_application = dllPath;
     arguments.app_root = get_directory(arguments.managed_application);
 
-    return fx_muxer_t::initialize_clr(
+    return corehost::initialize_clr(
         arguments,
         startup_info,
         host_mode_t::muxer);
@@ -39,7 +39,7 @@ CreateAssemblyDelegate(
     const char *type_name,
     const char *method_name,
     void **pfnDelegate) {
-    return fx_muxer_t::create_delegate(
+    return corehost::create_delegate(
         assembly_name,
         type_name,
         method_name,
@@ -94,7 +94,7 @@ ExecuteAssemblyFunction(const AssemblyFunctionCall *args) {
 DllApi
 int
 UnloadRuntime(void) {
-    return fx_muxer_t::unload_runtime();
+    return corehost::unload_runtime();
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,

@@ -24,15 +24,10 @@ namespace coreload {
         static int initialize_clr(
             arguments_t& arguments,
             const host_startup_info_t& host_info,
-            host_mode_t mode);
+            host_mode_t mode,
+            coreclr::domain_id_t& domain_id,
+            coreclr::host_handle_t& host_handle);
 
-        static int create_delegate(
-            const char* assembly,
-            const char* type,
-            const char* method_name,
-            void** pfnDelegate);
-
-        static int unload_runtime();
     private:
         static bool resolve_hostpolicy_dir(
             host_mode_t mode,
