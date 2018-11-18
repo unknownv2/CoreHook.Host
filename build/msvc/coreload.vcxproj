@@ -26,7 +26,6 @@
     <ClCompile Include="..\..\src\coreload\common\trace.cc" />
     <ClCompile Include="..\..\src\coreload\common\utils.cc" />
     <ClCompile Include="..\..\src\coreload\coreclr.cc" />
-    <ClCompile Include="..\..\src\coreload\coreload.cc" />
     <ClCompile Include="..\..\src\coreload\deps_entry.cc" />
     <ClCompile Include="..\..\src\coreload\deps_format.cc" />
     <ClCompile Include="..\..\src\coreload\deps_resolver.cc" />

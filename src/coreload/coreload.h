@@ -14,6 +14,4 @@
 #include "arguments.h"
 #include "libhost.h"
 
-int Initialize();
-
 #endif // CORELOAD_H
