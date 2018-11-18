@@ -12,7 +12,7 @@ StartCoreCLRInternal(
     }
     host_startup_info_t startup_info;
     arguments_t arguments;
-    // Used to the find dotnet dependencies
+  
     startup_info.dotnet_root = coreRoot;
 
     arguments.managed_application = dllPath;
@@ -55,10 +55,10 @@ ExecuteAssemblyClassFunction(
     const char *entry,
     const unsigned char *arguments) {
     int exit_code = StatusCode::HostApiFailed;
-    typedef void (STDMETHODCALLTYPE MainMethodFp)(const VOID* args);
-    MainMethodFp *pfnDelegate = nullptr;
+    typedef void (STDMETHODCALLTYPE LoadMethodFp)(const void* args);
+    LoadMethodFp *pfnLoadDelegate = nullptr;
 
-    if (SUCCEEDED((exit_code = CreateAssemblyDelegate(assembly, type, entry, reinterpret_cast<PVOID*>(&pfnDelegate))))) {
+    if (SUCCEEDED((exit_code = CreateAssemblyDelegate(assembly, type, entry, reinterpret_cast<PVOID*>(&pfnLoadDelegate))))) {
         RemoteEntryInfo entryInfo = { 0 };
         entryInfo.HostPID = GetCurrentProcessId();
 
@@ -69,12 +69,12 @@ ExecuteAssemblyClassFunction(
             entryInfo.Args.UserData = remoteArgs->UserData;
             entryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
 
-            pfnDelegate(&entryInfo);
+            pfnLoadDelegate(&entryInfo);
         }
         else {
             // No arguments were supplied to pass to the delegate function so pass an
             // empty string
-            pfnDelegate(nullptr);
+            pfnLoadDelegate(nullptr);
         }
     }
     else {
