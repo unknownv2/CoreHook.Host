@@ -949,7 +949,7 @@ ExecuteAssemblyFunction (
 // Shutdown the .NET Core runtime
 DllApi
 HRESULT
-UnloadRunTime(
+UnloadRuntime(
     VOID
     ) 
 {

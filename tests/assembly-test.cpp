@@ -106,5 +106,5 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     EXPECT_EQ(NOERROR, ExecuteAssemblyFunction(&assemblyFunctionCall));
 
     // Unload the AppDomain and stop the host
-    EXPECT_EQ(NOERROR, UnloadRunTime());
+    EXPECT_EQ(NOERROR, UnloadRuntime());
 }
