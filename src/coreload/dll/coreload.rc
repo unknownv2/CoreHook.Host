@@ -1,0 +1,13 @@
+#include "..\..\src\coreload\dll\targetver.h"
+
+#define VER_FILEFLAGSMASK   0x3fL
+#define VER_FILEFLAGS       0x0L
+#define VER_FILEOS          0x00040004L
+#define VER_FILETYPE        0x00000002L
+#define VER_FILESUBTYPE     0x00000000L
+#define VER_INTERNALNAME_STR        "coreload" VER_CORELOAD_BITS
+#define VER_ORIGINALFILENAME_STR    "coreload" VER_CORELOAD_BITS ".dll"
+#define VER_FILEDESCRIPTION_STR     "CoreCLR Host Module"
+#define VER_COMPANYNAME_STR         "Unknown Corporation"
+#define VER_LEGALCOPYRIGHT_STR      "Copyright (c) Unknown Corporation. No rights reserved."
+#include "common.ver"
