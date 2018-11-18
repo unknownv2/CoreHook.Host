@@ -1,4 +1,7 @@
 #pragma once
+#ifndef COREHOST_H
+#define COREHOST_H
+
 #include "libhost.h"
 #include "coreclr.h"
 
@@ -22,3 +25,5 @@ namespace coreload {
         static int unload_runtime();
     };
 }
+
+#endif // COREHOST_H
