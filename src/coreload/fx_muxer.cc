@@ -1,25 +1,12 @@
 #include <cassert>
 #include "arguments.h"
-#include "cpprest/json.h"
-#include "deps_format.h"
 #include "status_code.h"
 #include "framework_info.h"
-#include "fx_definition.h"
 #include "fx_muxer.h"
-#include "fx_ver.h"
-#include "host_startup_info.h"
-#include "libhost.h"
-#include "pal.h"
-#include "runtime_config.h"
-#include "trace.h"
-#include "utils.h"
 #include "deps_resolver.h"
 #include "coreclr.h"
 
 namespace coreload {
-
-    coreclr::domain_id_t  fx_muxer_t::m_domain_id = 0;
-    coreclr::host_handle_t fx_muxer_t::m_handle = nullptr;
 
     /**
     * When the framework is not found, display detailed error message
@@ -914,7 +901,7 @@ namespace coreload {
         std::vector<char> managed_application_path;
         pal::pal_clrstring(arguments.host_path, &managed_application_path);
 
-        // Initialize CoreCLR  
+        // Initialize CoreCLR
         auto hr = coreclr::initialize(
             managed_application_path.data(),
             "clrhost",

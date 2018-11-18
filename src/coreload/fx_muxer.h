@@ -18,9 +18,6 @@ namespace coreload {
     class fx_muxer_t
     {
     public:
-        static coreclr::host_handle_t m_handle;
-        static coreclr::domain_id_t m_domain_id;
-
         static int initialize_clr(
             arguments_t& arguments,
             const host_startup_info_t& host_info,
@@ -38,12 +35,14 @@ namespace coreload {
             const pal::string_t& specified_fx_version,
             const std::vector<pal::string_t>& probe_realpaths,
             pal::string_t* impl_dir);
+
         static fx_ver_t resolve_framework_version(
             const std::vector<fx_ver_t>& version_list,
             const pal::string_t& fx_ver,
             const fx_ver_t& specified,
             bool patch_roll_fwd,
             roll_fwd_on_no_candidate_fx_option roll_fwd_on_no_candidate_fx);
+
         static fx_definition_t* resolve_fx(
             host_mode_t mode,
             const runtime_config_t& config,

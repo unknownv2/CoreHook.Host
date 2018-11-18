@@ -1,4 +1,3 @@
-
 #include <cassert>
 #include "coreclr.h"
 #include "utils.h"

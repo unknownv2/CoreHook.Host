@@ -35,5 +35,4 @@ namespace coreload {
     {
         m_deps.parse(true, m_deps_file, graph);
     }
-
 }

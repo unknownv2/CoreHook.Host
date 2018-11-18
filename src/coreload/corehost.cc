@@ -1,15 +1,12 @@
 #include "arguments.h"
 #include "status_code.h"
 #include "fx_muxer.h"
-#include "host_startup_info.h"
-#include "pal.h"
-#include "trace.h"
-#include "coreclr.h"
 #include "corehost.h"
 
 namespace coreload {
     coreclr::domain_id_t corehost::m_domain_id = 0;
     coreclr::host_handle_t corehost::m_handle = nullptr;
+
     int corehost::initialize_clr(
         arguments_t& arguments,
         const host_startup_info_t& host_info,
