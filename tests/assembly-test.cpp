@@ -18,7 +18,7 @@ TEST(TestCoreCLRHost, TestDotNetAssemblyExecution) {
     PCWSTR assemblyEntryPoint =     L"Load";
 
     PCWSTR coreCLRInstallDirectory
-        = L"%programfiles%\\dotnet\\shared\\Microsoft.NETCore.App\\2.1.5";
+        = L"%programfiles%\\dotnet\\shared\\Microsoft.NETCore.App\\2.1.6";
 
     BinaryLoaderArgs binaryLoaderArgs = { 0 };
     AssemblyFunctionCall assemblyFunctionCall = { 0 };
