@@ -1,3 +1,7 @@
+#pragma once
+#ifndef CORELOAD_DLL_H
+#define CORELOAD_DLL_H
+
 #include "targetver.h"
 #include "coreload.h"
 
@@ -81,3 +85,4 @@ StartCoreCLR(
 DllApi
 int
 UnloadRuntime();
+#endif // CORELOAD_DLL_H
