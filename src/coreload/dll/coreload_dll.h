@@ -80,6 +80,4 @@ StartCoreCLR(
 // Stop the .NET Core host in the current application
 DllApi
 int
-UnloadRuntime(
-    void
-);
+UnloadRuntime();

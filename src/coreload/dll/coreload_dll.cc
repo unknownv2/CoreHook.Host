@@ -5,8 +5,7 @@ int
 StartCoreCLRInternal(
     const pal::char_t   *dllPath,
     const unsigned char verbose,
-    const pal::char_t   *coreRoot,
-    const pal::char_t   *coreLibraries) {
+    const pal::char_t   *coreRoot) {
     if (verbose) {
         trace::enable();
     }
@@ -28,7 +27,7 @@ StartCoreCLRInternal(
 DllApi
 int
 StartCoreCLR(const CoreLoadArgs *args) {
-    return StartCoreCLRInternal(args->BinaryFilePath, args->Verbose, args->CoreRootPath, args->CoreLibrariesPath);
+    return StartCoreCLRInternal(args->BinaryFilePath, args->Verbose, args->CoreRootPath);
 }
 
 // Create a native function delegate for a function inside a .NET assembly
@@ -93,11 +92,12 @@ ExecuteAssemblyFunction(const AssemblyFunctionCall *args) {
 // Shutdown the .NET Core runtime
 DllApi
 int
-UnloadRuntime(void) {
+UnloadRuntime() {
     return corehost::unload_runtime();
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule,
+BOOL APIENTRY DllMain(
+    HMODULE hModule,
     DWORD  ul_reason_for_call,
     LPVOID lpReserved) {
     switch (ul_reason_for_call)
