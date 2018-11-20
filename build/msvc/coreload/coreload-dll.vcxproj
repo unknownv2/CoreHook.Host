@@ -187,7 +187,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -202,7 +202,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -217,7 +217,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -232,7 +232,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -249,7 +249,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -268,7 +268,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -287,7 +287,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -306,7 +306,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;CORELOADDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\src\coreload\common;..\..\src\coreload\logging;..\..\src\coreload\json\casablanca\include;..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -317,19 +317,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\coreload\dll\coreload_dll.cc" />
+    <ClCompile Include="..\..\..\src\coreload\dll\coreload_dll.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\coreload\dll\coreload_dll.h" />
-    <ClInclude Include="..\..\src\coreload\dll\targetver.h" />
+    <ClInclude Include="..\..\..\src\coreload\dll\coreload_dll.h" />
+    <ClInclude Include="..\..\..\src\coreload\dll\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="coreload.vcxproj">
-      <Project>{0aaa1420-b5ea-49e2-8661-77a41fd249ca}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\src\coreload\dll\coreload.rc">
+    <ResourceCompile Include="..\..\..\src\coreload\dll\coreload.rc">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/D CORELOAD_BITS=64</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">/D CORELOAD_BITS=64</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D CORELOAD_BITS=32</AdditionalOptions>
@@ -339,6 +334,11 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/D CORELOAD_BITS=64</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">/D CORELOAD_BITS=64</AdditionalOptions>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="coreload.vcxproj">
+      <Project>{0aaa1420-b5ea-49e2-8661-77a41fd249ca}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

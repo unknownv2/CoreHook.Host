@@ -83,7 +83,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\coreload.vcxproj">
+    <ProjectReference Include="coreload.vcxproj">
       <Project>{0aaa1420-b5ea-49e2-8661-77a41fd249ca}</Project>
     </ProjectReference>
   </ItemGroup>

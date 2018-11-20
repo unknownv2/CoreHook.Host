@@ -1,4 +1,4 @@
-#include "..\..\src\coreload\dll\targetver.h"
+#include "..\..\..\src\coreload\dll\targetver.h"
 
 #define VER_FILEFLAGSMASK   0x3fL
 #define VER_FILEFLAGS       0x0L
