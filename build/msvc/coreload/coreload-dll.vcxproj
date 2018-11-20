@@ -142,7 +142,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>coreload32</TargetName>
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\coreloaddll\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -166,7 +166,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>coreload32</TargetName>
     <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\coreloaddll\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
