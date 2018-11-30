@@ -317,10 +317,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\coreload\dll\coreload_dll.cc" />
+    <ClCompile Include="..\..\..\src\coreload\dll\coreload.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\coreload\dll\coreload_dll.h" />
+    <ClInclude Include="..\..\..\src\coreload\dll\coreload.h" />
     <ClInclude Include="..\..\..\src\coreload\dll\targetver.h" />
   </ItemGroup>
   <ItemGroup>

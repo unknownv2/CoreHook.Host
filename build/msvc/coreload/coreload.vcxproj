@@ -67,7 +67,6 @@
     <ClInclude Include="..\..\..\src\coreload\common\utils.h" />
     <ClInclude Include="..\..\..\src\coreload\coreclr.h" />
     <ClInclude Include="..\..\..\src\coreload\corehost.h" />
-    <ClInclude Include="..\..\..\src\coreload\coreload.h" />
     <ClInclude Include="..\..\..\src\coreload\deps_entry.h" />
     <ClInclude Include="..\..\..\src\coreload\deps_format.h" />
     <ClInclude Include="..\..\..\src\coreload\deps_resolver.h" />
