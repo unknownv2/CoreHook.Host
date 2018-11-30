@@ -45,162 +45,159 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\coreload\logging\logging.cc">
+    <ClCompile Include="..\..\..\src\coreload\common\longfile.cc">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\common\utils.cc">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\common\trace.cc">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\common\pal.windows.cc">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\logging\logging.cc">
       <Filter>Source Files\logging</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\coreload\coreclr.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\common\pal.windows.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\common\longfile.cc">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\deps_resolver.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\arguments.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\deps_format.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\deps_entry.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\runtime_config.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\libhost.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\fx_ver.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\fx_muxer.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\version.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\fx_definition.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\host_startup_info.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\json\casablanca\src\json\json.cpp">
+    <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\json\json.cpp">
       <Filter>Source Files\json\casablanca\src\json</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\coreload\json\casablanca\src\json\json_parsing.cpp">
+    <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\json\json_parsing.cpp">
       <Filter>Source Files\json\casablanca\src\json</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\coreload\json\casablanca\src\json\json_serialization.cpp">
+    <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\json\json_serialization.cpp">
       <Filter>Source Files\json\casablanca\src\json</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\coreload\json\casablanca\src\utilities\asyncrt_utils.cpp">
+    <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\utilities\asyncrt_utils.cpp">
       <Filter>Source Files\json\casablanca\src\utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\coreload\common\trace.cc">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\common\utils.cc">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\coreload\framework_info.cc">
+    <ClCompile Include="..\..\..\src\coreload\arguments.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\coreload\corehost.cc">
+    <ClCompile Include="..\..\..\src\coreload\coreclr.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\corehost.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\deps_entry.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\deps_format.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\deps_resolver.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\framework_info.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\fx_definition.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\fx_muxer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\fx_ver.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\host_startup_info.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\libhost.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\runtime_config.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\version.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\coreload\logging\logging.h">
+    <ClInclude Include="..\..\..\src\coreload\common\longfile.h">
+      <Filter>Source Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\common\pal.h">
+      <Filter>Source Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\common\trace.h">
+      <Filter>Source Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\common\utils.h">
+      <Filter>Source Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\logging\logging.h">
       <Filter>Source Files\logging</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\targetver.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\details\basic_types.h">
+      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\common\pal.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\details\cpprest_compat.h">
+      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\coreclr.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\details\nosal.h">
+      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\common\longfile.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\details\SafeInt3.hpp">
+      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\deps_resolver.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\asyncrt_utils.h">
+      <Filter>Source Files\json\casablanca\include\cpprest</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\arguments.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\json.h">
+      <Filter>Source Files\json\casablanca\include\cpprest</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\deps_format.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\deps_entry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\runtime_config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\libhost.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\fx_muxer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\fx_ver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\status_code.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\coreload.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\host_startup_info.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\fx_definition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\json\casablanca\include\stdafx.h">
+    <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\stdafx.h">
       <Filter>Source Files\json\casablanca\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\json\casablanca\include\cpprest\asyncrt_utils.h">
-      <Filter>Source Files\json\casablanca\include\cpprest</Filter>
+    <ClInclude Include="..\..\..\src\coreload\version.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\json\casablanca\include\cpprest\json.h">
-      <Filter>Source Files\json\casablanca\include\cpprest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\json\casablanca\include\cpprest\details\basic_types.h">
-      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\json\casablanca\include\cpprest\details\cpprest_compat.h">
-      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\json\casablanca\include\cpprest\details\nosal.h">
-      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\json\casablanca\include\cpprest\details\SafeInt3.hpp">
-      <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\coreload\framework_info.h">
+    <ClInclude Include="..\..\..\src\coreload\coreclr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\common\trace.h">
+    <ClInclude Include="..\..\..\src\coreload\arguments.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\common\utils.h">
+    <ClInclude Include="..\..\..\src\coreload\corehost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\coreload\corehost.h">
+    <ClInclude Include="..\..\..\src\coreload\deps_entry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\deps_format.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\deps_resolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\framework_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\fx_definition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\fx_muxer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\fx_ver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\host_startup_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\libhost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\runtime_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\status_code.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
