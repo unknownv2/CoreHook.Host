@@ -1,4 +1,4 @@
-#include "coreload_dll.h"
+#include "coreload.h"
 
 // Start the .NET Core runtime in the current application
 int
@@ -54,7 +54,7 @@ ExecuteAssemblyClassFunction(
     const char *entry,
     const unsigned char *arguments) {
     int exit_code = StatusCode::HostApiFailed;
-    typedef void (STDMETHODCALLTYPE LoadMethodFp)(const void* args);
+    typedef void (STDMETHODCALLTYPE LoadMethodFp)(const void *args);
     LoadMethodFp *pfnLoadDelegate = nullptr;
 
     if (SUCCEEDED((exit_code = CreateAssemblyDelegate(assembly, type, entry, reinterpret_cast<PVOID*>(&pfnLoadDelegate))))) {
@@ -63,16 +63,14 @@ ExecuteAssemblyClassFunction(
 
         const auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
         if (remoteArgs != nullptr) {
-            // construct a hex string for the address of the entryInfo parameter
-            // which is passed to the .NET delegate function and execute the delegate
-            entryInfo.Args.UserData = remoteArgs->UserData;
+            // Construct and pass the remote user parameters to the .NET delegate
             entryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
+            entryInfo.Args.UserData = remoteArgs->UserDataSize ? remoteArgs->UserData : nullptr;
 
             pfnLoadDelegate(&entryInfo);
         }
         else {
-            // No arguments were supplied to pass to the delegate function so pass an
-            // empty string
+            // No arguments were supplied to pass to the delegate function
             pfnLoadDelegate(nullptr);
         }
     }

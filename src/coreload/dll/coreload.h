@@ -3,7 +3,9 @@
 #define CORELOAD_DLL_H
 
 #include "targetver.h"
-#include "coreload.h"
+#include "deps_resolver.h"
+#include "corehost.h"
+#include "status_code.h"
 
 // Function export macro
 #ifdef _USRDLL  
