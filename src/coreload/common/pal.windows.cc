@@ -230,7 +230,7 @@ namespace coreload {
         // Init the buffer
         ZeroMemory(&osinfo, sizeof(osinfo));
         osinfo.dwOSVersionInfoSize = sizeof(osinfo);
-        HMODULE hmodNtdll = LoadLibrary(L"ntdll.dll");
+        HMODULE hmodNtdll = LoadLibraryA("ntdll.dll");
         if (hmodNtdll != NULL)
         {
             pFuncRtlGetVersion pRtlGetVersion = (pFuncRtlGetVersion)GetProcAddress(hmodNtdll, "RtlGetVersion");
