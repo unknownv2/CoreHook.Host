@@ -26,35 +26,35 @@
 using namespace coreload;
 
 // Arguments for hosting the .NET Core runtime and loading an assembly into the
-struct CoreLoadArgs
+struct core_host_arguments
 {
-    unsigned char    Verbose;
-    unsigned char    Reserved[7];
-    pal::char_t      BinaryFilePath[MAX_PATH];
-    pal::char_t      CoreRootPath[MAX_PATH];
-    pal::char_t      CoreLibrariesPath[MAX_PATH];
+    unsigned char verbose;
+    unsigned char reserved[7];
+    pal::char_t   assembly_file_path[MAX_PATH];
+    pal::char_t   core_root_path[MAX_PATH];
+    pal::char_t   core_libraries_path[MAX_PATH];
 };
 
 // Arguments for executing a function located in a .NET assembly,
 // with optional arguments passed to the function call
-struct AssemblyFunctionCall
+struct assembly_function_call
 {
-    char           Assembly[FunctionNameSize];
-    char           Class[FunctionNameSize];
-    char           Function[FunctionNameSize];
-    unsigned char  Arguments[AssemblyFunCallArgsSize];
+    pal::char_t   assembly_name[FunctionNameSize];
+    pal::char_t   class_name[FunctionNameSize];
+    pal::char_t   function_name[FunctionNameSize];
+    unsigned char arguments[AssemblyFunCallArgsSize];
 };
 
-struct RemoteFunctionArgs
+struct core_load_arguments
 {
-    const unsigned char *UserData;
-    unsigned long       UserDataSize;
+    const unsigned char* user_data;
+    unsigned long        user_data_size;
 };
 
-struct RemoteEntryInfo
+struct remote_entry_info
 {
-    unsigned long      HostPID;
-    RemoteFunctionArgs Args;
+    unsigned long       host_process_id;
+    core_load_arguments arguments;
 };
 
 // DLL exports used for starting, executing in, and stopping the .NET Core runtime
@@ -63,24 +63,24 @@ struct RemoteEntryInfo
 DllApi
 int
 CreateAssemblyDelegate(
-    const char *assembly_name,
-    const char *type_name,
-    const char *method_name,
-    void       **pfnDelegate
+    const char* assembly_name,
+    const char* type_name,
+    const char* method_name,
+    void**      pfnDelegate
 );
 
 // Execute a function located in a .NET assembly by creating a native delegate
 DllApi
 int
 ExecuteAssemblyFunction(
-    const AssemblyFunctionCall *args
+    const assembly_function_call* arguments
 );
 
 // Host the .NET Core runtime in the current application
 DllApi
 int
 StartCoreCLR(
-    const CoreLoadArgs *args
+    const core_host_arguments* arguments
 );
 
 // Stop the .NET Core host in the current application

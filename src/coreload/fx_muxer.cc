@@ -567,7 +567,16 @@ namespace coreload {
         pal::string_t roll_fwd_on_no_candidate_fx;
         pal::string_t additional_deps;
         pal::string_t deps_file = _X("");
-        pal::string_t runtime_config = _X("");
+        pal::string_t runtime_config = host_info.dotnet_root;
+        append_path(&runtime_config, _X("dotnet.runtimeconfig.json"));
+
+        // If the configuration doesn't exist, then there should be a runtimeconfig
+        // in the application root path.
+        if(!pal::file_exists(runtime_config))
+        {
+            runtime_config = _X("");
+        }
+
         std::vector<pal::string_t> spec_probe_paths = std::vector<pal::string_t>();
 
         if (!deps_file.empty() && !pal::realpath(&deps_file))
@@ -576,19 +585,20 @@ namespace coreload {
             return StatusCode::InvalidArgFailure;
         }
 
-        // Read config
+        // Read and parse the runtime configuration.
+
         fx_definition_vector_t fx_definitions;
         auto app = new fx_definition_t();
         fx_definitions.push_back(std::unique_ptr<fx_definition_t>(app));
 
-        int rc = read_config(*app, arguments.managed_application, runtime_config);
+        const int rc = read_config(*app, arguments.managed_application, runtime_config);
         if (rc)
         {
             return rc;
         }
 
         auto app_config = app->get_runtime_config();
-        bool is_framework_dependent = app_config.get_is_framework_dependent();
+        const bool is_framework_dependent = app_config.get_is_framework_dependent();
 
         // These settings are only valid for framework-dependent apps
         if (is_framework_dependent)

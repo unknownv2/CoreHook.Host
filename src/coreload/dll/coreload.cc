@@ -3,18 +3,18 @@
 // Start the .NET Core runtime in the current application
 int
 StartCoreCLRInternal(
-    const pal::char_t   *dllPath,
-    const unsigned char verbose,
-    const pal::char_t   *coreRoot) {
-    if (verbose) {
+    const pal::char_t*  assembly_path,
+    const pal::char_t*  core_root,
+    const unsigned char verbose_log) {
+    if (verbose_log) {
         trace::enable();
     }
     host_startup_info_t startup_info;
     arguments_t arguments;
   
-    startup_info.dotnet_root = coreRoot;
+    startup_info.dotnet_root = core_root;
 
-    arguments.managed_application = dllPath;
+    arguments.managed_application = assembly_path;
     arguments.app_root = get_directory(arguments.managed_application);
 
     return corehost::initialize_clr(
@@ -26,18 +26,18 @@ StartCoreCLRInternal(
 // Host the .NET Core runtime in the current application
 DllApi
 int
-StartCoreCLR(const CoreLoadArgs *args) {
-    return StartCoreCLRInternal(args->BinaryFilePath, args->Verbose, args->CoreRootPath);
+StartCoreCLR(const core_host_arguments* arguments) {
+    return StartCoreCLRInternal(arguments->assembly_file_path, arguments->core_root_path, arguments->verbose);
 }
 
 // Create a native function delegate for a function inside a .NET assembly
 DllApi
 int
 CreateAssemblyDelegate(
-    const char *assembly_name,
-    const char *type_name,
-    const char *method_name,
-    void **pfnDelegate) {
+    const char* assembly_name,
+    const char* type_name,
+    const char* method_name,
+    void**      pfnDelegate) {
     return corehost::create_delegate(
         assembly_name,
         type_name,
@@ -49,29 +49,29 @@ CreateAssemblyDelegate(
 // Execute a method from a class located inside a .NET assembly
 int
 ExecuteAssemblyClassFunction(
-    const char *assembly,
-    const char *type,
-    const char *entry,
-    const unsigned char *arguments) {
+    const char* assembly,
+    const char* type,
+    const char* entry,
+    const unsigned char* arguments) {
     int exit_code = StatusCode::HostApiFailed;
-    typedef void (STDMETHODCALLTYPE LoadMethodFp)(const void *args);
-    LoadMethodFp *pfnLoadDelegate = nullptr;
+    typedef void (STDMETHODCALLTYPE load_plugin_fn)(const void *load_plugin_arguments);
+    load_plugin_fn* load_plugin_delegate = nullptr;
 
-    if (SUCCEEDED((exit_code = CreateAssemblyDelegate(assembly, type, entry, reinterpret_cast<PVOID*>(&pfnLoadDelegate))))) {
-        RemoteEntryInfo entryInfo = { 0 };
-        entryInfo.HostPID = GetCurrentProcessId();
+    if (SUCCEEDED(exit_code = CreateAssemblyDelegate(assembly, type, entry, reinterpret_cast<PVOID*>(&load_plugin_delegate)))) {
+        remote_entry_info entryInfo = { 0 };
+        entryInfo.host_process_id = GetCurrentProcessId();
 
-        const auto remoteArgs = reinterpret_cast<const RemoteFunctionArgs*>(arguments);
-        if (remoteArgs != nullptr) {
+        const auto remote_arguments = reinterpret_cast<const core_load_arguments*>(arguments);
+        if (remote_arguments != nullptr) {
             // Construct and pass the remote user parameters to the .NET delegate
-            entryInfo.Args.UserDataSize = remoteArgs->UserDataSize;
-            entryInfo.Args.UserData = remoteArgs->UserDataSize ? remoteArgs->UserData : nullptr;
+            entryInfo.arguments.user_data_size = remote_arguments->user_data_size;
+            entryInfo.arguments.user_data = remote_arguments->user_data_size ? remote_arguments->user_data : nullptr;
 
-            pfnLoadDelegate(&entryInfo);
+            load_plugin_delegate(&entryInfo);
         }
         else {
             // No arguments were supplied to pass to the delegate function
-            pfnLoadDelegate(nullptr);
+            load_plugin_delegate(nullptr);
         }
     }
     else {
@@ -83,8 +83,13 @@ ExecuteAssemblyClassFunction(
 // Execute a function located in a .NET assembly by creating a native delegate
 DllApi
 int
-ExecuteAssemblyFunction(const AssemblyFunctionCall *args) {
-    return ExecuteAssemblyClassFunction(args->Assembly, args->Class, args->Function, args->Arguments);
+ExecuteAssemblyFunction(const assembly_function_call* arguments) {
+    std::vector<char> assemblyName, className, functionName;
+    pal::pal_clrstring(arguments->assembly_name, &assemblyName);
+    pal::pal_clrstring(arguments->class_name, &className);
+    pal::pal_clrstring(arguments->function_name, &functionName);
+
+    return ExecuteAssemblyClassFunction(assemblyName.data(), className.data(), functionName.data(), arguments->arguments);
 }
 
 // Shutdown the .NET Core runtime
@@ -96,8 +101,8 @@ UnloadRuntime() {
 
 BOOL APIENTRY DllMain(
     HMODULE hModule,
-    DWORD  ul_reason_for_call,
-    LPVOID lpReserved) {
+    DWORD   ul_reason_for_call,
+    LPVOID  lpReserved) {
     switch (ul_reason_for_call)
     {
         case DLL_PROCESS_ATTACH:
