@@ -15,7 +15,7 @@ namespace coreload {
     {
         invalid = 0,
 
-        muxer,          // Invoked as "dotnet.exe".
+        muxer,          // Emulating invoking the host as "dotnet.exe".
 
         apphost,        // Invoked as <appname>.exe from the application base; this is the renamed "apphost.exe".
 

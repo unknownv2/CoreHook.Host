@@ -279,7 +279,6 @@ namespace coreload {
         const pal::string_t& specified_fx_version
     )
     {
-        // If invoking using FX dotnet.exe, use own directory.
         if (mode == host_mode_t::split_fx)
         {
             return new fx_definition_t(config.get_fx_name(), dotnet_dir, pal::string_t(), pal::string_t());
@@ -471,21 +470,19 @@ namespace coreload {
         pal::string_t& runtime_config
     )
     {
-        if (!runtime_config.empty() && !pal::realpath(&runtime_config))
-        {
-            trace::error(_X("The specified runtimeconfig.json [%s] does not exist"), runtime_config.c_str());
-            return StatusCode::InvalidConfigFile;
-        }
-
         pal::string_t config_file, dev_config_file;
+        // First, attempt to load the runtime config using the app path.
+        trace::verbose(_X("App runtimeconfig.json from [%s]"), app_candidate.c_str());
+        get_runtime_config_paths_from_app(app_candidate, &config_file, &dev_config_file);
 
-        if (runtime_config.empty())
+        // If the application.runtime.config doesn't exist, try using the global config.
+        if(!pal::realpath(&config_file))
         {
-            trace::verbose(_X("App runtimeconfig.json from [%s]"), app_candidate.c_str());
-            get_runtime_config_paths_from_app(app_candidate, &config_file, &dev_config_file);
-        }
-        else
-        {
+            if (!runtime_config.empty() && !pal::realpath(&runtime_config))
+            {
+                trace::error(_X("The specified runtimeconfig.json [%s] does not exist"), runtime_config.c_str());
+                return StatusCode::InvalidConfigFile;
+            }
             trace::verbose(_X("Specified runtimeconfig.json from [%s]"), runtime_config.c_str());
             get_runtime_config_paths_from_arg(runtime_config, &config_file, &dev_config_file);
         }
@@ -535,9 +532,6 @@ namespace coreload {
         else
         {
             // Native apps can be activated by muxer, native exe host or "corehost"
-            // 1. When activated with dotnet.exe or corehost.exe, check for hostpolicy in the deps dir or
-            //    app dir.
-            // 2. When activated with native exe, the standalone host, check own directory.
             assert(mode != host_mode_t::invalid);
             expected = (mode == host_mode_t::apphost)
                 ? dotnet_root
