@@ -25,17 +25,17 @@ Building the DLL requires Visual Studio and there are two options: You can build
 
 You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM|ARM64**) and build. 
 
-An example for building the X64 `corerundll64.dll` in the `Release` configuration:
+An example for building the X64 `coreload64.dll` in the `Release` configuration:
 
 ```
-msbuild build/msvc/corerundll.vcxproj /p:Configuration=Release /p:Platform=x64
+msbuild build/msvc/coreload.vcxproj /p:Configuration=Release /p:Platform=x64
 ```
 
 To build the entire solution (which also builds the testing project), you can run:
 
 ```
-nuget restore build/msvc/corerundll.sln
-msbuild build/msvc/corerundll.sln /p:Configuration=Release /p:Platform=x64
+nuget restore build/msvc/coreload.sln
+msbuild build/msvc/coreload.sln /p:Configuration=Release /p:Platform=x64
 ```
 
 The build output DLL will be inside the `bin` folder.
@@ -61,13 +61,13 @@ csc -target:library Calculator.cs
 ### Binary Releases 
  You can also download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases).
  
- For `x86, x64`, extract the zip corresponding to your target architecture, then place the `corerundll32.dll` or `corerundll64.dll` in the build output directory of your program.
+ For `x86, x64`, extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the build output directory of your program.
  
- For `ARM, ARM64`,  extract the zip corresponding to your target architecture, then place the `corerundll32.dll` or `corerundll64.dll` in the output directory of your published program, created either from using the [Publishing Script](https://github.com/unknownv2/CoreHook#publishing-script) or the `dotnet publish` command.
+ For `ARM, ARM64`,  extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the output directory of your published program, created either from using the [Publishing Script](https://github.com/unknownv2/CoreHook#publishing-script) or the `dotnet publish` command.
 
-## Notes
+## Credits
 
-The `corerundll` project is based on the [CoreCLR](https://github.com/dotnet/coreclr) simple host example. The next major update to the hosting library project will be based on the [core-setup](https://github.com/dotnet/core-setup/) host which supports parsing the `.deps.json` and `runtimeconfig.json` application configuration files.
+The `coreload` project is based on the [core-setup](https://github.com/dotnet/core-setup/) host which supports parsing the `.deps.json` and `runtimeconfig.json` application configuration files.
 
 ## References
 * [.NET Core Hosting Sample](https://github.com/dotnet/samples/tree/master/core/hosting)
