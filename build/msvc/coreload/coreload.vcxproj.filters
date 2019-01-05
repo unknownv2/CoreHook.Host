@@ -116,21 +116,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\coreload\common\longfile.h">
-      <Filter>Source Files\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\coreload\common\pal.h">
-      <Filter>Source Files\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\coreload\common\trace.h">
-      <Filter>Source Files\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\coreload\common\utils.h">
-      <Filter>Source Files\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\coreload\logging\logging.h">
-      <Filter>Source Files\logging</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\details\basic_types.h">
       <Filter>Source Files\json\casablanca\include\cpprest\details</Filter>
     </ClInclude>
@@ -198,6 +183,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\coreload\version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\common\longfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\common\trace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\common\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\logging\logging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\common\pal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
