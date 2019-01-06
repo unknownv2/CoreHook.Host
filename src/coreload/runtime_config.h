@@ -1,11 +1,6 @@
 #pragma once
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 #ifndef __RUNTIME_CONFIG_H__
 #define __RUNTIME_CONFIG_H__
-
-#include <list>
 
 #include "pal.h"
 #include "cpprest/json.h"
@@ -15,7 +10,6 @@ typedef web::json::value json_value;
 typedef web::json::object json_object;
 
 namespace coreload {
-
 
     class runtime_config_framework_t
     {
