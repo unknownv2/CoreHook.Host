@@ -42,13 +42,7 @@ The build output DLL will be inside the `bin` folder.
 
 ### CMake
 
-You can also build the library using CMake. You can run the `scripts/win-vs-2017.cmd` file to build for the `x86` and `x64` architectures. This also gives you the option to generate and build with an older version of `Visual Studio` such as `VS 2015` or `VS 2013`.
-
-You can build by running these commands from the root of the repository:
-```
-cd scripts
-win-vs-2017.cmd
-```
+You can also build the library using CMake. You can run the `build.cmd` file to build for the `x86` and `x64` architectures using `Visual Studio 2017`. CMake also gives you the option to build with an older version of `Visual Studio` such as `2015` or `2013`.
 
 ### Tests
 
