@@ -1,4 +1,3 @@
-
 #include <cassert>
 #include "pal.h"
 #include "utils.h"

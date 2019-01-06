@@ -4,7 +4,6 @@
 #include <set>
 #include <functional>
 #include <cassert>
-
 #include "trace.h"
 #include "deps_entry.h"
 #include "deps_format.h"
@@ -12,6 +11,7 @@
 #include "utils.h"
 #include "fx_ver.h"
 #include "libhost.h"
+
 const coreload::pal::string_t MissingAssemblyMessage = _X(
     "%s:\n"
     "  An assembly specified in the application dependencies manifest (%s) was not found:\n"

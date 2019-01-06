@@ -587,8 +587,7 @@ namespace coreload {
         }
     }
 
-
-    // Peform a "soft" roll-forward meaning we don't read any physical framework folders
+    // Perform a "soft" roll-forward meaning we don't read any physical framework folders
     // and just check if the older reference is compatible with the newer reference
     // with respect to roll-forward\applypatches.
     int fx_muxer_t::soft_roll_forward(

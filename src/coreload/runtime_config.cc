@@ -341,5 +341,4 @@ namespace coreload {
         m_frameworks[0].set_roll_fwd_on_no_candidate_fx(roll_fwd_on_no_candidate_fx_option::disabled);
         m_frameworks[0].set_use_exact_version(true);
     }
-
 }

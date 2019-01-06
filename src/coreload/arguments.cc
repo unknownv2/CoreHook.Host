@@ -1,6 +1,4 @@
 #include "arguments.h"
-#include "utils.h"
-#include "coreclr.h"
 
 namespace coreload {
 
