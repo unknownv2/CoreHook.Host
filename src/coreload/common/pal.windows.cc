@@ -42,6 +42,18 @@ namespace coreload {
         return std::to_wstring(value);
     }
 
+    pal::string_t pal::get_timestamp()
+    {
+        std::time_t t = std::time(0);
+        const std::size_t elems = 100;
+        char_t buf[elems];
+        struct tm tm_buf;
+        gmtime_s(&tm_buf, &t);
+        std::wcsftime(buf, elems, _X("%c %Z"), &tm_buf);
+
+        return pal::string_t(buf);
+    }
+
     bool pal::touch_file(const pal::string_t& path)
     {
         HANDLE hnd = ::CreateFileW(path.c_str(), 0, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);

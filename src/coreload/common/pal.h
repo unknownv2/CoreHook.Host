@@ -76,9 +76,11 @@ namespace coreload {
         pal::string_t to_lower(const pal::string_t& in);
 
         inline size_t strlen(const char_t* str) { return ::wcslen(str); }
-        inline void err_vprintf(const char_t* format, va_list vl) { ::vfwprintf(stderr, format, vl); ::fputwc(_X('\n'), stderr); }
+        inline errno_t file_open(const pal::string_t& path, const char_t* mode, FILE* stream) { return ::_wfopen_s(&stream, path.c_str(), mode); }
+        inline void file_vprintf(FILE* f, const char_t* format, va_list vl) { ::vfwprintf(f, format, vl); ::fputwc(_X('\n'), f); }
+        inline void err_fputs(const char_t* message) { ::fputws(message, stderr); ::fputwc(_X('\n'), stderr); }
         inline void out_vprintf(const char_t* format, va_list vl) { ::vfwprintf(stdout, format, vl); ::fputwc(_X('\n'), stdout); }
-
+        inline int str_vprintf(char_t* buffer, size_t count, size_t max_count, const char_t* format, va_list vl) { return ::_vsnwprintf_s(buffer, count, max_count, format, vl); }
         bool pal_utf8string(const pal::string_t& str, std::vector<char>* out);
         bool utf8_palstring(const std::string& str, pal::string_t* out);
         bool pal_clrstring(const pal::string_t& str, std::vector<char>* out);
@@ -86,6 +88,9 @@ namespace coreload {
 #else   
         
 #endif
+        pal::string_t get_timestamp();
+
+        inline void file_flush(FILE *f) { std::fflush(f); }
         inline void err_flush() { std::fflush(stderr); }
         inline void out_flush() { std::fflush(stdout); }
 

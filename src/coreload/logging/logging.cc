@@ -32,7 +32,7 @@ namespace coreload {
             std::lock_guard<std::mutex> lock(mutex_log_);
             va_list args;
             va_start(args, format);
-            pal::err_vprintf(format, args);
+            pal::out_vprintf(format, args);
             va_end(args);
         }
         
