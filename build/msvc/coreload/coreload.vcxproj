@@ -48,6 +48,8 @@
     <ClCompile Include="..\..\..\src\coreload\framework_info.cc" />
     <ClCompile Include="..\..\..\src\coreload\fx_definition.cc" />
     <ClCompile Include="..\..\..\src\coreload\fx_muxer.cc" />
+    <ClCompile Include="..\..\..\src\coreload\fx_muxer.messages.cc" />
+    <ClCompile Include="..\..\..\src\coreload\fx_reference.cc" />
     <ClCompile Include="..\..\..\src\coreload\fx_ver.cc" />
     <ClCompile Include="..\..\..\src\coreload\host_startup_info.cc" />
     <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\json\json.cpp" />
@@ -71,6 +73,7 @@
     <ClInclude Include="..\..\..\src\coreload\deps_resolver.h" />
     <ClInclude Include="..\..\..\src\coreload\framework_info.h" />
     <ClInclude Include="..\..\..\src\coreload\fx_definition.h" />
+    <ClInclude Include="..\..\..\src\coreload\fx_reference.h" />
     <ClInclude Include="..\..\..\src\coreload\host_startup_info.h" />
     <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\asyncrt_utils.h" />
     <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\details\basic_types.h" />
@@ -79,6 +82,7 @@
     <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\details\SafeInt3.hpp" />
     <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\cpprest\json.h" />
     <ClInclude Include="..\..\..\src\coreload\json\casablanca\include\stdafx.h" />
+    <ClInclude Include="..\..\..\src\coreload\roll_fwd_on_no_candidate_fx_option.h" />
     <ClInclude Include="..\..\..\src\coreload\status_code.h" />
     <ClInclude Include="..\..\..\src\coreload\fx_muxer.h" />
     <ClInclude Include="..\..\..\src\coreload\fx_ver.h" />

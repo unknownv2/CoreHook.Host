@@ -8,6 +8,7 @@ namespace coreload {
     // compare multiple dot separated identifiers individually.) ex: 1.0.0-beta.2 vs. 1.0.0-beta.11
     struct fx_ver_t
     {
+        fx_ver_t();
         fx_ver_t(int major, int minor, int patch);
         fx_ver_t(int major, int minor, int patch, const pal::string_t& pre);
         fx_ver_t(int major, int minor, int patch, const pal::string_t& pre, const pal::string_t& build);

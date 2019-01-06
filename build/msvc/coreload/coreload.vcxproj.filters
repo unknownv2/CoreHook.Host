@@ -66,9 +66,6 @@
     <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\utilities\asyncrt_utils.cpp">
       <Filter>Source Files\json\casablanca\src\utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\coreload\arguments.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\coreload\coreclr.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,6 +103,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\coreload\version.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\arguments.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\fx_reference.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\coreload\fx_muxer.messages.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -189,6 +195,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\coreload\common\pal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\fx_reference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\coreload\roll_fwd_on_no_candidate_fx_option.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

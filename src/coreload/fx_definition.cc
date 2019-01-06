@@ -15,15 +15,14 @@ namespace coreload {
         , m_found_version(found_version) {
 
     }
-
     void fx_definition_t::parse_runtime_config(
         const pal::string_t& path,
         const pal::string_t& dev_path,
-        const runtime_config_t* higher_layer_config,
-        const runtime_config_t* app_config
+        const fx_reference_t& fx_ref,
+        const fx_reference_t& override_settings
     )
     {
-        m_runtime_config.parse(path, dev_path, higher_layer_config, app_config);
+        m_runtime_config.parse(path, dev_path, fx_ref, override_settings);
     }
 
     void fx_definition_t::parse_deps()
