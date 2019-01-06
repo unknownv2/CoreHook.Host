@@ -55,7 +55,6 @@
     <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\json\json_serialization.cpp" />
     <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\utilities\asyncrt_utils.cpp" />
     <ClCompile Include="..\..\..\src\coreload\libhost.cc" />
-    <ClCompile Include="..\..\..\src\coreload\logging\logging.cc" />
     <ClCompile Include="..\..\..\src\coreload\runtime_config.cc" />
     <ClCompile Include="..\..\..\src\coreload\version.cc" />
   </ItemGroup>
@@ -84,7 +83,6 @@
     <ClInclude Include="..\..\..\src\coreload\fx_muxer.h" />
     <ClInclude Include="..\..\..\src\coreload\fx_ver.h" />
     <ClInclude Include="..\..\..\src\coreload\libhost.h" />
-    <ClInclude Include="..\..\..\src\coreload\logging\logging.h" />
     <ClInclude Include="..\..\..\src\coreload\runtime_config.h" />
     <ClInclude Include="..\..\..\src\coreload\targetver.h" />
     <ClInclude Include="..\..\..\src\coreload\version.h" />

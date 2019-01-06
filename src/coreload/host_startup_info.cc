@@ -1,7 +1,7 @@
 #include "host_startup_info.h"
 #include "pal.h"
+#include "trace.h"
 #include "status_code.h"
-#include "logging.h"
 #include "utils.h"
 
 namespace coreload {
@@ -42,9 +42,9 @@ namespace coreload {
         append_path(&app_path, app_name.c_str());
         app_path.append(_X(".dll"));
 
-        logging::logger::instance().info(_X("Host path: [%s]"), host_path.c_str());
-        logging::logger::instance().info(_X("Dotnet path: [%s]"), dotnet_root.c_str());
-        logging::logger::instance().info(_X("App path: [%s]"), app_path.c_str());
+        trace::info(_X("Host path: [%s]"), host_path.c_str());
+        trace::info(_X("Dotnet path: [%s]"), dotnet_root.c_str());
+        trace::info(_X("App path: [%s]"), app_path.c_str());
         return 0;
     }
 
@@ -65,9 +65,9 @@ namespace coreload {
         if (argc >= 1) {
             host_path->assign(argv[0]);
             if (!host_path->empty()) {
-                logging::logger::instance().info(_X("Attempting to use argv[0] as path [%s]"), host_path->c_str());
+                trace::info(_X("Attempting to use argv[0] as path [%s]"), host_path->c_str());
                 if (!get_path_from_argv(host_path)) {
-                    logging::logger::instance().warning(_X("Failed to resolve argv[0] as path [%s]. Using location of current executable instead."), host_path->c_str());
+                    trace::warning(_X("Failed to resolve argv[0] as path [%s]. Using location of current executable instead."), host_path->c_str());
                     host_path->clear();
                 }
             }
@@ -75,11 +75,10 @@ namespace coreload {
 
         // If argv[0] did not work, get the executable name
         if (host_path->empty() && (!pal::get_own_executable_path(host_path) || !pal::realpath(host_path))) {
-            logging::logger::instance().error(_X("Failed to resolve full path of the current executable [%s]"), host_path->c_str());
+            trace::error(_X("Failed to resolve full path of the current executable [%s]"), host_path->c_str());
             return StatusCode::LibHostCurExeFindFailure;
         }
 
         return 0;
     }
-
 }

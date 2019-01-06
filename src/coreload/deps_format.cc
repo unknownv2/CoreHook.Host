@@ -4,7 +4,6 @@
 #include "deps_entry.h"
 #include "deps_format.h"
 #include "utils.h"
-#include "logging.h"
 #include "trace.h"
 #include <tuple>
 #include <array>

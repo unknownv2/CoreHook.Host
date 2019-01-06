@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\logging">
-      <UniqueIdentifier>{36cafe21-635e-4fad-8337-0c7c67081f4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\common">
       <UniqueIdentifier>{261810cf-7bc6-4f2a-90aa-c52cef659a9c}</UniqueIdentifier>
     </Filter>
@@ -56,9 +53,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\coreload\common\pal.windows.cc">
       <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\coreload\logging\logging.cc">
-      <Filter>Source Files\logging</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\coreload\json\casablanca\src\json\json.cpp">
       <Filter>Source Files\json\casablanca\src\json</Filter>
@@ -192,9 +186,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\coreload\common\utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\coreload\logging\logging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\coreload\common\pal.h">

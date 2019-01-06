@@ -3,7 +3,6 @@
 
 #include "utils.h"
 #include "pal.h"
-#include "logging.h"
 #include "trace.h"
 #include "deps_format.h"
 

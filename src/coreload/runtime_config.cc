@@ -1,5 +1,4 @@
 #include "pal.h"
-#include "logging.h"
 #include "trace.h"
 #include "utils.h"
 #include "cpprest/json.h"
