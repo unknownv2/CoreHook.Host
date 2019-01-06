@@ -32,62 +32,62 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     auto error = StartCoreCLR(&host_arguments);
  
     EXPECT_EQ(NO_ERROR, error);
-    typedef int (STDMETHODCALLTYPE calculator_method_del)(const int a, const int b);
+    typedef int (STDMETHODCALLTYPE calculator_method_fn)(const int a, const int b);
 
     // Test the 'int Add(int a, int b) => a + b;' method
-    calculator_method_del *fn_delegate = nullptr;
+    calculator_method_fn *calculator_delegate = nullptr;
     error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_add,
-        reinterpret_cast<void**>(&fn_delegate)
+        reinterpret_cast<void**>(&calculator_delegate)
     );
     EXPECT_EQ(NO_ERROR, error);
     const int integer_a = 1;
     const int integer_b = 2;
     const int integer_add_result = integer_a + integer_b;
 
-    EXPECT_EQ(integer_add_result, fn_delegate(integer_a, integer_b));
+    EXPECT_EQ(integer_add_result, calculator_delegate(integer_a, integer_b));
 
     // Test the 'int Subtract(int a, int b) => b - a;' method
     error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_subtract,
-        reinterpret_cast<void**>(&fn_delegate)
+        reinterpret_cast<void**>(&calculator_delegate)
     );
     EXPECT_EQ(NO_ERROR, error);
     const int integer_subtract_result = integer_b - integer_a;
 
-    EXPECT_EQ(integer_subtract_result, fn_delegate(integer_a, integer_b));
+    EXPECT_EQ(integer_subtract_result, calculator_delegate(integer_a, integer_b));
 
     // Test the 'int Multiply(int a, int b) => a * b;' method
     error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_multiply,
-        reinterpret_cast<void**>(&fn_delegate)
+        reinterpret_cast<void**>(&calculator_delegate)
     );
     EXPECT_EQ(NO_ERROR, error);
     const int integer_multiply_result = integer_a * integer_b;
 
-    EXPECT_EQ(integer_multiply_result, fn_delegate(integer_a, integer_b));
+    EXPECT_EQ(integer_multiply_result, calculator_delegate(integer_a, integer_b));
 
     // Test the 'int Divide(int a, int b) => a / b;' method
     error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_divide,
-        reinterpret_cast<void**>(&fn_delegate)
+        reinterpret_cast<void**>(&calculator_delegate)
     );
     EXPECT_EQ(NO_ERROR, error);
     const int integer_divide_result = integer_a / integer_b;
 
-    EXPECT_EQ(integer_divide_result, fn_delegate(integer_a, integer_b));
+    EXPECT_EQ(integer_divide_result, calculator_delegate(integer_a, integer_b));
 
     // Test the 'int Load(IntPtr remoteParameters)' method
-    typedef void (STDMETHODCALLTYPE load_method_del)(const void* args);
-    load_method_del *fn_method_load_delegate = nullptr;
+    typedef void (STDMETHODCALLTYPE load_method_fn)(const void* args);
+    load_method_fn* fn_method_load_delegate = nullptr;
     error = CreateAssemblyDelegate(
             assembly_name,
             type_name,

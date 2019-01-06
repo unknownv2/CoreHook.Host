@@ -1,11 +1,8 @@
 
 #include "pal.h"
-#include "trace.h"
-#include "utils.h"
 #include "longfile.h"
 
 namespace coreload {
-
 
     const pal::char_t LongFile::DirectorySeparatorChar = _X('\\');
     const pal::char_t LongFile::AltDirectorySeparatorChar = _X('/');

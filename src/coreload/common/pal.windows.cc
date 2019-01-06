@@ -2,7 +2,6 @@
 #include "trace.h"
 #include "utils.h"
 #include "longfile.h"
-
 #include <cassert>
 #include <locale>
 #include <codecvt>

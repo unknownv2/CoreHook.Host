@@ -52,16 +52,16 @@ int ExecuteAssemblyClassFunction(
     load_plugin_fn* load_plugin_delegate = nullptr;
 
     if (SUCCEEDED(exit_code = CreateAssemblyDelegate(assembly, type, entry, reinterpret_cast<PVOID*>(&load_plugin_delegate)))) {
-        remote_entry_info entryInfo = { 0 };
-        entryInfo.host_process_id = GetCurrentProcessId();
+        remote_entry_info entry_info = { 0 };
+        entry_info.host_process_id = GetCurrentProcessId();
 
         const auto remote_arguments = reinterpret_cast<const core_load_arguments*>(arguments);
         if (remote_arguments != nullptr) {
             // Construct and pass the remote user parameters to the .NET delegate
-            entryInfo.arguments.user_data_size = remote_arguments->user_data_size;
-            entryInfo.arguments.user_data = remote_arguments->user_data_size ? remote_arguments->user_data : nullptr;
+            entry_info.arguments.user_data_size = remote_arguments->user_data_size;
+            entry_info.arguments.user_data = remote_arguments->user_data_size ? remote_arguments->user_data : nullptr;
 
-            load_plugin_delegate(&entryInfo);
+            load_plugin_delegate(&entry_info);
         }
         else {
             // No arguments were supplied to pass to the delegate function
@@ -76,12 +76,12 @@ int ExecuteAssemblyClassFunction(
 
 // Execute a function located in a .NET assembly by creating a native delegate
 DllApi int ExecuteAssemblyFunction(const assembly_function_call* arguments) {
-    std::vector<char> assemblyName, className, functionName;
-    pal::pal_clrstring(arguments->assembly_name, &assemblyName);
-    pal::pal_clrstring(arguments->class_name, &className);
-    pal::pal_clrstring(arguments->function_name, &functionName);
+    std::vector<char> assembly_name, class_name, function_name;
+    pal::pal_clrstring(arguments->assembly_name, &assembly_name);
+    pal::pal_clrstring(arguments->class_name, &class_name);
+    pal::pal_clrstring(arguments->function_name, &function_name);
 
-    return ExecuteAssemblyClassFunction(assemblyName.data(), className.data(), functionName.data(), arguments->arguments);
+    return ExecuteAssemblyClassFunction(assembly_name.data(), class_name.data(), function_name.data(), arguments->arguments);
 }
 
 // Shutdown the .NET Core runtime
