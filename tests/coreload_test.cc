@@ -16,9 +16,6 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     PCSTR method_name_divide = "Divide";
     PCSTR method_name_load = "Load";
 
-    host_startup_info_t startup_info;
-    arguments_t arguments;
-
     PCWSTR dotnet_sdk_root
         = L"%programfiles%\\dotnet\\sdk\\2.2.100";
 
@@ -28,27 +25,24 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     pal::string_t library_path = dotnet_assembly_name;
     EXPECT_TRUE(pal::realpath(&library_path));
 
-    startup_info.dotnet_root = dotnet_root;
-    arguments.managed_application = library_path;
-    arguments.app_root = get_directory(arguments.managed_application);
+    core_host_arguments host_arguments = { 0 };
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, library_path.c_str());
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, dotnet_root);
 
-    auto error = corehost::initialize_clr(
-        arguments,
-        startup_info,
-        host_mode_t::muxer);
-
-    EXPECT_EQ(0, error);
+    auto error = StartCoreCLR(&host_arguments);
+ 
+    EXPECT_EQ(NO_ERROR, error);
     typedef int (STDMETHODCALLTYPE calculator_method_del)(const int a, const int b);
 
     // Test the 'int Add(int a, int b) => a + b;' method
     calculator_method_del *fn_delegate = nullptr;
-    error = corehost::create_delegate(
+    error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_add,
-        (void**)&fn_delegate
+        reinterpret_cast<void**>(&fn_delegate)
     );
-    EXPECT_EQ(0, error);
+    EXPECT_EQ(NO_ERROR, error);
     const int integer_a = 1;
     const int integer_b = 2;
     const int integer_add_result = integer_a + integer_b;
@@ -56,38 +50,67 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     EXPECT_EQ(integer_add_result, fn_delegate(integer_a, integer_b));
 
     // Test the 'int Subtract(int a, int b) => b - a;' method
-    error = corehost::create_delegate(
+    error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_subtract,
-        (void**)&fn_delegate
+        reinterpret_cast<void**>(&fn_delegate)
     );
-    EXPECT_EQ(0, error);
+    EXPECT_EQ(NO_ERROR, error);
     const int integer_subtract_result = integer_b - integer_a;
 
     EXPECT_EQ(integer_subtract_result, fn_delegate(integer_a, integer_b));
 
     // Test the 'int Multiply(int a, int b) => a * b;' method
-    error = corehost::create_delegate(
+    error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_multiply,
-        (void**)&fn_delegate
+        reinterpret_cast<void**>(&fn_delegate)
     );
-    EXPECT_EQ(0, error);
+    EXPECT_EQ(NO_ERROR, error);
     const int integer_multiply_result = integer_a * integer_b;
 
     EXPECT_EQ(integer_multiply_result, fn_delegate(integer_a, integer_b));
 
     // Test the 'int Divide(int a, int b) => a / b;' method
-    error = corehost::create_delegate(
+    error = CreateAssemblyDelegate(
         assembly_name,
         type_name,
         method_name_divide,
-        (void**)&fn_delegate
+        reinterpret_cast<void**>(&fn_delegate)
     );
-    EXPECT_EQ(0, error);
+    EXPECT_EQ(NO_ERROR, error);
     const int integer_divide_result = integer_a / integer_b;
 
     EXPECT_EQ(integer_divide_result, fn_delegate(integer_a, integer_b));
+
+    // Test the 'int Load(IntPtr remoteParameters)' method
+    typedef void (STDMETHODCALLTYPE load_method_del)(const void* args);
+    load_method_del *fn_method_load_delegate = nullptr;
+    error = CreateAssemblyDelegate(
+            assembly_name,
+            type_name,
+            method_name_load,
+            reinterpret_cast<void**>(&fn_method_load_delegate));
+
+    EXPECT_EQ(NOERROR, error);
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    pal::utf8_palstring(assembly_name, &assembly_name_wide);
+    pal::utf8_palstring(type_name, &type_name_wide);
+    pal::utf8_palstring(method_name_load, &method_name_wide);
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, assembly_name_wide.c_str());
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, type_name_wide.c_str());
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, method_name_wide.c_str());
+
+    EXPECT_EQ(NOERROR, ExecuteAssemblyFunction(&assembly_function_call));
+
+    // Unload the AppDomain and stop the host
+    EXPECT_EQ(NOERROR, UnloadRuntime());
 }
