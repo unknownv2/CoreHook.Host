@@ -66,4 +66,28 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     const int integer_subtract_result = integer_b - integer_a;
 
     EXPECT_EQ(integer_subtract_result, fn_delegate(integer_a, integer_b));
+
+    // Test the 'int Multiply(int a, int b) => a * b;' method
+    error = corehost::create_delegate(
+        assembly_name,
+        type_name,
+        method_name_multiply,
+        (void**)&fn_delegate
+    );
+    EXPECT_EQ(0, error);
+    const int integer_multiply_result = integer_a * integer_b;
+
+    EXPECT_EQ(integer_multiply_result, fn_delegate(integer_a, integer_b));
+
+    // Test the 'int Divide(int a, int b) => a / b;' method
+    error = corehost::create_delegate(
+        assembly_name,
+        type_name,
+        method_name_divide,
+        (void**)&fn_delegate
+    );
+    EXPECT_EQ(0, error);
+    const int integer_divide_result = integer_a / integer_b;
+
+    EXPECT_EQ(integer_divide_result, fn_delegate(integer_a, integer_b));
 }
