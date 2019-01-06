@@ -18,10 +18,10 @@
 #define DllApi extern "C" DllExport
 
 // The max length of a function to be executed in a .NET class
-#define FunctionNameSize               256
+#define max_function_name_size                  256
 
 // The max length of arguments to be parsed and passed to a .NET function
-#define AssemblyFunCallArgsSize        12
+#define assembly_function_arguments_size        12
 
 using namespace coreload;
 
@@ -39,10 +39,10 @@ struct core_host_arguments
 // with optional arguments passed to the function call
 struct assembly_function_call
 {
-    pal::char_t   assembly_name[FunctionNameSize];
-    pal::char_t   class_name[FunctionNameSize];
-    pal::char_t   function_name[FunctionNameSize];
-    unsigned char arguments[AssemblyFunCallArgsSize];
+    pal::char_t   assembly_name[max_function_name_size];
+    pal::char_t   class_name[max_function_name_size];
+    pal::char_t   function_name[max_function_name_size];
+    unsigned char arguments[assembly_function_arguments_size];
 };
 
 struct core_load_arguments
@@ -87,4 +87,5 @@ StartCoreCLR(
 DllApi
 int
 UnloadRuntime();
+
 #endif // CORELOAD_DLL_H

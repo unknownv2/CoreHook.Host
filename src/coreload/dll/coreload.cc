@@ -1,8 +1,7 @@
 #include "coreload.h"
 
 // Start the .NET Core runtime in the current application
-int
-StartCoreCLRInternal(
+int StartCoreCLRInternal(
     const pal::char_t*  assembly_path,
     const pal::char_t*  core_root,
     const unsigned char verbose_log) {
@@ -24,16 +23,12 @@ StartCoreCLRInternal(
 }
 
 // Host the .NET Core runtime in the current application
-DllApi
-int
-StartCoreCLR(const core_host_arguments* arguments) {
+DllApi int StartCoreCLR(const core_host_arguments* arguments) {
     return StartCoreCLRInternal(arguments->assembly_file_path, arguments->core_root_path, arguments->verbose);
 }
 
 // Create a native function delegate for a function inside a .NET assembly
-DllApi
-int
-CreateAssemblyDelegate(
+DllApi int CreateAssemblyDelegate(
     const char* assembly_name,
     const char* type_name,
     const char* method_name,
@@ -47,8 +42,7 @@ CreateAssemblyDelegate(
 }
 
 // Execute a method from a class located inside a .NET assembly
-int
-ExecuteAssemblyClassFunction(
+int ExecuteAssemblyClassFunction(
     const char* assembly,
     const char* type,
     const char* entry,
@@ -81,9 +75,7 @@ ExecuteAssemblyClassFunction(
 }
 
 // Execute a function located in a .NET assembly by creating a native delegate
-DllApi
-int
-ExecuteAssemblyFunction(const assembly_function_call* arguments) {
+DllApi int ExecuteAssemblyFunction(const assembly_function_call* arguments) {
     std::vector<char> assemblyName, className, functionName;
     pal::pal_clrstring(arguments->assembly_name, &assemblyName);
     pal::pal_clrstring(arguments->class_name, &className);
@@ -93,9 +85,7 @@ ExecuteAssemblyFunction(const assembly_function_call* arguments) {
 }
 
 // Shutdown the .NET Core runtime
-DllApi
-int
-UnloadRuntime() {
+DllApi int UnloadRuntime() {
     return corehost::unload_runtime();
 }
 
