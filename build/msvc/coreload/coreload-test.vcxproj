@@ -83,6 +83,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="coreload-dll.vcxproj">
+      <Project>{aff94999-1dd3-4c11-ae5e-21999065abf1}</Project>
+    </ProjectReference>
     <ProjectReference Include="coreload.vcxproj">
       <Project>{0aaa1420-b5ea-49e2-8661-77a41fd249ca}</Project>
     </ProjectReference>
@@ -102,7 +105,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -119,7 +122,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -136,7 +139,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -153,7 +156,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -168,7 +171,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -185,7 +188,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -202,7 +205,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -219,7 +222,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src\coreload\common;..\..\..\src\coreload\logging;..\..\..\src\coreload;..\..\..\src\coreload\json\casablanca\include;..\..\..\src\coreload\dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
