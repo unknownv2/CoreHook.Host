@@ -32,7 +32,6 @@ struct core_host_arguments
     unsigned char reserved[7];
     pal::char_t   assembly_file_path[MAX_PATH];
     pal::char_t   core_root_path[MAX_PATH];
-    pal::char_t   core_libraries_path[MAX_PATH];
 };
 
 // Arguments for executing a function located in a .NET assembly,

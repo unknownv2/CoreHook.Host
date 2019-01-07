@@ -1,7 +1,8 @@
 # CoreHook.Host
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/unknownv2/CoreHook.Host/blob/master/LICENSE)
-[![Releases](https://img.shields.io/github/release/unknownv2/CoreHook.Host.svg?colorB=33b2e0)](https://github.com/unknownv2/CoreHook.Host/releases)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/unknownv2/CoreHook.Host/blob/master/LICENSE)
+[![Releases](https://img.shields.io/github/release/unknownv2/CoreHook.Host.svg?colorB=33b2e0&style=flat-square
+)](https://github.com/unknownv2/CoreHook.Host/releases)
 
 A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/CoreHook) in an unmanaged application on Windows.
 
@@ -9,7 +10,7 @@ A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/Cor
 
 | Build server | Platform    | Build status                             |
 | ------------ | ----------- | ---------------------------------------- |
-| AppVeyor     | Windows     | [![Build status](https://ci.appveyor.com/api/projects/status/7c0lfec5c7tlvo2a/branch/master?svg=true)](https://ci.appveyor.com/project/unknownv2/corehook-host/branch/master) |
+| AppVeyor     | Windows     | [![Build status](https://ci.appveyor.com/api/projects/status/7c0lfec5c7tlvo2a/branch/master?style=flat-square)](https://ci.appveyor.com/project/unknownv2/corehook-host/branch/master) |
 
 ## Building
 
@@ -28,7 +29,7 @@ You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM
 An example for building the X64 `coreload64.dll` in the `Release` configuration:
 
 ```
-msbuild build/msvc/coreload.vcxproj /p:Configuration=Release /p:Platform=x64
+msbuild build/msvc/coreload/coreload-dll.vcxproj /p:Configuration=Release /p:Platform=x64
 ```
 
 To build the entire solution (which also builds the testing project), you can run:

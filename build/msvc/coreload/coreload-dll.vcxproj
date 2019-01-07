@@ -135,50 +135,50 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>coreload32</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>coreload32</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>coreload64</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>coreload64</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>coreload32</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>coreload32</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>coreload64</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <IntDir>$(Platform)\$(Configuration)\coreloaddll\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>coreload64</TargetName>
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
