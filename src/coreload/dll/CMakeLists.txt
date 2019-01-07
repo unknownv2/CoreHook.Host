@@ -7,6 +7,7 @@ include_directories(
 
 set(CORELOAD_DLL_SOURCES 
     coreload.cc
+    coreload.rc    
     )
 
 add_library(coreload_dll SHARED ${CORELOAD_DLL_SOURCES})
