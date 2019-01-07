@@ -7,7 +7,6 @@ include_directories(
 )
 
 set(SOURCES
-    logging/logging.cc
     json/casablanca/src/json/json.cpp
     json/casablanca/src/json/json_parsing.cpp
     json/casablanca/src/json/json_serialization.cpp
@@ -25,6 +24,8 @@ set(SOURCES
     framework_info.cc
     fx_definition.cc
     fx_muxer.cc
+    fx_muxer.messages.cc
+    fx_reference.cc
     fx_ver.cc
     host_startup_info.cc
     libhost.cc
