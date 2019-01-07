@@ -1,4 +1,3 @@
-cd ../
 mkdir build32-vs2017
 mkdir build64-vs2017
 cd build32-vs2017

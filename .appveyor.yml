@@ -13,10 +13,10 @@ configuration:
   - Release
 
 before_build:
-  - nuget restore build\msvc\corerundll.sln
+  - nuget restore build\msvc\coreload.sln
 
 build:
-  project: build\msvc\corerundll.sln
+  project: build\msvc\coreload.sln
   verbosity: detailed
 
 skip_commits:
@@ -25,15 +25,15 @@ skip_commits:
     - '**/*.txt'
   
 after_build:
-  7z a corerundll-%CONFIGURATION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\bin\%PLATFORM%\%CONFIGURATION%\corerundll*.dll
+  7z a coreload-%CONFIGURATION%-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\bin\%PLATFORM%\%CONFIGURATION%\coreload*.dll
 
 artifacts:
-- path: corerundll-%CONFIGURATION%-%PLATFORM%.zip
+- path: coreload-%CONFIGURATION%-%PLATFORM%.zip
   name: Releases
 
 deploy:
   provider: GitHub
-  description: "corerundll module"
+  description: "corehook host module"
   auth_token:
     secure: 99ssBJ/lNK6AL1FNajtOhloP5bXeUAm8m+cI0us6pW1hVw84MTKxwYzfurYMuaOQ
   draft: false
