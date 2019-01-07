@@ -49,26 +49,31 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <IntDir>$(Platform)\$(Configuration)\coreloadtest\</IntDir>
   </PropertyGroup>
   <ItemGroup>

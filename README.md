@@ -28,7 +28,7 @@ You can choose a configuration (**Debug|Release**) and a platform (**X86|X64|ARM
 An example for building the X64 `coreload64.dll` in the `Release` configuration:
 
 ```
-msbuild build/msvc/coreload.vcxproj /p:Configuration=Release /p:Platform=x64
+msbuild build/msvc/coreload/coreload-dll.vcxproj /p:Configuration=Release /p:Platform=x64
 ```
 
 To build the entire solution (which also builds the testing project), you can run:
