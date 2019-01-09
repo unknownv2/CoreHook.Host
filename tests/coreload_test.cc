@@ -123,3 +123,101 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     // Unload the AppDomain and stop the host
     EXPECT_EQ(NOERROR, UnloadRuntime());
 }
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, _X("ClassName"));
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, _X("MethodName"));
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyClassName) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, _X("AssemblyName"));
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, _X("MethodName"));
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, _X("AssemblyName"));
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, _X("ClassName"));
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithEmptyArguments) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+TEST(TestLibraryExports, TestStartCoreCLRWithEmptyArguments) {
+    core_host_arguments host_arguments = { 0 };
+
+    const auto empty_string = _X("");
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, empty_string);
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+}
+
+TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath) {
+    core_host_arguments host_arguments = { 0 };
+
+    const auto empty_string = _X("");
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, empty_string);
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, _X("C:\\"));
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+}
+
+TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath) {
+    core_host_arguments host_arguments = { 0 };
+
+    const auto empty_string = _X("");
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, _X("C:\\"));
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+}
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionArgumentsNULL) {
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(nullptr));
+}
+
+TEST(TestLibraryExports, TestStartCoreCLRArgumentsNull) {
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(nullptr));
+}

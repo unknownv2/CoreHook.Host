@@ -44,8 +44,13 @@ namespace coreload {
     namespace pal {
         
 #if defined(_WIN32)
+#ifdef COREHOST_MAKE_DLL
+#define SHARED_API extern "C" __declspec(dllexport)
+#else
+#define SHARED_API
+#endif
 
-#define STDMETHODCALLTYPE __stdcall
+        #define STDMETHODCALLTYPE __stdcall
 
         typedef wchar_t char_t;
         typedef std::wstring string_t;
