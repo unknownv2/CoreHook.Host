@@ -57,14 +57,10 @@ SHARED_API int CreateAssemblyDelegate(
 );
 
 // Execute a function located in a .NET assembly by creating a native delegate
-SHARED_API int ExecuteAssemblyFunction(
-    const assembly_function_call* arguments
-);
+SHARED_API int ExecuteAssemblyFunction(const assembly_function_call* arguments);
 
 // Host the .NET Core runtime in the current application
-SHARED_API int StartCoreCLR(
-    const core_host_arguments* arguments
-);
+SHARED_API int StartCoreCLR(const core_host_arguments* arguments);
 
 // Stop the .NET Core host in the current application
 SHARED_API int UnloadRuntime();

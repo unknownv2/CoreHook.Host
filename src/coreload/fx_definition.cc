@@ -12,9 +12,11 @@ namespace coreload {
         : m_name(name)
         , m_dir(dir)
         , m_requested_version(requested_version)
-        , m_found_version(found_version) {
+        , m_found_version(found_version)
+    {
 
     }
+
     void fx_definition_t::parse_runtime_config(
         const pal::string_t& path,
         const pal::string_t& dev_path,

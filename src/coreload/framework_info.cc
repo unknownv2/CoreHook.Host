@@ -107,5 +107,4 @@ namespace coreload {
 
         return framework_infos.size() > 0;
     }
-
 }

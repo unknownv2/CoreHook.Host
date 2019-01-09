@@ -41,7 +41,8 @@ namespace coreload {
     static coreclr_initialize_fn coreclr_initialize = nullptr;
     static coreclr_execute_assembly_fn coreclr_execute_assembly = nullptr;
     static coreclr_create_delegate_fn coreclr_create_delegate = nullptr;
-    bool coreclr::bind(const pal::string_t& libcoreclr_path) {
+    bool coreclr::bind(const pal::string_t& libcoreclr_path)
+    {
         assert(g_coreclr == nullptr);
         pal::string_t coreclr_dll_path(libcoreclr_path);
         append_path(&coreclr_dll_path, LIBCORECLR_NAME);
@@ -58,7 +59,8 @@ namespace coreload {
         return true;
     }
 
-    void coreclr::unload() {
+    void coreclr::unload()
+    {
         assert(g_coreclr != nullptr && coreclr_initialize != nullptr);
 
         pal::unload_library(g_coreclr);
@@ -71,7 +73,8 @@ namespace coreload {
         const char** property_values,
         int property_count,
         host_handle_t* host_handle,
-        domain_id_t* domain_id) {
+        domain_id_t* domain_id)
+    {
         assert(g_coreclr != nullptr && coreclr_initialize != nullptr);
 
         return coreclr_initialize(
@@ -87,7 +90,8 @@ namespace coreload {
     pal::hresult_t coreclr::shutdown(
         host_handle_t host_handle,
         domain_id_t domain_id,
-        int* latchedExitCode) {
+        int* latchedExitCode)
+    {
         assert(g_coreclr != nullptr && coreclr_shutdown != nullptr);
 
         return coreclr_shutdown(host_handle, domain_id, latchedExitCode);
@@ -99,7 +103,8 @@ namespace coreload {
         int argc,
         const char** argv,
         const char* managed_assembly_path,
-        unsigned int* exit_code) {
+        unsigned int* exit_code)
+    {
         assert(g_coreclr != nullptr && coreclr_execute_assembly != nullptr);
 
         return coreclr_execute_assembly(

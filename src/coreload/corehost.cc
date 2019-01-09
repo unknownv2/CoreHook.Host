@@ -10,7 +10,8 @@ namespace coreload {
     int corehost::initialize_clr(
         arguments_t& arguments,
         const host_startup_info_t& host_info,
-        host_mode_t mode) {
+        host_mode_t mode)
+    {
         return fx_muxer_t::initialize_clr(arguments, host_info, mode, corehost::m_domain_id, corehost::m_handle);
     }
 
@@ -18,7 +19,8 @@ namespace coreload {
         const char* assembly_name,
         const char* type_name,
         const char* method_name,
-        void** pfnDelegate) {
+        void** pfnDelegate)
+    {
         assert(assembly_name != nullptr);
         assert(type_name != nullptr);
         assert(method_name != nullptr);
