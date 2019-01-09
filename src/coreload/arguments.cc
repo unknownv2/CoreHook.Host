@@ -9,7 +9,8 @@ namespace coreload {
         app_argc(0),
         app_argv(nullptr),
         core_servicing(_X("")),
-        deps_path(_X("")) {
+        deps_path(_X(""))
+    {
 
     }
 }

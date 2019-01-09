@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "coreload.h"
-
-TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
+TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly) {
     // Assembly file name for getting base library path 
     // that is given to the .NET Core host when starting it
     PCWSTR dotnet_assembly_name = L"Calculator.dll";
@@ -17,13 +16,13 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     PCSTR method_name_load = "Load";
 
     PCWSTR dotnet_sdk_root
-        = L"%programfiles%\\dotnet\\sdk\\2.2.100";
+        = L"%programfiles%\\dotnet\\sdk\\2.2.102";
 
     WCHAR dotnet_root[MAX_PATH];
-    ::ExpandEnvironmentStringsW(dotnet_sdk_root, dotnet_root, MAX_PATH);
+    ExpandEnvironmentStringsW(dotnet_sdk_root, dotnet_root, MAX_PATH);
 
     pal::string_t library_path = dotnet_assembly_name;
-    EXPECT_TRUE(pal::realpath(&library_path));
+    ASSERT_TRUE(pal::realpath(&library_path));
 
     core_host_arguments host_arguments = { 0 };
     wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, library_path.c_str());
@@ -31,7 +30,7 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
 
     auto error = StartCoreCLR(&host_arguments);
  
-    EXPECT_EQ(NO_ERROR, error);
+    ASSERT_EQ(NO_ERROR, error);
     typedef int (STDMETHODCALLTYPE calculator_method_fn)(const int a, const int b);
 
     // Test the 'int Add(int a, int b) => a + b;' method
@@ -42,7 +41,9 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
         method_name_add,
         reinterpret_cast<void**>(&calculator_delegate)
     );
-    EXPECT_EQ(NO_ERROR, error);
+    ASSERT_EQ(NO_ERROR, error);
+    ASSERT_NE(nullptr, calculator_delegate);
+
     const int integer_a = 1;
     const int integer_b = 2;
     const int integer_add_result = integer_a + integer_b;
@@ -56,7 +57,9 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
         method_name_subtract,
         reinterpret_cast<void**>(&calculator_delegate)
     );
-    EXPECT_EQ(NO_ERROR, error);
+    ASSERT_EQ(NO_ERROR, error);
+    ASSERT_NE(nullptr, calculator_delegate);
+
     const int integer_subtract_result = integer_b - integer_a;
 
     EXPECT_EQ(integer_subtract_result, calculator_delegate(integer_a, integer_b));
@@ -68,7 +71,9 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
         method_name_multiply,
         reinterpret_cast<void**>(&calculator_delegate)
     );
-    EXPECT_EQ(NO_ERROR, error);
+    ASSERT_EQ(NO_ERROR, error);
+    ASSERT_NE(nullptr, calculator_delegate);
+
     const int integer_multiply_result = integer_a * integer_b;
 
     EXPECT_EQ(integer_multiply_result, calculator_delegate(integer_a, integer_b));
@@ -80,7 +85,8 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
         method_name_divide,
         reinterpret_cast<void**>(&calculator_delegate)
     );
-    EXPECT_EQ(NO_ERROR, error);
+    ASSERT_EQ(NO_ERROR, error);
+    ASSERT_NE(nullptr, calculator_delegate);
     const int integer_divide_result = integer_a / integer_b;
 
     EXPECT_EQ(integer_divide_result, calculator_delegate(integer_a, integer_b));
@@ -94,7 +100,9 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
             method_name_load,
             reinterpret_cast<void**>(&fn_method_load_delegate));
 
-    EXPECT_EQ(NOERROR, error);
+    ASSERT_EQ(NOERROR, error);
+    ASSERT_NE(nullptr, fn_method_load_delegate);
+
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -113,4 +121,102 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
 
     // Unload the AppDomain and stop the host
     EXPECT_EQ(NOERROR, UnloadRuntime());
+}
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, _X("ClassName"));
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, _X("MethodName"));
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassName) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, _X("AssemblyName"));
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, _X("MethodName"));
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, _X("AssemblyName"));
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, _X("ClassName"));
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithEmptyArguments) {
+    assembly_function_call assembly_function_call = { 0 };
+
+    pal::string_t assembly_name_wide;
+    pal::string_t type_name_wide;
+    pal::string_t method_name_wide;
+
+    const auto empty_string = _X("");
+
+    wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.class_name, max_function_name_size, empty_string);
+    wcscpy_s(assembly_function_call.function_name, max_function_name_size, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+}
+TEST(LibraryExportsTest, TestStartCoreCLRWithEmptyArguments) {
+    core_host_arguments host_arguments = { 0 };
+
+    const auto empty_string = _X("");
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, empty_string);
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+}
+
+TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath) {
+    core_host_arguments host_arguments = { 0 };
+
+    const auto empty_string = _X("");
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, empty_string);
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, _X("C:\\"));
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+}
+
+TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath) {
+    core_host_arguments host_arguments = { 0 };
+
+    const auto empty_string = _X("");
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, _X("C:\\"));
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, empty_string);
+
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+}
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionArgumentsNULL) {
+    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(nullptr));
+}
+
+TEST(TestLibraryExports, TestStartCoreCLRArgumentsNull) {
+    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(nullptr));
 }

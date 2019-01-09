@@ -7,16 +7,6 @@
 #include "corehost.h"
 #include "status_code.h"
 
-// Function export macro
-#ifdef _USRDLL  
-#define DllExport    __declspec(dllexport)
-#else
-#define DllExport    __declspec(dllimport)
-#endif
-
-// Export functions with their plain name
-#define DllApi extern "C" DllExport
-
 // The max length of a function to be executed in a .NET class
 #define max_function_name_size                  256
 
@@ -59,9 +49,7 @@ struct remote_entry_info
 // DLL exports used for starting, executing in, and stopping the .NET Core runtime
 
 // Create a native function delegate for a function inside a .NET assembly
-DllApi
-int
-CreateAssemblyDelegate(
+SHARED_API int CreateAssemblyDelegate(
     const char* assembly_name,
     const char* type_name,
     const char* method_name,
@@ -69,22 +57,12 @@ CreateAssemblyDelegate(
 );
 
 // Execute a function located in a .NET assembly by creating a native delegate
-DllApi
-int
-ExecuteAssemblyFunction(
-    const assembly_function_call* arguments
-);
+SHARED_API int ExecuteAssemblyFunction(const assembly_function_call* arguments);
 
 // Host the .NET Core runtime in the current application
-DllApi
-int
-StartCoreCLR(
-    const core_host_arguments* arguments
-);
+SHARED_API int StartCoreCLR(const core_host_arguments* arguments);
 
 // Stop the .NET Core host in the current application
-DllApi
-int
-UnloadRuntime();
+SHARED_API int UnloadRuntime();
 
 #endif // CORELOAD_DLL_H
