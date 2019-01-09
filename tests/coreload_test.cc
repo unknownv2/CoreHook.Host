@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "coreload.h"
-
-TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
+TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly) {
     // Assembly file name for getting base library path 
     // that is given to the .NET Core host when starting it
     PCWSTR dotnet_assembly_name = L"Calculator.dll";
@@ -20,7 +19,7 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
         = L"%programfiles%\\dotnet\\sdk\\2.2.102";
 
     WCHAR dotnet_root[MAX_PATH];
-    ::ExpandEnvironmentStringsW(dotnet_sdk_root, dotnet_root, MAX_PATH);
+    ExpandEnvironmentStringsW(dotnet_sdk_root, dotnet_root, MAX_PATH);
 
     pal::string_t library_path = dotnet_assembly_name;
     ASSERT_TRUE(pal::realpath(&library_path));
@@ -123,7 +122,7 @@ TEST(TestExecuteDotnetAssembly, TestExecuteDotnetAssemblyName) {
     // Unload the AppDomain and stop the host
     EXPECT_EQ(NOERROR, UnloadRuntime());
 }
-TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -139,7 +138,7 @@ TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
-TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyClassName) {
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassName) {
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -155,7 +154,7 @@ TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyClassName) {
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
-TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName) {
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName) {
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -170,7 +169,7 @@ TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName)
 
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
-TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithEmptyArguments) {
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithEmptyArguments) {
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -185,7 +184,7 @@ TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithEmptyArguments) {
 
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
-TEST(TestLibraryExports, TestStartCoreCLRWithEmptyArguments) {
+TEST(LibraryExportsTest, TestStartCoreCLRWithEmptyArguments) {
     core_host_arguments host_arguments = { 0 };
 
     const auto empty_string = _X("");
