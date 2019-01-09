@@ -11,7 +11,7 @@ set(CORELOAD_DLL_SOURCES
     )
 
 add_library(coreload_dll SHARED ${CORELOAD_DLL_SOURCES})
-target_compile_definitions(coreload_dll PRIVATE _USRDLL=1)
+target_compile_definitions(coreload_dll PRIVATE COREHOST_MAKE_DLL=1)
 
 target_link_libraries(coreload_dll coreload)
 set_target_properties(coreload_dll PROPERTIES OUTPUT_NAME ${CORELOAD_DLL_NAME})

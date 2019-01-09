@@ -13,7 +13,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 include_directories(${CORELOAD_INSTALL_INCLUDE_DIR})
 
 project(coreload_dll)
-add_definitions(-DCOREHOST_MAKE_DLL=1)
 if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Win32")
     add_definitions(-D_TARGET_X86_=1 -DCORELOAD_BITS=32)
     set(CORELOAD_DLL_NAME "coreload32")
