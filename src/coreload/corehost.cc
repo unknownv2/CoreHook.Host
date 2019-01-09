@@ -19,6 +19,11 @@ namespace coreload {
         const char* type_name,
         const char* method_name,
         void** pfnDelegate) {
+        assert(assembly_name != nullptr);
+        assert(type_name != nullptr);
+        assert(method_name != nullptr);
+        assert(pfnDelegate != nullptr);
+
         auto hr = coreclr::create_delegate(
             corehost::m_handle,
             corehost::m_domain_id,

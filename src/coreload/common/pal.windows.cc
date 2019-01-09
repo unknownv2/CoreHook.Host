@@ -27,7 +27,6 @@ namespace coreload {
         }
 
         return false;
-
     }
 
     pal::string_t pal::to_lower(const pal::string_t& in)
