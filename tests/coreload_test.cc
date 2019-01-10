@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "coreload.h"
-TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly) {
+
+TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly)
+{
     // Assembly file name for getting base library path 
     // that is given to the .NET Core host when starting it
     PCWSTR dotnet_assembly_name = L"Calculator.dll";
@@ -25,9 +27,15 @@ TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly) {
     ASSERT_TRUE(pal::realpath(&library_path));
 
     core_host_arguments host_arguments = { 0 };
+    // The path to the assembly being loaded by CoreCLR.
     wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, library_path.c_str());
+    // The path that should contain the runtime configuration or dependencies for the assembly
     wcscpy_s(host_arguments.core_root_path, MAX_PATH, dotnet_root);
 
+    // This will initialize CoreCLR in the current application,
+    // which allows us to load assemblies from the paths defined by the
+    // runtime configuration or from the base application path of the 
+    // test assembly library Calculator.dll.
     auto error = StartCoreCLR(&host_arguments);
  
     ASSERT_EQ(NO_ERROR, error);
@@ -122,6 +130,7 @@ TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly) {
     // Unload the AppDomain and stop the host
     EXPECT_EQ(NOERROR, UnloadRuntime());
 }
+
 TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
     assembly_function_call assembly_function_call = { 0 };
 
