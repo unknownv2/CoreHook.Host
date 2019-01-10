@@ -12,6 +12,15 @@ A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/Cor
 | ------------ | ----------- | ---------------------------------------- |
 | AppVeyor     | Windows     | [![Build status](https://ci.appveyor.com/api/projects/status/7c0lfec5c7tlvo2a/branch/master?style=flat-square)](https://ci.appveyor.com/project/unknownv2/corehook-host/branch/master) |
 
+## Binary Releases 
+ You download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases) or you can build the binaries from source.
+ 
+ ## Usage
+ 
+ For `x86, x64`, extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the build output directory of your program.
+ 
+ For `ARM, ARM64`,  extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the output directory of your published program, created either from using the [Publishing Script](https://github.com/unknownv2/CoreHook#publishing-script) or the `dotnet publish` command.
+
 ## Building
 
 ## Windows (x86, x64, ARM, ARM64)
@@ -52,13 +61,6 @@ You can compile the .NET class [`Calculator.cs`](tests/dotnet/Calculator.cs), wh
 ```
 csc -target:library Calculator.cs
 ```
-
-### Binary Releases 
- You can also download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases).
- 
- For `x86, x64`, extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the build output directory of your program.
- 
- For `ARM, ARM64`,  extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the output directory of your published program, created either from using the [Publishing Script](https://github.com/unknownv2/CoreHook#publishing-script) or the `dotnet publish` command.
 
 ## Credits
 
