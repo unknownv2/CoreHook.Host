@@ -231,6 +231,7 @@ TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath)
 
     EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
+
 TEST(TestLibraryExports, TestExecuteAssemblyFunctionArgumentsNULL)
 {
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(nullptr));
