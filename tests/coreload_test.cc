@@ -131,7 +131,8 @@ TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly)
     EXPECT_EQ(NOERROR, UnloadRuntime());
 }
 
-TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName)
+{
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -147,7 +148,8 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName) {
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
-TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassName) {
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassName)
+{
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -163,7 +165,8 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassName) {
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
-TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName) {
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName)
+{
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -178,7 +181,9 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName)
 
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
-TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithEmptyArguments) {
+
+TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithEmptyArguments)
+{
     assembly_function_call assembly_function_call = { 0 };
 
     pal::string_t assembly_name_wide;
@@ -193,7 +198,9 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithEmptyArguments) {
 
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
-TEST(LibraryExportsTest, TestStartCoreCLRWithEmptyArguments) {
+
+TEST(LibraryExportsTest, TestStartCoreCLRWithEmptyArguments)
+{
     core_host_arguments host_arguments = { 0 };
 
     const auto empty_string = _X("");
@@ -203,7 +210,8 @@ TEST(LibraryExportsTest, TestStartCoreCLRWithEmptyArguments) {
     EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
 
-TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath) {
+TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath)
+{
     core_host_arguments host_arguments = { 0 };
 
     const auto empty_string = _X("");
@@ -213,7 +221,8 @@ TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath) {
     EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
 
-TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath) {
+TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath)
+{
     core_host_arguments host_arguments = { 0 };
 
     const auto empty_string = _X("");
@@ -222,10 +231,13 @@ TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath) {
 
     EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
-TEST(TestLibraryExports, TestExecuteAssemblyFunctionArgumentsNULL) {
+
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionArgumentsNULL)
+{
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(nullptr));
 }
 
-TEST(TestLibraryExports, TestStartCoreCLRArgumentsNull) {
+TEST(TestLibraryExports, TestStartCoreCLRArgumentsNull)
+{
     EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(nullptr));
 }
