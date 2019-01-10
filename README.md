@@ -6,22 +6,22 @@
 
 A library for hosting .NET Core with [CoreHook](https://github.com/unknownv2/CoreHook) in an unmanaged application on Windows.
 
-## Build status
+# Build status
 
 | Build server | Platform    | Build status                             |
 | ------------ | ----------- | ---------------------------------------- |
 | AppVeyor     | Windows     | [![Build status](https://ci.appveyor.com/api/projects/status/7c0lfec5c7tlvo2a/branch/master?style=flat-square)](https://ci.appveyor.com/project/unknownv2/corehook-host/branch/master) |
 
-## Binary Releases 
+# Binary Releases 
  You download the pre-built Windows binaries [here](https://github.com/unknownv2/CoreHook.Host/releases) or you can build the binaries from source.
  
- ## Usage
- 
+ # Usage
+
  For `x86, x64`, extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the build output directory of your program.
  
  For `ARM, ARM64`,  extract the zip corresponding to your target architecture, then place the `coreload32.dll` or `coreload64.dll` in the output directory of your published program, created either from using the [Publishing Script](https://github.com/unknownv2/CoreHook#publishing-script) or the `dotnet publish` command.
 
-## Building
+# Building
 
 ## Windows (x86, x64, ARM, ARM64)
 
@@ -62,7 +62,7 @@ You can compile the .NET class [`Calculator.cs`](tests/dotnet/Calculator.cs), wh
 csc -target:library Calculator.cs
 ```
 
-## Credits
+# Credits
 
 The `coreload` project is based on the [core-setup](https://github.com/dotnet/core-setup/) host which supports parsing the `.deps.json` and `runtimeconfig.json` application configuration files.
 
