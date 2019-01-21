@@ -9,8 +9,6 @@
 #include "fx_ver.h"
 
 namespace coreload {
-
-
     enum host_mode_t
     {
         invalid = 0,

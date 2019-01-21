@@ -3,7 +3,6 @@
 #include "trace.h"
 
 namespace coreload {
-
     bool deps_entry_t::to_path(const pal::string_t& base, bool look_in_base, pal::string_t* str) const
     {
         pal::string_t& candidate = *str;

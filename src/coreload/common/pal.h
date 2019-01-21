@@ -40,9 +40,7 @@
 #define LIBHOSTPOLICY_NAME MAKE_LIBNAME("hostpolicy")
 
 namespace coreload {
-
-    namespace pal {
-        
+    namespace pal {        
 #if defined(_WIN32)
 #ifdef COREHOST_MAKE_DLL
 #define SHARED_API extern "C" __declspec(dllexport)

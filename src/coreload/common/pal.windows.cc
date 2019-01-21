@@ -8,7 +8,6 @@
 #include <ShlObj.h>
 
 namespace coreload {
-
     bool GetModuleFileNameWrapper(HMODULE hModule, pal::string_t* recv)
     {
         pal::string_t path;

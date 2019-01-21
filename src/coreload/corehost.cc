@@ -42,7 +42,8 @@ namespace coreload {
         return StatusCode::Success;
     }
 
-    int corehost::unload_runtime() {
+    int corehost::unload_runtime()
+    {
         int exit_code = 0;
 
         auto hr = coreclr::shutdown(corehost::m_handle, corehost::m_domain_id, (int*)&exit_code);

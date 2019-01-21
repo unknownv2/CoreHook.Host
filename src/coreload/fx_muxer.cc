@@ -7,7 +7,6 @@
 #include "coreclr.h"
 
 namespace coreload {
-
     /**
     * Resolve the hostpolicy version from deps.
     *  - Scan the deps file's libraries section and find the hostpolicy version in the file.
@@ -843,7 +842,8 @@ namespace coreload {
 
         arguments.probe_paths = app_config.get_probe_paths();
         // If the deps.json path is empty, set it using the application name
-        if (arguments.deps_path.empty()) {
+        if (arguments.deps_path.empty())
+        {
             arguments.deps_path = get_deps_from_app_binary(arguments.managed_application);
         }
 

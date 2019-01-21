@@ -13,7 +13,6 @@
 #include "libhost.h"
 
 namespace coreload {
-
     // Probe paths to be resolved for ordering
     struct probe_paths_t
     {

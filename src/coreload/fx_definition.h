@@ -6,7 +6,6 @@
 #include "runtime_config.h"
 
 namespace coreload {
-
     class fx_definition_t {
     public:
         fx_definition_t();
@@ -49,7 +48,6 @@ namespace coreload {
     {
         return *fx_definitions[0];
     }
-
 }
 
 #endif // FX_DEFINITION_H

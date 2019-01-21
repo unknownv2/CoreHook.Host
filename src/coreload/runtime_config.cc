@@ -7,7 +7,6 @@
 #include <cassert>
 
 namespace coreload {
-
     // The semantics of applying the runtimeconfig.json values follows, in the following steps from
     // first to last, where last always wins. These steps are also annotated in the code here.
     // 1) Apply the environment settings

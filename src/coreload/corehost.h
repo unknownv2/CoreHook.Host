@@ -6,7 +6,6 @@
 #include "coreclr.h"
 
 namespace coreload {
-
     class corehost {
     public:
         static coreclr::host_handle_t m_handle;

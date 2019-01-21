@@ -145,5 +145,4 @@ namespace coreload {
             trace::verbose(_X("Prerelease roll forwarded [%s] -> [%s] in [%s]"), start_str.c_str(), max_str->c_str(), path.c_str());
         }
     }
-
 }

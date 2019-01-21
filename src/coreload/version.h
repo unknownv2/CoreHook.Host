@@ -5,7 +5,6 @@
 #include "utils.h"
 
 namespace coreload {
-
     struct version_t
     {
         version_t();

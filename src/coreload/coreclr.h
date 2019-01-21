@@ -2,10 +2,8 @@
 #define CLR_H
 #include "pal.h"
 
-namespace coreload {
-    
+namespace coreload {    
     namespace coreclr {
-
         typedef void* host_handle_t;
         typedef unsigned int domain_id_t;
 
@@ -43,6 +41,5 @@ namespace coreload {
             const char* method_name,
             void** delegate);
     }
-
 }
 #endif // CLR_H
