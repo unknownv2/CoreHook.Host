@@ -10,7 +10,6 @@ typedef web::json::value json_value;
 typedef web::json::object json_object;
 
 namespace coreload {
-
     class runtime_config_framework_t
     {
     public:

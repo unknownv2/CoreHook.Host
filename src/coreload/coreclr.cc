@@ -47,7 +47,8 @@ namespace coreload {
         pal::string_t coreclr_dll_path(libcoreclr_path);
         append_path(&coreclr_dll_path, LIBCORECLR_NAME);
 
-        if (!pal::load_library(&coreclr_dll_path, &g_coreclr)) {
+        if (!pal::load_library(&coreclr_dll_path, &g_coreclr))
+        {
             return false;
         }
 

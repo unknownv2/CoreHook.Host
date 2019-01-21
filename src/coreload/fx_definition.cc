@@ -1,7 +1,6 @@
 #include "fx_definition.h"
 
 namespace coreload {
-
     fx_definition_t::fx_definition_t() {}
 
     fx_definition_t::fx_definition_t(

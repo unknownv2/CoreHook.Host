@@ -3,7 +3,6 @@
 #include "longfile.h"
 
 namespace coreload {
-
     const pal::char_t LongFile::DirectorySeparatorChar = _X('\\');
     const pal::char_t LongFile::AltDirectorySeparatorChar = _X('/');
     const pal::char_t LongFile::VolumeSeparatorChar = _X(':');

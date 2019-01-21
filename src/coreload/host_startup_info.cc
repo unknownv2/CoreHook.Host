@@ -5,7 +5,6 @@
 #include "utils.h"
 
 namespace coreload {
-
     host_startup_info_t::host_startup_info_t(
         const pal::char_t* host_path_value,
         const pal::char_t* dotnet_root_value,
@@ -15,7 +14,8 @@ namespace coreload {
         , app_path(app_path_value) {}
 
     // Determine if string is a valid path, and if so then fix up by using realpath()
-    bool get_path_from_argv(pal::string_t *path) {
+    bool get_path_from_argv(pal::string_t *path)
+    {
         // Assume all paths will have at least one separator. We want to detect path vs. file before calling realpath
         // because realpath will expand a filename into a full path containing the current directory which may be
         // the wrong location when filename ends up being found in %PATH% and not the current directory.
@@ -29,7 +29,8 @@ namespace coreload {
 
     int host_startup_info_t::parse(
         int argc,
-        const pal::char_t* argv[]) {
+        const pal::char_t* argv[])
+    {
         // Get host_path
         get_host_path(argc, argv, &host_path);
 
@@ -48,25 +49,30 @@ namespace coreload {
         return 0;
     }
 
-    const bool host_startup_info_t::is_valid() const {
+    const bool host_startup_info_t::is_valid() const
+    {
         return (
             !host_path.empty() &&
             !dotnet_root.empty() &&
             !app_path.empty());
     }
 
-    const pal::string_t host_startup_info_t::get_app_name() const {
+    const pal::string_t host_startup_info_t::get_app_name() const
+    {
         return get_filename(strip_file_ext(app_path));
     }
 
-    /*static*/
-    int host_startup_info_t::get_host_path(int argc, const pal::char_t* argv[], pal::string_t* host_path) {
+    /*static*/ int host_startup_info_t::get_host_path(int argc, const pal::char_t* argv[], pal::string_t* host_path)
+    {
         // Attempt to get host_path from argv[0] as to allow for hosts located elsewhere
-        if (argc >= 1) {
+        if (argc >= 1)
+        {
             host_path->assign(argv[0]);
-            if (!host_path->empty()) {
+            if (!host_path->empty())
+            {
                 trace::info(_X("Attempting to use argv[0] as path [%s]"), host_path->c_str());
-                if (!get_path_from_argv(host_path)) {
+                if (!get_path_from_argv(host_path))
+                {
                     trace::warning(_X("Failed to resolve argv[0] as path [%s]. Using location of current executable instead."), host_path->c_str());
                     host_path->clear();
                 }
@@ -74,7 +80,8 @@ namespace coreload {
         }
 
         // If argv[0] did not work, get the executable name
-        if (host_path->empty() && (!pal::get_own_executable_path(host_path) || !pal::realpath(host_path))) {
+        if (host_path->empty() && (!pal::get_own_executable_path(host_path) || !pal::realpath(host_path)))
+        {
             trace::error(_X("Failed to resolve full path of the current executable [%s]"), host_path->c_str());
             return StatusCode::LibHostCurExeFindFailure;
         }

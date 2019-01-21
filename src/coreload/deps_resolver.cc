@@ -23,8 +23,6 @@ const coreload::pal::string_t ManifestListMessage = _X(
     "    %s");
 
 namespace coreload {
-
-
     // -----------------------------------------------------------------------------
     // A uniqifying append helper that doesn't let two "paths" to be identical in
     // the "output" string.
