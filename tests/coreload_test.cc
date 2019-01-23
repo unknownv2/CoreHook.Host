@@ -18,7 +18,7 @@ TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly)
     PCSTR method_name_load = "Load";
 
     PCWSTR dotnet_sdk_root
-        = L"%programfiles%\\dotnet\\sdk\\2.2.102";
+        = L"%programfiles%\\dotnet\\sdk\\2.2.103";
 
     WCHAR dotnet_root[MAX_PATH];
     ExpandEnvironmentStringsW(dotnet_sdk_root, dotnet_root, MAX_PATH);
@@ -232,12 +232,12 @@ TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath)
     EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
 
-TEST(TestLibraryExports, TestExecuteAssemblyFunctionArgumentsNULL)
+TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithNullArguments)
 {
     EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(nullptr));
 }
 
-TEST(TestLibraryExports, TestStartCoreCLRArgumentsNull)
+TEST(TestLibraryExports, TestStartCoreCLRWithNullArguments)
 {
     EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(nullptr));
 }
