@@ -64,7 +64,7 @@ csc -target:library Calculator.cs
 
 # Credits
 
-The `coreload` project is based on the [core-setup](https://github.com/dotnet/core-setup/) host which supports parsing the `.deps.json` and `runtimeconfig.json` application configuration files.
+The `coreload` project is based on the [core-setup](https://github.com/dotnet/core-setup/) host which supports parsing the `.deps.json` and `runtimeconfig.json` application configuration files. Most of the code for this library is borrowed from [the corehost source](https://github.com/dotnet/core-setup/tree/master/src/corehost).
 
 ## References
 * [.NET Core Hosting Sample](https://github.com/dotnet/samples/tree/master/core/hosting)
