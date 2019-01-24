@@ -114,5 +114,7 @@ namespace coreload
 
         pal::string_t m_deps_file;
     };
-}
+
+} // namespace coreload
+
 #endif // DEPS_FORMAT_H_
