@@ -1,9 +1,12 @@
-#ifndef CLR_H
-#define CLR_H
+#ifndef CLR_H_
+#define CLR_H_
+
 #include "pal.h"
 
-namespace coreload {    
-    namespace coreclr {
+namespace coreload
+{
+    namespace coreclr
+    {
         typedef void* host_handle_t;
         typedef unsigned int domain_id_t;
 
@@ -40,6 +43,9 @@ namespace coreload {
             const char* type_name,
             const char* method_name,
             void** delegate);
-    }
-}
-#endif // CLR_H
+
+    } // namespace coreclr
+
+} // namespace coreload
+
+#endif // CLR_H_

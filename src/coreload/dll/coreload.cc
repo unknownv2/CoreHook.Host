@@ -4,10 +4,10 @@ int ValidateArgument(
     const pal::char_t* argument,
     size_t max_size)
 {
-    if (argument != nullptr && pal::strncmp(argument, _X(""), max_size) != 0)
+    if (argument != nullptr)
     {
         const size_t string_length = pal::strlen(argument);
-        if (string_length >= max_size)
+        if (string_length == 0 || string_length > max_size)
         {
             return StatusCode::InvalidArgFailure;
         }

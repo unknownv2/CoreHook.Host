@@ -7,7 +7,8 @@
 #include <codecvt>
 #include <ShlObj.h>
 
-namespace coreload {
+namespace coreload
+{
     bool GetModuleFileNameWrapper(HMODULE hModule, pal::string_t* recv)
     {
         pal::string_t path;
@@ -533,4 +534,4 @@ namespace coreload {
         // On Windows, paths are case-insensitive
         return (strcasecmp(path1.c_str(), path2.c_str()) == 0);
     }
-}
+} // namespace coreload

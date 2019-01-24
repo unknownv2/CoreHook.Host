@@ -1,10 +1,12 @@
-#ifndef HOST_STARTUP_INFO_H
-#define HOST_STARTUP_INFO_H
+#ifndef HOST_STARTUP_INFO_H_
+#define HOST_STARTUP_INFO_H_
 
 #include "pal.h"
 
-namespace coreload {
-    class host_startup_info_t {
+namespace coreload
+{
+    class host_startup_info_t
+    {
     public:
         host_startup_info_t() {}
         host_startup_info_t(
@@ -26,5 +28,7 @@ namespace coreload {
         pal::string_t dotnet_root;  // The path to the framework.
         pal::string_t app_path;     // For apphost, the path to the app dll; for muxer, not applicable as this information is not yet parsed.
     };
-}
-#endif // HOST_STARTUP_INFO_H
+
+} // namespace coreload
+
+#endif // HOST_STARTUP_INFO_H_

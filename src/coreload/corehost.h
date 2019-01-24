@@ -1,12 +1,13 @@
-#pragma once
-#ifndef COREHOST_H
-#define COREHOST_H
+#ifndef COREHOST_H_
+#define COREHOST_H_
 
 #include "libhost.h"
 #include "coreclr.h"
 
-namespace coreload {
-    class corehost {
+namespace coreload
+{
+    class corehost
+    {
     public:
         static coreclr::host_handle_t m_handle;
         static coreclr::domain_id_t m_domain_id;
@@ -23,6 +24,7 @@ namespace coreload {
 
         static int unload_runtime();
     };
-}
 
-#endif // COREHOST_H
+} // namespace coreload
+
+#endif // COREHOST_H_

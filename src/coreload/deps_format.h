@@ -1,6 +1,5 @@
-#ifndef DEPS_FORMAT_H
-#define DEPS_FORMAT_H
-
+#ifndef DEPS_FORMAT_H_
+#define DEPS_FORMAT_H_
 
 #include <iostream>
 #include <vector>
@@ -10,7 +9,8 @@
 #include "deps_entry.h"
 #include "cpprest/json.h"
 
-namespace coreload {
+namespace coreload
+{
     class deps_json_t
     {
         typedef web::json::value json_value;
@@ -114,5 +114,7 @@ namespace coreload {
 
         pal::string_t m_deps_file;
     };
-}
-#endif // DEPS_FORMAT_H
+
+} // namespace coreload
+
+#endif // DEPS_FORMAT_H_

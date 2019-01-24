@@ -1,5 +1,5 @@
-#ifndef PAL_H
-#define PAL_H
+#ifndef PAL_H_
+#define PAL_H_
 
 #include <string>
 #include <fstream>
@@ -39,8 +39,10 @@
 #define LIBHOSTPOLICY_FILENAME (LIB_PREFIX _X("hostpolicy"))
 #define LIBHOSTPOLICY_NAME MAKE_LIBNAME("hostpolicy")
 
-namespace coreload {
-    namespace pal {        
+namespace coreload
+{
+    namespace pal
+    {
 #if defined(_WIN32)
 #ifdef COREHOST_MAKE_DLL
 #define SHARED_API extern "C" __declspec(dllexport)
@@ -136,7 +138,9 @@ namespace coreload {
         bool is_running_in_wow64();
 
         bool are_paths_equal_with_normalized_casing(const string_t& path1, const string_t& path2);
-    }
-}
 
-#endif // PAL_H
+    } // namespace pal
+
+} // namespace coreload
+
+#endif // PAL_H_

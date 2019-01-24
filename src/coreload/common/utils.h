@@ -1,11 +1,10 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef UTILS_H_
+#define UTILS_H_
 
 #include "pal.h"
-namespace coreload {
+
+namespace coreload
+{
     struct host_option
     {
         pal::string_t option;
@@ -51,5 +50,6 @@ namespace coreload {
     bool try_stou(const pal::string_t& str, unsigned* num);
     pal::string_t get_dotnet_root_env_var_name();
 
-}
-#endif
+} // namespace coreload
+
+#endif // UTILS_H_

@@ -3,7 +3,8 @@
 #include "fx_muxer.h"
 #include "corehost.h"
 
-namespace coreload {
+namespace coreload
+{
     coreclr::domain_id_t corehost::m_domain_id = 0;
     coreclr::host_handle_t corehost::m_handle = nullptr;
 
@@ -55,4 +56,4 @@ namespace coreload {
         coreclr::unload();
         return exit_code;
     }
-}
+} // namespace coreload

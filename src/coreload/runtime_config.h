@@ -1,6 +1,5 @@
-#pragma once
-#ifndef __RUNTIME_CONFIG_H__
-#define __RUNTIME_CONFIG_H__
+#ifndef RUNTIME_CONFIG_H_
+#define RUNTIME_CONFIG_H_
 
 #include "pal.h"
 #include "cpprest/json.h"
@@ -9,7 +8,8 @@
 typedef web::json::value json_value;
 typedef web::json::object json_object;
 
-namespace coreload {
+namespace coreload
+{
     class runtime_config_framework_t
     {
     public:
@@ -105,5 +105,6 @@ namespace coreload {
         bool read_framework_array(web::json::array frameworks);
         static void copy_framework_settings_to(const fx_reference_t& from, fx_reference_t& to);
     };
-}
-#endif // __RUNTIME_CONFIG_H__
+} // namespace coreload
+
+#endif // RUNTIME_CONFIG_H_

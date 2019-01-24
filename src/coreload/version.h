@@ -1,10 +1,11 @@
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef VERSION_H_
+#define VERSION_H_
 
 #include "pal.h"
 #include "utils.h"
 
-namespace coreload {
+namespace coreload
+{
     struct version_t
     {
         version_t();
@@ -39,5 +40,7 @@ namespace coreload {
 
         static int compare(const version_t&a, const version_t& b);
     };
-}
-#endif // VERSION_H
+
+} // namespace coreload
+
+#endif // VERSION_H_

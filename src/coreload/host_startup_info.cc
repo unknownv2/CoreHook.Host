@@ -4,7 +4,8 @@
 #include "status_code.h"
 #include "utils.h"
 
-namespace coreload {
+namespace coreload
+{
     host_startup_info_t::host_startup_info_t(
         const pal::char_t* host_path_value,
         const pal::char_t* dotnet_root_value,
@@ -88,4 +89,4 @@ namespace coreload {
 
         return 0;
     }
-}
+} // namespace coreload

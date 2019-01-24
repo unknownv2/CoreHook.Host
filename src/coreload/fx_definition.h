@@ -1,12 +1,14 @@
-#ifndef FX_DEFINITION_H
-#define FX_DEFINITION_H
+#ifndef FX_DEFINITION_H_
+#define FX_DEFINITION_H_
 
 #include "pal.h"
 #include "deps_format.h"
 #include "runtime_config.h"
 
-namespace coreload {
-    class fx_definition_t {
+namespace coreload
+{
+    class fx_definition_t
+    {
     public:
         fx_definition_t();
 
@@ -48,6 +50,7 @@ namespace coreload {
     {
         return *fx_definitions[0];
     }
-}
 
-#endif // FX_DEFINITION_H
+} // namespace coreload
+
+#endif // FX_DEFINITION_H_

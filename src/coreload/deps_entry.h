@@ -1,5 +1,5 @@
-#ifndef DEPS_ENTRY_H
-#define DEPS_ENTRY_H
+#ifndef DEPS_ENTRY_H_
+#define DEPS_ENTRY_H_
 
 #include <iostream>
 #include <array>
@@ -7,7 +7,8 @@
 #include "pal.h"
 #include "version.h"
 
-namespace coreload {
+namespace coreload
+{
     struct deps_asset_t
     {
         deps_asset_t() : deps_asset_t(_X(""), _X(""), version_t(), version_t()) { }
@@ -60,6 +61,7 @@ namespace coreload {
         // Given a "base" dir, yield the relative path with package name, version in the package layout.
         bool to_full_path(const pal::string_t& root, pal::string_t* str) const;
     };
-}
 
-#endif // DEPS_ENTRY_H
+} // namespace coreload
+
+#endif // DEPS_ENTRY_H_

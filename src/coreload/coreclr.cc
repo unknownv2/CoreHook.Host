@@ -2,7 +2,8 @@
 #include "coreclr.h"
 #include "utils.h"
 
-namespace coreload {
+namespace coreload
+{
     static pal::dll_t g_coreclr = nullptr;
 
     // Prototype of the coreclr_initialize function from coreclr.dll
@@ -129,4 +130,4 @@ namespace coreload {
 
         return coreclr_create_delegate(host_handle, domain_id, assembly_name, type_name, method_name, delegate);
     }
-}
+} // namespace coreload

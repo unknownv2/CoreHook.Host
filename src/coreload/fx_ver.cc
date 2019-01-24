@@ -3,7 +3,8 @@
 #include "utils.h"
 #include "fx_ver.h"
 
-namespace coreload {
+namespace coreload
+{
     fx_ver_t::fx_ver_t(int major, int minor, int patch, const pal::string_t& pre, const pal::string_t& build)
         : m_major(major)
         , m_minor(minor)
@@ -196,4 +197,4 @@ namespace coreload {
         assert(!valid || fx_ver->as_str() == ver);
         return valid;
     }
-}
+} // namespace coreload

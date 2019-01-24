@@ -1,6 +1,3 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 #include "deps_entry.h"
 #include "deps_format.h"
 #include "utils.h"
@@ -10,7 +7,8 @@
 #include <cassert>
 #include <functional>
 
-namespace coreload {
+namespace coreload
+{
     const std::array<const pal::char_t*, deps_entry_t::asset_types::count> deps_entry_t::s_known_asset_types = {
         _X("runtime"), _X("resources"), _X("native")
     };
@@ -485,5 +483,4 @@ namespace coreload {
             return false;
         }
     }
-
-}
+} // namespace coreload

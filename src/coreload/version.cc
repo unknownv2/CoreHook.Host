@@ -8,7 +8,8 @@
 // -- if version_t is an empty value (-1 for all segments) then as_str() returns an empty string
 // -- Different terminology; fx_ver_t(major, minor, patch, build) vs version_t(major, minor, build, revision)
 
-namespace coreload {
+namespace coreload
+{
     version_t::version_t() : version_t(-1, -1, -1, -1) { }
 
     version_t::version_t(int major, int minor, int build, int revision)
@@ -165,4 +166,4 @@ namespace coreload {
         assert(!valid || ver_out->as_str() == ver);
         return valid;
     }
-}
+} // namespace coreload

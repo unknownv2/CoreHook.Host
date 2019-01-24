@@ -1,6 +1,7 @@
 #include "fx_definition.h"
 
-namespace coreload {
+namespace coreload
+{
     fx_definition_t::fx_definition_t() {}
 
     fx_definition_t::fx_definition_t(
@@ -35,4 +36,4 @@ namespace coreload {
     {
         m_deps.parse(true, m_deps_file, graph);
     }
-}
+} // namespace coreload

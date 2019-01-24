@@ -1,12 +1,10 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-#ifndef TRACE_H
-#define TRACE_H
+#ifndef TRACE_H_
+#define TRACE_H_
 
 #include "pal.h"
 
-namespace coreload {
+namespace coreload
+{
     namespace trace
     {
         void setup();
@@ -32,5 +30,7 @@ namespace coreload {
         // Returns the currently set callback for error writing
         error_writer_fn get_error_writer();
     };
-}
-#endif // TRACE_H
+
+} // namespace coreload
+
+#endif // TRACE_H_

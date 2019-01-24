@@ -1,11 +1,9 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 #include "pal.h"
 #include "fx_ver.h"
 #include "fx_reference.h"
 
-namespace coreload {
+namespace coreload
+{
     bool fx_reference_t::is_roll_forward_compatible(const fx_ver_t& other) const
     {
         // We expect the version to be <
@@ -102,4 +100,4 @@ namespace coreload {
             }
         }
     }
-}
+} // namespace coreload

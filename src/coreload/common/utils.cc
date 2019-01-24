@@ -1,10 +1,8 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 #include "utils.h"
 #include "trace.h"
 
-namespace coreload {
+namespace coreload
+{
     bool library_exists_in_dir(const pal::string_t& lib_dir, const pal::string_t& lib_name, pal::string_t* p_lib_path)
     {
         pal::string_t lib_path = lib_dir;
@@ -382,5 +380,4 @@ namespace coreload {
 
         return pal::string_t(_X("DOTNET_ROOT"));
     }
-
-}
+} // namespace coreload

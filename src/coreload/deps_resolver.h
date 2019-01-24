@@ -1,8 +1,7 @@
-#ifndef DEPS_RESOLVER_H
-#define DEPS_RESOLVER_H
+#ifndef DEPS_RESOLVER_H_
+#define DEPS_RESOLVER_H_
 
 #include <vector>
-
 #include "pal.h"
 #include "arguments.h"
 #include "trace.h"
@@ -12,7 +11,8 @@
 #include "runtime_config.h"
 #include "libhost.h"
 
-namespace coreload {
+namespace coreload
+{
     // Probe paths to be resolved for ordering
     struct probe_paths_t
     {
@@ -233,6 +233,7 @@ namespace coreload {
         // Is the deps file for an app using shared frameworks?
         bool m_is_framework_dependent;
     };
-}
 
-#endif // DEPS_RESOLVER_H
+} // namespace coreload
+
+#endif // DEPS_RESOLVER_H_

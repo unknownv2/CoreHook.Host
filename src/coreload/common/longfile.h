@@ -1,11 +1,12 @@
-
-#ifndef _LONG_FILE_SUPPORT
-#define _LONG_FILE_SUPPORT
+#ifndef LONG_FILE_SUPPORT_
+#define LONG_FILE_SUPPORT_
 
 #include "pal.h"
 
-namespace coreload {
-    class LongFile {
+namespace coreload
+{
+    class LongFile
+    {
     public:
         static const pal::string_t ExtendedPrefix;
         static const pal::string_t DevicePathPrefix;
@@ -24,6 +25,7 @@ namespace coreload {
         static bool IsNormalized(const pal::string_t& path);
         static bool ShouldNormalize(const pal::string_t& path);
     };
-}
 
-#endif // _LONG_FILE_SUPPORT
+} // namespace coreload
+
+#endif // LONG_FILE_SUPPORT_
