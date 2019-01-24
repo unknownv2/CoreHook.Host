@@ -1,10 +1,8 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 #include "trace.h"
 #include <mutex>
 
-namespace coreload {
+namespace coreload
+{
     // g_trace_verbosity is used to encode COREHOST_TRACE and COREHOST_TRACE_VERBOSITY to selectively control output of
     //    trace::warn(), trace::info(), and trace::verbose()
     //  COREHOST_TRACE=0 COREHOST_TRACE_VERBOSITY=N/A        implies g_trace_verbosity = 0.  // Trace "disabled". error() messages will be produced.
@@ -206,4 +204,4 @@ namespace coreload {
         // No need for locking since g_error_writer is thread local.
         return g_error_writer;
     }
-}
+} // namespace coreload

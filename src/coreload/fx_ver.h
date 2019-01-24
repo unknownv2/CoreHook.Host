@@ -1,9 +1,10 @@
-#ifndef __FX_VER_H__
-#define __FX_VER_H__
+#ifndef FX_VER_H_
+#define FX_VER_H_
 
 #include "pal.h"
 
-namespace coreload {
+namespace coreload
+{
     // Note: This is not SemVer (esp., in comparing pre-release part, fx_ver_t does not
     // compare multiple dot separated identifiers individually.) ex: 1.0.0-beta.2 vs. 1.0.0-beta.11
     struct fx_ver_t
@@ -45,5 +46,7 @@ namespace coreload {
 
         static int compare(const fx_ver_t&a, const fx_ver_t& b);
     };
-}
-#endif // __FX_VER_H__
+
+} // namespace coreload
+
+#endif // FX_VER_H_

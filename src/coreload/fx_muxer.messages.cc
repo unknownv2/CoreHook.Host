@@ -1,10 +1,8 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 #include <cassert>
 #include "fx_muxer.h"
 
-namespace coreload {
+namespace coreload
+{
     /**
     * When the framework is referenced more than once in a non-compatible way, display detailed error message
     *   about available frameworks and installation of new framework.
@@ -95,4 +93,4 @@ namespace coreload {
             }
         }
     }
-}
+} // namespace coreload

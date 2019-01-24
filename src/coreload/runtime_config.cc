@@ -6,7 +6,8 @@
 #include "fx_reference.h"
 #include <cassert>
 
-namespace coreload {
+namespace coreload
+{
     // The semantics of applying the runtimeconfig.json values follows, in the following steps from
     // first to last, where last always wins. These steps are also annotated in the code here.
     // 1) Apply the environment settings
@@ -340,4 +341,4 @@ namespace coreload {
         m_frameworks[0].set_roll_fwd_on_no_candidate_fx(roll_fwd_on_no_candidate_fx_option::disabled);
         m_frameworks[0].set_use_exact_version(true);
     }
-}
+} // namespace coreload

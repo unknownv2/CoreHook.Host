@@ -1,5 +1,5 @@
-#ifndef ARGUMENTS_H
-#define ARGUMENTS_H
+#ifndef ARGUMENTS_H_
+#define ARGUMENTS_H_
 
 #include "utils.h"
 #include "pal.h"
@@ -103,4 +103,4 @@ namespace coreload {
         arguments_t();
     };
 }
-#endif // ARGUMENTS_H
+#endif // ARGUMENTS_H_

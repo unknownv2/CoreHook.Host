@@ -1,6 +1,7 @@
 #include "arguments.h"
 
-namespace coreload {
+namespace coreload
+{
     arguments_t::arguments_t() :
         managed_application(_X("")),
         host_path(_X("")),
@@ -12,4 +13,4 @@ namespace coreload {
     {
 
     }
-}
+} // namespace coreload

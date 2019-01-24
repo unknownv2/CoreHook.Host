@@ -1,11 +1,12 @@
-#pragma once
-#ifndef __FX_MUXER_H__
-#define __FX_MUXER_H__
+#ifndef FX_MUXER_H_
+#define FX_MUXER_H_
+
 #include "libhost.h"
 #include "arguments.h"
 #include "coreclr.h"
 
-namespace coreload {
+namespace coreload
+{
     const int Max_Framework_Resolve_Retries = 100;
 
     class corehost_init_t;
@@ -88,5 +89,7 @@ namespace coreload {
             const fx_definition_vector_t& fx_definitions,
             const fx_name_to_fx_reference_map_t& newest_references);
     };
-}
-#endif // __FX_MUXER_H__
+
+} // namespace coreload
+
+#endif // FX_MUXER_H_

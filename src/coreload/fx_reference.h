@@ -1,15 +1,13 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-#ifndef __FX_REFERENCE_H__
-#define __FX_REFERENCE_H__
+#ifndef FX_REFERENCE_H_
+#define FX_REFERENCE_H_
 
 #include <list>
 #include "pal.h"
 #include "fx_ver.h"
 #include "roll_fwd_on_no_candidate_fx_option.h"
 
-namespace coreload {
+namespace coreload 
+{
     class fx_reference_t
     {
     public:
@@ -104,5 +102,7 @@ namespace coreload {
 
     typedef std::vector<fx_reference_t> fx_reference_vector_t;
     typedef std::unordered_map<pal::string_t, fx_reference_t> fx_name_to_fx_reference_map_t;
-}
-#endif // __FX_REFERENCE_H__
+
+} // namespace coreload
+
+#endif // FX_REFERENCE_H_

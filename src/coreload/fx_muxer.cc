@@ -6,7 +6,8 @@
 #include "deps_resolver.h"
 #include "coreclr.h"
 
-namespace coreload {
+namespace coreload
+{
     /**
     * Resolve the hostpolicy version from deps.
     *  - Scan the deps file's libraries section and find the hostpolicy version in the file.
@@ -1063,4 +1064,4 @@ namespace coreload {
         }  
         return StatusCode::Success;
     }
-}
+} // namespace coreload

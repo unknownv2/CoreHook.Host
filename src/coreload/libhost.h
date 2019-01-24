@@ -1,5 +1,5 @@
-#ifndef LIBHOST_H
-#define LIBHOST_H
+#ifndef LIBHOST_H_
+#define LIBHOST_H_
 
 #include <stdint.h>
 #include "trace.h"
@@ -8,7 +8,8 @@
 #include "fx_definition.h"
 #include "fx_ver.h"
 
-namespace coreload {
+namespace coreload
+{
     enum host_mode_t
     {
         invalid = 0,
@@ -411,4 +412,5 @@ namespace coreload {
     void try_prerelease_roll_forward_in_dir(const pal::string_t& cur_dir, const fx_ver_t& start_ver, pal::string_t* max_str);
 
 } // namespace coreload
-#endif // LIBHOST_H
+
+#endif // LIBHOST_H_

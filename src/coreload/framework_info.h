@@ -1,9 +1,10 @@
-#ifndef __FRAMEWORK_INFO_H_
-#define __FRAMEWORK_INFO_H_
+#ifndef FRAMEWORK_INFO_H_
+#define FRAMEWORK_INFO_H_
 
 #include "libhost.h"
 
-namespace coreload {
+namespace coreload
+{
     struct framework_info
     {
         framework_info(pal::string_t name, pal::string_t path, fx_ver_t version)
@@ -21,5 +22,6 @@ namespace coreload {
         pal::string_t path;
         fx_ver_t version;
     };
+
 }
-#endif // __FRAMEWORK_INFO_H_
+#endif // FRAMEWORK_INFO_H_

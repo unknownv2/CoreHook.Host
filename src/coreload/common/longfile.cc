@@ -1,8 +1,8 @@
-
 #include "pal.h"
 #include "longfile.h"
 
-namespace coreload {
+namespace coreload 
+{
     const pal::char_t LongFile::DirectorySeparatorChar = _X('\\');
     const pal::char_t LongFile::AltDirectorySeparatorChar = _X('/');
     const pal::char_t LongFile::VolumeSeparatorChar = _X(':');
@@ -136,5 +136,4 @@ namespace coreload {
     {
         return c == DirectorySeparatorChar || c == AltDirectorySeparatorChar;
     }
-
-}
+} // namespace coreload

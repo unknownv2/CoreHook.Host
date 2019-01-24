@@ -1,7 +1,8 @@
-#ifndef STATUS_CODE_H
-#define STATUS_CODE_H
+#ifndef STATUS_CODE_H_
+#define STATUS_CODE_H_
 
-namespace coreload {
+namespace coreload
+{
     enum StatusCode
     {
         Success = 0,
@@ -35,5 +36,7 @@ namespace coreload {
         FrameworkCompatFailure = 0x8000809c,
         FrameworkCompatRetry = 0x8000809d,
     };
-}
-#endif // STATUS_CODE_H
+
+} // namespace coreload
+
+#endif // STATUS_CODE_H_

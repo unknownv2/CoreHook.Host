@@ -4,7 +4,8 @@
 #include "trace.h"
 #include "utils.h"
 
-namespace coreload {
+namespace coreload
+{
     bool compare_by_name_and_version(const framework_info &a, const framework_info &b)
     {
         if (a.name < b.name)
@@ -107,4 +108,4 @@ namespace coreload {
 
         return framework_infos.size() > 0;
     }
-}
+} // namespace coreload

@@ -4,8 +4,8 @@
 #include "libhost.h"
 #include "host_startup_info.h"
 
-namespace coreload {
-
+namespace coreload
+{
     void get_runtime_config_paths_from_app(const pal::string_t& app, pal::string_t* cfg, pal::string_t* dev_cfg)
     {
         auto name = get_filename_without_ext(app);
@@ -145,4 +145,4 @@ namespace coreload {
             trace::verbose(_X("Prerelease roll forwarded [%s] -> [%s] in [%s]"), start_str.c_str(), max_str->c_str(), path.c_str());
         }
     }
-}
+} // namespace coreload

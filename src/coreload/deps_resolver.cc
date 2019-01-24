@@ -1,6 +1,3 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 #include <set>
 #include <functional>
 #include <cassert>
@@ -22,7 +19,8 @@ const coreload::pal::string_t ManifestListMessage = _X(
     "  This assembly was expected to be in the local runtime store as the application was published using the following target manifest files:\n"
     "    %s");
 
-namespace coreload {
+namespace coreload
+{
     // -----------------------------------------------------------------------------
     // A uniqifying append helper that doesn't let two "paths" to be identical in
     // the "output" string.
@@ -855,4 +853,4 @@ namespace coreload {
 
         return true;
     }
-}
+} // namespace coreload
