@@ -1,6 +1,5 @@
-#pragma once
-#ifndef CORELOAD_DLL_H
-#define CORELOAD_DLL_H
+#ifndef CORELOAD_DLL_H_
+#define CORELOAD_DLL_H_
 
 #include "targetver.h"
 #include "deps_resolver.h"
@@ -65,4 +64,4 @@ SHARED_API int StartCoreCLR(const core_host_arguments* arguments);
 // Stop the .NET Core host in the current application
 SHARED_API int UnloadRuntime();
 
-#endif // CORELOAD_DLL_H
+#endif // CORELOAD_DLL_H_

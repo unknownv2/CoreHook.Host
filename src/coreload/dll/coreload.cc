@@ -7,7 +7,7 @@ int ValidateArgument(
     if (argument != nullptr)
     {
         const size_t string_length = pal::strlen(argument);
-        if (string_length == 0 || string_length > max_size)
+        if (string_length == 0 || string_length >= max_size)
         {
             return StatusCode::InvalidArgFailure;
         }
