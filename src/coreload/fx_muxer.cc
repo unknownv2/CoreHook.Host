@@ -717,6 +717,13 @@ namespace coreload
         pal::string_t roll_fwd_on_no_candidate_fx;
         pal::string_t additional_deps;
         pal::string_t deps_file = _X("");
+
+        // If the assembly doesn't exist, exit.
+        if (!pal::realpath(&arguments.managed_application))
+        {
+            return StatusCode::InvalidArgFailure;
+        }
+
         pal::string_t runtime_config = host_info.dotnet_root;
         append_path(&runtime_config, _X("dotnet.runtimeconfig.json"));
 
