@@ -81,6 +81,7 @@ namespace coreload
         pal::string_t to_lower(const pal::string_t& in);
 
         inline size_t strlen(const char_t* str) { return ::wcslen(str); }
+        inline size_t strnlen(const char_t* str, size_t max_size) { return ::wcsnlen(str, max_size); }
         inline errno_t file_open(const pal::string_t& path, const char_t* mode, FILE* stream) { return ::_wfopen_s(&stream, path.c_str(), mode); }
         inline void file_vprintf(FILE* f, const char_t* format, va_list vl) { ::vfwprintf(f, format, vl); ::fputwc(_X('\n'), f); }
         inline void err_fputs(const char_t* message) { ::fputws(message, stderr); ::fputwc(_X('\n'), stderr); }
