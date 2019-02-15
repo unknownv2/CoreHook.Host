@@ -23,8 +23,8 @@ TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly)
     WCHAR dotnet_root[MAX_PATH];
     ExpandEnvironmentStringsW(dotnet_sdk_root, dotnet_root, MAX_PATH);
 
-    pal::string_t library_path = dotnet_assembly_name;
-    ASSERT_TRUE(pal::realpath(&library_path));
+    coreload::pal::string_t library_path = dotnet_assembly_name;
+    ASSERT_TRUE(coreload::pal::realpath(&library_path));
 
     core_host_arguments host_arguments = { 0 };
     // The path to the assembly being loaded by CoreCLR.
@@ -113,13 +113,13 @@ TEST(ExecuteDotnetAssemblyTest, CanExecuteDotnetAssembly)
 
     assembly_function_call assembly_function_call = { 0 };
 
-    pal::string_t assembly_name_wide;
-    pal::string_t type_name_wide;
-    pal::string_t method_name_wide;
+    coreload::pal::string_t assembly_name_wide;
+    coreload::pal::string_t type_name_wide;
+    coreload::pal::string_t method_name_wide;
 
-    pal::utf8_palstring(assembly_name, &assembly_name_wide);
-    pal::utf8_palstring(type_name, &type_name_wide);
-    pal::utf8_palstring(method_name_load, &method_name_wide);
+    coreload::pal::utf8_palstring(assembly_name, &assembly_name_wide);
+    coreload::pal::utf8_palstring(type_name, &type_name_wide);
+    coreload::pal::utf8_palstring(method_name_load, &method_name_wide);
 
     wcscpy_s(assembly_function_call.assembly_name, max_function_name_size, assembly_name_wide.c_str());
     wcscpy_s(assembly_function_call.class_name, max_function_name_size, type_name_wide.c_str());
@@ -135,9 +135,9 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName)
 {
     assembly_function_call assembly_function_call = { 0 };
 
-    pal::string_t assembly_name_wide;
-    pal::string_t type_name_wide;
-    pal::string_t method_name_wide;
+    coreload::pal::string_t assembly_name_wide;
+    coreload::pal::string_t type_name_wide;
+    coreload::pal::string_t method_name_wide;
 
     const auto empty_string = _X("");
 
@@ -145,16 +145,16 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyAssemblyName)
     wcscpy_s(assembly_function_call.class_name, max_function_name_size, _X("ClassName"));
     wcscpy_s(assembly_function_call.function_name, max_function_name_size, _X("MethodName"));
 
-    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
 TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassName)
 {
     assembly_function_call assembly_function_call = { 0 };
 
-    pal::string_t assembly_name_wide;
-    pal::string_t type_name_wide;
-    pal::string_t method_name_wide;
+    coreload::pal::string_t assembly_name_wide;
+    coreload::pal::string_t type_name_wide;
+    coreload::pal::string_t method_name_wide;
 
     const auto empty_string = _X("");
 
@@ -162,16 +162,16 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassName)
     wcscpy_s(assembly_function_call.class_name, max_function_name_size, empty_string);
     wcscpy_s(assembly_function_call.function_name, max_function_name_size, _X("MethodName"));
 
-    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
 TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName)
 {
     assembly_function_call assembly_function_call = { 0 };
 
-    pal::string_t assembly_name_wide;
-    pal::string_t type_name_wide;
-    pal::string_t method_name_wide;
+    coreload::pal::string_t assembly_name_wide;
+    coreload::pal::string_t type_name_wide;
+    coreload::pal::string_t method_name_wide;
 
     const auto empty_string = _X("");
 
@@ -179,16 +179,16 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithOneEmptyClassMethodName)
     wcscpy_s(assembly_function_call.class_name, max_function_name_size, _X("ClassName"));
     wcscpy_s(assembly_function_call.function_name, max_function_name_size, empty_string);
 
-    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
 TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithEmptyArguments)
 {
     assembly_function_call assembly_function_call = { 0 };
 
-    pal::string_t assembly_name_wide;
-    pal::string_t type_name_wide;
-    pal::string_t method_name_wide;
+    coreload::pal::string_t assembly_name_wide;
+    coreload::pal::string_t type_name_wide;
+    coreload::pal::string_t method_name_wide;
 
     const auto empty_string = _X("");
 
@@ -196,7 +196,7 @@ TEST(LibraryExportsTest, TestExecuteAssemblyFunctionWithEmptyArguments)
     wcscpy_s(assembly_function_call.class_name, max_function_name_size, empty_string);
     wcscpy_s(assembly_function_call.function_name, max_function_name_size, empty_string);
 
-    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(&assembly_function_call));
 }
 
 TEST(LibraryExportsTest, TestStartCoreCLRWithEmptyArguments)
@@ -207,7 +207,7 @@ TEST(LibraryExportsTest, TestStartCoreCLRWithEmptyArguments)
     wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, empty_string);
     wcscpy_s(host_arguments.core_root_path, MAX_PATH, empty_string);
 
-    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
 
 TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath)
@@ -218,7 +218,7 @@ TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath)
     wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, empty_string);
     wcscpy_s(host_arguments.core_root_path, MAX_PATH, _X("C:\\"));
 
-    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
 
 TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath)
@@ -229,15 +229,26 @@ TEST(TestLibraryExports, TestStartCoreCLRWithEmptyCoreRootPath)
     wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, _X("C:\\"));
     wcscpy_s(host_arguments.core_root_path, MAX_PATH, empty_string);
 
-    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
 
 TEST(TestLibraryExports, TestExecuteAssemblyFunctionWithNullArguments)
 {
-    EXPECT_EQ(StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(nullptr));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, ExecuteAssemblyFunction(nullptr));
 }
 
 TEST(TestLibraryExports, TestStartCoreCLRWithNullArguments)
 {
-    EXPECT_EQ(StatusCode::InvalidArgFailure, StartCoreCLR(nullptr));
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, StartCoreCLR(nullptr));
+}
+
+TEST(TestLibraryExports, TestStartCoreCLRWithInvalidAssemblyPath)
+{
+    core_host_arguments host_arguments = { 0 };
+
+    const auto invalid_file_path = _X("^-.3this_is_not_a_file_path");
+    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, invalid_file_path);
+    wcscpy_s(host_arguments.core_root_path, MAX_PATH, _X("C:\\"));
+
+    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
