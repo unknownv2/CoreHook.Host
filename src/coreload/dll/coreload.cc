@@ -1,53 +1,53 @@
 #include "coreload.h"
 
 int ValidateArgument(
-    const pal::char_t* argument,
+    const ::coreload::pal::char_t* argument,
     size_t max_size)
 {
     if (argument != nullptr)
     {
-        const size_t string_length = pal::strnlen(argument, max_size);
+        const size_t string_length = ::coreload::pal::strnlen(argument, max_size);
         if (string_length == 0 || string_length >= max_size)
         {
-            return StatusCode::InvalidArgFailure;
+            return ::coreload::StatusCode::InvalidArgFailure;
         }
     }
     else
     {
-        return StatusCode::InvalidArgFailure;
+        return ::coreload::StatusCode::InvalidArgFailure;
     }
-    return StatusCode::Success;
+    return ::coreload::StatusCode::Success;
 }
 
 bool inline IsValidCoreHostArgument(
-    const pal::char_t* argument,
+    const ::coreload::pal::char_t* argument,
     size_t max_size)
 {
-    return ValidateArgument(argument, max_size) == StatusCode::Success;
+    return ValidateArgument(argument, max_size) == ::coreload::StatusCode::Success;
 }
 
 // Start the .NET Core runtime in the current application
 int StartCoreCLRInternal(
-    const pal::char_t*  assembly_path,
-    const pal::char_t*  core_root,
+    const coreload::pal::char_t*  assembly_path,
+    const coreload::pal::char_t*  core_root,
     const unsigned char verbose_log)
 {
     if (verbose_log)
     {
-        trace::enable();
+        coreload::trace::enable();
     }
-    host_startup_info_t startup_info;
-    arguments_t arguments;
+    coreload::host_startup_info_t startup_info;
+    coreload::arguments_t arguments;
   
     startup_info.dotnet_root = core_root;
 
     arguments.managed_application = assembly_path;
-    arguments.app_root = get_directory(arguments.managed_application);
+    arguments.app_root = coreload::get_directory(arguments.managed_application);
 
-    return corehost::initialize_clr(
+    return coreload::corehost::initialize_clr(
         arguments,
         startup_info,
-        host_mode_t::muxer);
+        coreload::host_mode_t::muxer);
 }
 
 // Host the .NET Core runtime in the current application
@@ -58,7 +58,7 @@ SHARED_API int StartCoreCLR(
         || !IsValidCoreHostArgument(arguments->assembly_file_path, MAX_PATH)
         || !IsValidCoreHostArgument(arguments->core_root_path, MAX_PATH))
     {
-        return StatusCode::InvalidArgFailure;
+        return coreload::StatusCode::InvalidArgFailure;
     }
 
     return StartCoreCLRInternal(arguments->assembly_file_path, arguments->core_root_path, arguments->verbose);
@@ -71,7 +71,7 @@ SHARED_API int CreateAssemblyDelegate(
     const char* method_name,
     void**      pfnDelegate)
 {
-    return corehost::create_delegate(
+    return coreload::corehost::create_delegate(
         assembly_name,
         type_name,
         method_name,
@@ -86,7 +86,7 @@ int ExecuteAssemblyClassFunction(
     const char* entry,
     const unsigned char* arguments)
 {
-    int exit_code = StatusCode::HostApiFailed;
+    int exit_code = coreload::StatusCode::HostApiFailed;
     typedef void (STDMETHODCALLTYPE load_plugin_fn)(const void *load_plugin_arguments);
     load_plugin_fn* load_plugin_delegate = nullptr;
 
@@ -112,7 +112,7 @@ int ExecuteAssemblyClassFunction(
     }
     else
     {
-        exit_code = StatusCode::InvalidArgFailure;
+        exit_code = coreload::StatusCode::InvalidArgFailure;
     }
     return exit_code;
 }
@@ -125,13 +125,13 @@ SHARED_API int ExecuteAssemblyFunction(const assembly_function_call* arguments)
         || !IsValidCoreHostArgument(arguments->class_name, max_function_name_size)
         || !IsValidCoreHostArgument(arguments->function_name, max_function_name_size))
     {
-        return StatusCode::InvalidArgFailure;
+        return coreload::StatusCode::InvalidArgFailure;
     }
 
     std::vector<char> assembly_name, class_name, function_name;
-    pal::pal_clrstring(arguments->assembly_name, &assembly_name);
-    pal::pal_clrstring(arguments->class_name, &class_name);
-    pal::pal_clrstring(arguments->function_name, &function_name);
+    coreload::pal::pal_clrstring(arguments->assembly_name, &assembly_name);
+    coreload::pal::pal_clrstring(arguments->class_name, &class_name);
+    coreload::pal::pal_clrstring(arguments->function_name, &function_name);
 
     return ExecuteAssemblyClassFunction(assembly_name.data(), class_name.data(), function_name.data(), arguments->arguments);
 }
@@ -139,7 +139,7 @@ SHARED_API int ExecuteAssemblyFunction(const assembly_function_call* arguments)
 // Shutdown the .NET Core runtime
 SHARED_API int UnloadRuntime()
 {
-    return corehost::unload_runtime();
+    return coreload::corehost::unload_runtime();
 }
 
 BOOL APIENTRY DllMain(

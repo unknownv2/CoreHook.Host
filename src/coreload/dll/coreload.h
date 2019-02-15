@@ -12,25 +12,23 @@
 // The max length of arguments to be parsed and passed to a .NET function
 #define assembly_function_arguments_size        12
 
-using namespace coreload;
-
 // Arguments for hosting the .NET Core runtime and loading an assembly into the
 struct core_host_arguments
 {
-    unsigned char verbose;
-    unsigned char reserved[7];
-    pal::char_t   assembly_file_path[MAX_PATH];
-    pal::char_t   core_root_path[MAX_PATH];
+    unsigned char           verbose;
+    unsigned char           reserved[7];
+    coreload::pal::char_t   assembly_file_path[MAX_PATH];
+    coreload::pal::char_t   core_root_path[MAX_PATH];
 };
 
 // Arguments for executing a function located in a .NET assembly,
 // with optional arguments passed to the function call
 struct assembly_function_call
 {
-    pal::char_t   assembly_name[max_function_name_size];
-    pal::char_t   class_name[max_function_name_size];
-    pal::char_t   function_name[max_function_name_size];
-    unsigned char arguments[assembly_function_arguments_size];
+    coreload::pal::char_t   assembly_name[max_function_name_size];
+    coreload::pal::char_t   class_name[max_function_name_size];
+    coreload::pal::char_t   function_name[max_function_name_size];
+    unsigned char           arguments[assembly_function_arguments_size];
 };
 
 struct core_load_arguments
