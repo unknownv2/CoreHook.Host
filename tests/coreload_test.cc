@@ -252,22 +252,3 @@ TEST(TestLibraryExports, TestStartCoreCLRWithInvalidAssemblyPath)
 
     EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
 }
-
-TEST(TestLibraryExports, TestStartCoreCLRWithEmptyAssemblyPath2)
-{
-    core_host_arguments host_arguments = { 0 };
-
-    const auto empty_string = _X("a");
-    wcscpy_s(host_arguments.assembly_file_path, MAX_PATH, empty_string);
-    wcscpy_s(host_arguments.core_root_path, MAX_PATH, _X("C:\\"));
-
-    wcscpy_s(host_arguments.assembly_file_path,
-        MAX_PATH,
-        _X("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
-
-    host_arguments.assembly_file_path[255] = 'a';
-    host_arguments.assembly_file_path[256] = 'a';
-   // auto len = pal::strlen(host_arguments.assembly_file_path);
-
-    EXPECT_EQ(coreload::StatusCode::InvalidArgFailure, StartCoreCLR(&host_arguments));
-}
