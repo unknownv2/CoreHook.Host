@@ -1,29 +1,29 @@
 #include "coreload.h"
 
 int ValidateArgument(
-    const ::coreload::pal::char_t* argument,
+    const coreload::pal::char_t* argument,
     size_t max_size)
 {
     if (argument != nullptr)
     {
-        const size_t string_length = ::coreload::pal::strnlen(argument, max_size);
+        const size_t string_length = coreload::pal::strnlen(argument, max_size);
         if (string_length == 0 || string_length >= max_size)
         {
-            return ::coreload::StatusCode::InvalidArgFailure;
+            return coreload::StatusCode::InvalidArgFailure;
         }
     }
     else
     {
-        return ::coreload::StatusCode::InvalidArgFailure;
+        return coreload::StatusCode::InvalidArgFailure;
     }
-    return ::coreload::StatusCode::Success;
+    return coreload::StatusCode::Success;
 }
 
 bool inline IsValidCoreHostArgument(
-    const ::coreload::pal::char_t* argument,
+    const coreload::pal::char_t* argument,
     size_t max_size)
 {
-    return ValidateArgument(argument, max_size) == ::coreload::StatusCode::Success;
+    return ValidateArgument(argument, max_size) == coreload::StatusCode::Success;
 }
 
 // Start the .NET Core runtime in the current application
